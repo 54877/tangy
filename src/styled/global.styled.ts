@@ -1,4 +1,5 @@
 import "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -365,3 +366,165 @@ export const theme = {
     sm: "4px",
   },
 };
+
+export const textStyles = {
+  headingXxxl: css`
+    font-family: ${NotoSansTC};
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingXxl: css`
+    font-family: ${NotoSansTC};
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingXl: css`
+    font-family: ${NotoSansTC};
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingLg: css`
+    font-family: ${NotoSansTC};
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingMd: css`
+    font-family: ${NotoSansTC};
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingSm: css`
+    font-family: ${NotoSansTC};
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 120%;
+  `,
+
+  headingXs: css`
+    font-family: ${NotoSansTC};
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 120%;
+  `,
+
+  labelLg: css`
+    font-family: ${NotoSansTC};
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 120%;
+  `,
+
+  labelMd: css`
+    font-family: ${NotoSansTC};
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 120%;
+  `,
+
+  labelSm: css`
+    font-family: ${NotoSansTC};
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 120%;
+  `,
+
+  labelXs: css`
+    font-family: ${NotoSansTC};
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 120%;
+  `,
+
+  paragraphLg: css`
+    font-family: ${NotoSansTC};
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 150%;
+  `,
+
+  paragraphMd: css`
+    font-family: ${NotoSansTC};
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+  `,
+
+  paragraphSm: css`
+    font-family: ${NotoSansTC};
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+  `,
+
+  paragraphXs: css`
+    font-family: ${NotoSansTC};
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 150%;
+  `,
+};
+
+//初始化css
+export const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    font-weight: normal;
+  }
+
+
+  ul, ol {
+    list-style: none;
+  }
+
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+
+  button, input, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    outline: none;
+    background: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+`;
