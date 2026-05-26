@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
-import { ButtonOutlinedType, ButtonType } from "../styled/Button.styled";
 import type { CSSProperties } from "styled-components";
+import { ButtonOutlinedType, ButtonType } from "./Button.styled";
 
 interface btnType {
   icon?: ReactNode;

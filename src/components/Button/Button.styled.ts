@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { textStyles } from "./global.styled";
+import { textStyles } from "../../global.styled";
 
 export const ButtonType = styled.button`
   ${textStyles.labelMd};
@@ -9,7 +9,7 @@ export const ButtonType = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.white};
   background-color: ${({ theme }) => theme.colors.primary[600]};
 
@@ -38,7 +38,7 @@ export const ButtonOutlinedType = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.gray[950]};
   background-color: ${({ theme }) => theme.colors.text.white};
   border: 2px solid ${({ theme }) => theme.colors.gray[200]};

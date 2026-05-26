@@ -1,6 +1,7 @@
-import { Button, ButtonOutlined } from "./components/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { LinkPrimary } from "./components/Link";
+import { Button, ButtonOutlined } from "./components/Button/Button";
+import { LinkPrimary } from "./components/Link/Link";
+
 function App() {
   return (
     <>
@@ -18,7 +19,7 @@ function App() {
             icon_left={<AddIcon />}
             text={"測試"}
           />
-          <LinkPrimary text={"測試"} />
+          <LinkPrimary to={""} text={"測試"} icon_left={<AddIcon />} />
         </div>
       </section>
     </>

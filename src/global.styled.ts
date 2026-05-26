@@ -476,6 +476,16 @@ export const textStyles = {
 
 //初始化css
 export const GlobalStyle = createGlobalStyle`
+
+   /* Debug Layout */
+     *,
+     *::before,
+     *::after {
+         outline: 1px solid red;
+    }
+   /* Debug Layout */
+
+   
   * {
     margin: 0;
     padding: 0;
