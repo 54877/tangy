@@ -1,11 +1,11 @@
 import "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { breakpoints } from "./tokens/breakpoints";
-import { spaces } from "./tokens/spaces";
-import { semanticColors } from "./tokens/semanticColors";
-import { typography } from "./tokens/typography";
-import { radius } from "./tokens/radius";
 import { colors } from "./tokens/colors";
+import { radius } from "./tokens/radius";
+import { semanticColors } from "./tokens/semanticColors";
+import { spaces } from "./tokens/spaces";
+import { typography } from "./tokens/typography";
 
 declare module "styled-components" {
   export interface DefaultTheme {

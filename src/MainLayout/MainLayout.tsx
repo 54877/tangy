@@ -1,17 +1,17 @@
 import { Outlet } from "react-router-dom";
+import Fb from "../assets/icon_tangy/facebook.png";
+import ig from "../assets/icon_tangy/IG.png";
+import line from "../assets/icon_tangy/line.png";
+import x from "../assets/icon_tangy/x.png";
+import { LogoTangy } from "../components/LogoTangy/LogoTangy";
+import { FlexType } from "../styles/components/flex";
+import { Heading, SpanType } from "../styles/components/span";
 import {
   ContainerLayout,
   FooterContainer,
   FooterIcon,
   FooterSpan,
 } from "./MainLayout.styled";
-import { LogoTangy } from "../components/LogoTangy/LogoTangy";
-import { Heading, SpanType } from "../styles/components/span";
-import Fb from "../assets/icon_tangy/facebook.png";
-import ig from "../assets/icon_tangy/IG.png";
-import line from "../assets/icon_tangy/line.png";
-import x from "../assets/icon_tangy/x.png";
-import { FlexType } from "../styles/components/flex";
 
 export function MainLayout() {
   return (
@@ -21,7 +21,14 @@ export function MainLayout() {
       {/* Footer */}
       <FooterContainer>
         <ContainerLayout>
-          <FlexType $justify="space-between">
+          <FlexType
+            style={{
+              paddingBottom: "24px",
+              borderBottom: "1px  solid #CCD1D5",
+              marginBottom: "24px",
+            }}
+            $justify="space-between"
+          >
             <FlexType
               style={{ gap: "68px" }}
               $direction="column"
@@ -85,6 +92,11 @@ export function MainLayout() {
                 <FooterSpan>老師儀表板</FooterSpan>
               </FlexType>
             </FlexType>
+          </FlexType>
+          <FlexType $gap="lg" $justify="flex-start">
+            <FooterSpan>© 2024 碳吉學院 All Rights Reserved</FooterSpan>
+            <FooterSpan>隱私權政策</FooterSpan>
+            <FooterSpan>使用者條款</FooterSpan>
           </FlexType>
         </ContainerLayout>
       </FooterContainer>
