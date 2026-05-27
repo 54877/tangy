@@ -10,6 +10,7 @@ export const TangyTitle = styled(Typography)`
   && {
     font-size: 24px;
     font-weight: 400;
+    color: #232529;
   }
 `;
 

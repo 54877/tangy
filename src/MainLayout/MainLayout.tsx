@@ -27,10 +27,13 @@ export function MainLayout() {
               borderBottom: "1px  solid #CCD1D5",
               marginBottom: "24px",
             }}
-            $justify="space-between"
+            $direction={{ xs: "column", sm: "row" }}
+            $gap={{ xs: "lg", sm: "none" }}
+            $justify={{ sm: "space-between" }}
+            $align={{ xs: "flex-start" }}
           >
             <FlexType
-              style={{ gap: "68px" }}
+              $gap={{ xs: "lg", sm: "xl" }}
               $direction="column"
               $align="flex-start"
             >
@@ -49,13 +52,17 @@ export function MainLayout() {
             </FlexType>
 
             {/* 認識碳吉 */}
-            <FlexType style={{ gap: "100px" }} $align="flex-start">
+            <FlexType
+              $gap={{ sm: "xxl", xs: "lg" }}
+              $direction={{ sm: "row", xs: "column" }}
+              $align="flex-start"
+            >
               <FlexType $direction="column" $gap="none" $align="flex-start">
                 <Heading
                   style={{ marginBottom: "12px" }}
                   $size="sm"
                   $color="primary"
-                  $Shade={600}
+                  $shade={600}
                 >
                   認識碳吉學院
                 </Heading>
@@ -70,7 +77,7 @@ export function MainLayout() {
                   style={{ marginBottom: "12px" }}
                   $size="sm"
                   $color="primary"
-                  $Shade={600}
+                  $shade={600}
                 >
                   碳吉學員
                 </Heading>
@@ -84,7 +91,7 @@ export function MainLayout() {
                   style={{ marginBottom: "12px" }}
                   $size="sm"
                   $color="primary"
-                  $Shade={600}
+                  $shade={600}
                 >
                   碳吉老師
                 </Heading>
@@ -93,10 +100,16 @@ export function MainLayout() {
               </FlexType>
             </FlexType>
           </FlexType>
-          <FlexType $gap="lg" $justify="flex-start">
+          <FlexType
+            $gap={{ sm: "lg", xs: "sm" }}
+            $direction={{ xs: "column", sm: "row" }}
+            $justify="flex-start"
+          >
             <FooterSpan>© 2024 碳吉學院 All Rights Reserved</FooterSpan>
-            <FooterSpan>隱私權政策</FooterSpan>
-            <FooterSpan>使用者條款</FooterSpan>
+            <FlexType $gap={{ xs: "sm", sm: "lg" }}>
+              <FooterSpan>隱私權政策</FooterSpan>
+              <FooterSpan>使用者條款</FooterSpan>
+            </FlexType>
           </FlexType>
         </ContainerLayout>
       </FooterContainer>

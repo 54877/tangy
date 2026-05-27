@@ -32,15 +32,20 @@ export const theme = {
   radius,
 };
 
+//  *,
+//  *::before,
+//  *::after {
+//      outline: 1px solid red;
+// }
 //初始化css
 export const GlobalStyle = createGlobalStyle`
 
    /* Debug Layout */
-     *,
-     *::before,
-     *::after {
-         outline: 1px solid red;
-    }
+  *,
+  *::before,  
+  *::after {
+      outline: 1px solid red;
+ }
    /* Debug Layout */
 
    

@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { SpanType } from "../styles/components/span";
+import { media } from "../styles/helper/media";
 
 export const ContainerLayout = styled.div(() => ({
   padding: "0 24px",
   margin: "0 auto",
   maxWidth: "1320px",
   width: "100%",
-  "@media (min-width: 768px)": {
+  [media.sm]: {
     padding: 0,
   },
-  "@media (min-width: 375px)": {},
 }));
 
 export const FooterContainer = styled.footer(({ theme }) => ({
