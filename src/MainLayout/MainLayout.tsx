@@ -1,3 +1,6 @@
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Outlet } from "react-router-dom";
 import Fb from "../assets/icon_tangy/facebook.png";
 import ig from "../assets/icon_tangy/IG.png";
@@ -7,6 +10,7 @@ import { LogoTangy } from "../components/LogoTangy/LogoTangy";
 import { FlexType } from "../styles/components/flex";
 import { Heading, SpanType } from "../styles/components/span";
 import {
+  ContainerHeader,
   ContainerLayout,
   FooterContainer,
   FooterIcon,
@@ -16,7 +20,17 @@ import {
 export function MainLayout() {
   return (
     <>
-      <h1>我是MainLayout</h1>
+      {/*     TOP NAV   */}
+      <ContainerHeader>
+        <FlexType $justify="space-between">
+          <LogoTangy />
+          <FlexType>
+            <SearchIcon sx={{ margin: "12px" }} />
+            <ShoppingCartOutlinedIcon sx={{ margin: "12px" }} />
+            <MenuOutlinedIcon sx={{ margin: "12px" }} />
+          </FlexType>
+        </FlexType>
+      </ContainerHeader>
       <Outlet />
       {/* Footer */}
       <FooterContainer>
