@@ -8,7 +8,6 @@ export const TangyIcon = styled.img(() => ({
 
 export const TangyTitle = styled(Typography)`
   && {
-    font-family: jf-openhuninn-2.0;
     font-size: 24px;
     font-weight: 400;
   }

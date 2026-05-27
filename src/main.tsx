@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { GlobalStyle, theme } from "./global.styled.ts";
+import { GlobalStyle, theme } from "./styles/global.styled.ts";
 import { ThemeProvider } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./context/auth/AuthProvider.tsx";

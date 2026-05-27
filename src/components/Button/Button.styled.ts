@@ -1,16 +1,15 @@
 import styled from "styled-components";
-import { textStyles } from "../../global.styled";
 
 export const ButtonType = styled.button`
-  ${textStyles.labelMd};
+  ${({ theme }) => theme.typography.label.md}
   display: flex;
   padding: 12px 24px;
   border-radius: 8px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  gap: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.text.white};
+  gap: ${({ theme }) => theme.spaces.sm};
+  color: ${({ theme }) => theme.semanticColors.text.white};
   background-color: ${({ theme }) => theme.colors.primary[600]};
 
   transition: all 0.2s ease;
@@ -31,16 +30,16 @@ export const ButtonType = styled.button`
 `;
 
 export const ButtonOutlinedType = styled.button`
-  ${textStyles.labelMd};
+  ${({ theme }) => theme.typography.label.md}
   display: flex;
   padding: 12px 24px;
   border-radius: 8px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spaces.sm};
   color: ${({ theme }) => theme.colors.gray[950]};
-  background-color: ${({ theme }) => theme.colors.text.white};
+  background-color: ${({ theme }) => theme.semanticColors.text.white};
   border: 2px solid ${({ theme }) => theme.colors.gray[200]};
 
   transition: all 0.2s ease;

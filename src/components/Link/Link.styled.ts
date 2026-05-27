@@ -1,11 +1,9 @@
 import styled from "styled-components";
 
 import { NavLink } from "react-router-dom";
-import { textStyles } from "../../global.styled";
 
-//TODO 等建立好ROUTE改成NavLink
 export const NavLinkType = styled(NavLink)`
-  ${textStyles.paragraphSm};
+  ${({ theme }) => theme.typography.paragraph.sm}
   display: flex;
   align-items: center;
   opacity: 1;
@@ -14,7 +12,7 @@ export const NavLinkType = styled(NavLink)`
   padding-bottom: 4px;
   justify-content: center;
   cursor: pointer;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spaces.sm};
   color: ${({ theme }) => theme.colors.primary[600]};
 
   transition: all 0.2s ease;
