@@ -1,5 +1,4 @@
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Outlet } from "react-router-dom";
 import Fb from "../assets/icon_tangy/facebook.png";
@@ -12,10 +11,15 @@ import { Heading, SpanType } from "../styles/components/span";
 import {
   ContainerHeader,
   ContainerLayout,
+  FlexTypeHeader,
   FooterContainer,
   FooterIcon,
   FooterSpan,
+  HeaderSearch,
+  Search,
+  SearchFlex,
 } from "./MainLayout.styled";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export function MainLayout() {
   return (
@@ -24,11 +28,18 @@ export function MainLayout() {
       <ContainerHeader>
         <FlexType $justify="space-between">
           <LogoTangy />
-          <FlexType>
-            <SearchIcon sx={{ margin: "12px" }} />
+          <FlexType $display={{ xs: "none", sm: "flex" }}>
+            <SpanType>課程分類</SpanType>
+            <KeyboardArrowDownIcon />
+          </FlexType>
+          <FlexTypeHeader>
+            <SearchFlex>
+              <HeaderSearch type="text" />
+              <Search />
+            </SearchFlex>
             <ShoppingCartOutlinedIcon sx={{ margin: "12px" }} />
             <MenuOutlinedIcon sx={{ margin: "12px" }} />
-          </FlexType>
+          </FlexTypeHeader>
         </FlexType>
       </ContainerHeader>
       <Outlet />
