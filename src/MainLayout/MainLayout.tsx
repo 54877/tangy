@@ -1,4 +1,3 @@
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Outlet } from "react-router-dom";
 import Fb from "../assets/icon_tangy/facebook.png";
@@ -8,41 +7,95 @@ import x from "../assets/icon_tangy/x.png";
 import { LogoTangy } from "../components/LogoTangy/LogoTangy";
 import { FlexType } from "../styles/components/flex";
 import { Heading, SpanType } from "../styles/components/span";
+import CloseIcon from "@mui/icons-material/Close";
 import {
+  ButtonIcon,
   ContainerHeader,
   ContainerLayout,
   FlexTypeHeader,
   FooterContainer,
   FooterIcon,
   FooterSpan,
+  HeaderFixed,
   HeaderSearch,
+  Li,
+  ListMenu,
+  MenuIcon,
   Search,
   SearchFlex,
 } from "./MainLayout.styled";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Box, Drawer, useMediaQuery } from "@mui/material";
+import { media } from "../styles/helper/media";
+import { Button } from "../components/Button/Button";
+import { useState } from "react";
+
+//TODO LOGO 跳轉手頁
+//TODO API 取得課程分類  後台可修改客成分類
+//TODO 登入註冊跳轉 登入頁面
+//TODO search 跳轉頁面
 
 export function MainLayout() {
+  const isMobile = useMediaQuery(`${media.sm}`);
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       {/*     TOP NAV   */}
-      <ContainerHeader>
-        <FlexType $justify="space-between">
+      <HeaderFixed>
+        <ContainerHeader $gap={{ sm: "lg" }} $justify="space-between">
           <LogoTangy />
+
           <FlexType $display={{ xs: "none", sm: "flex" }}>
             <SpanType>課程分類</SpanType>
             <KeyboardArrowDownIcon />
           </FlexType>
-          <FlexTypeHeader>
+
+          <FlexTypeHeader $gap={{ xs: "none", sm: "lg" }}>
+            {/* 搜尋 */}
             <SearchFlex>
               <HeaderSearch type="text" />
               <Search />
             </SearchFlex>
-            <ShoppingCartOutlinedIcon sx={{ margin: "12px" }} />
-            <MenuOutlinedIcon sx={{ margin: "12px" }} />
+            <FlexType $gap={{ xs: "none", sm: "sm" }}>
+              {/* cart */}
+              <ShoppingCartOutlinedIcon
+                sx={{ margin: "12px", cursor: "pointer" }}
+              />
+              {/* Menu */}
+              {isMobile ? (
+                <Button text={"登入/註冊"}></Button>
+              ) : open ? (
+                <>
+                  <ButtonIcon
+                    onClick={() => setOpen(false)}
+                    icon={<CloseIcon />}
+                  ></ButtonIcon>
+                </>
+              ) : (
+                <>
+                  <ButtonIcon
+                    onClick={() => setOpen(true)}
+                    icon={<MenuIcon />}
+                  ></ButtonIcon>
+                </>
+              )}
+            </FlexType>
           </FlexTypeHeader>
-        </FlexType>
-      </ContainerHeader>
-      <Outlet />
+        </ContainerHeader>
+      </HeaderFixed>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: isMobile ? "0" : "80px",
+          padding: "0",
+        }}
+      >
+        <Outlet />
+      </Box>
+
       {/* Footer */}
       <FooterContainer>
         <ContainerLayout>
@@ -138,6 +191,48 @@ export function MainLayout() {
           </FlexType>
         </ContainerLayout>
       </FooterContainer>
+
+      {/* Drawer */}
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: "100%",
+            pt: "80px",
+          },
+        }}
+      >
+        <ListMenu>
+          <FlexType $direction={"column"} $gap={"sm"}>
+            <Li>
+              <SpanType $type="label">所有領域</SpanType>
+            </Li>
+            <Li>
+              <SpanType>個人理財</SpanType>
+              <ArrowForwardIosIcon />
+            </Li>
+            <Li>
+              <SpanType>家族財富</SpanType>
+              <ArrowForwardIosIcon />
+            </Li>
+            <Li>
+              <SpanType>投資規劃</SpanType>
+              <ArrowForwardIosIcon />
+            </Li>
+            <Li>
+              <SpanType>財務分析</SpanType>
+              <ArrowForwardIosIcon />
+            </Li>
+            <Li>
+              <SpanType>風險管理</SpanType>
+              <ArrowForwardIosIcon />
+            </Li>
+          </FlexType>
+          <Button text={"登入/註冊"}></Button>
+        </ListMenu>
+      </Drawer>
     </>
   );
 }

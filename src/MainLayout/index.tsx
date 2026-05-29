@@ -1,4 +1,4 @@
-import App from "../App";
+import { Index } from "../index/indexPage";
 
 export default {
   path: "/",
@@ -20,7 +20,7 @@ export default {
   children: [
     {
       index: true,
-      element: <App />,
+      element: <Index />,
     },
   ],
 };

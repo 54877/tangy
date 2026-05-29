@@ -5,6 +5,7 @@ import { ButtonOutlinedType, ButtonType } from "./Button.styled";
 interface btnType {
   icon?: ReactNode;
   text?: string;
+  className?: string;
   icon_right?: ReactNode;
   icon_left?: ReactNode;
   onClick?: () => void;
@@ -15,6 +16,7 @@ interface btnType {
 export function Button({
   icon,
   text,
+  className,
   icon_right,
   icon_left,
   disabled,
@@ -25,6 +27,7 @@ export function Button({
     <>
       {icon ? (
         <ButtonType
+          className={className}
           disabled={disabled}
           style={{ borderRadius: "100px", padding: "12px", ...style }}
           onClick={onClick}

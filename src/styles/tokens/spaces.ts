@@ -5,5 +5,6 @@ export const spaces = {
   md: "16px",
   sm: "8px",
   xs: "4px",
+  spc: "12px",
   none: "0px",
 };
