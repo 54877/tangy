@@ -16,6 +16,7 @@ export const BannerBox = styled.div(() => ({
   display: "flex",
   alignItems: "center",
   padding: "0 16px",
+
   margin: "0 auto",
   maxWidth: "1320px",
   [media.sm]: {
@@ -50,6 +51,7 @@ export const ContainerBanner = styled.div`
   margin: 0 auto;
   max-width: 1320px;
   width: 100%;
+  padding: 0 16px;
 `;
 
 export const BannerMapImg = styled.img<{ $isMobile?: boolean }>`
@@ -60,4 +62,7 @@ export const BannerMapImg = styled.img<{ $isMobile?: boolean }>`
 
 export const H1 = styled.h1`
   ${({ theme }) => theme.typography.heading.md};
+  ${media.sm} {
+    ${({ theme }) => theme.typography.heading.xxxl};
+  }
 `;
