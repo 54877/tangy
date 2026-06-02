@@ -1,16 +1,30 @@
 import course_1 from "../assets/icon_tangy/course_1.png";
 import tangyNew from "../assets/icon_tangy/tangyNew.png";
+import tangyMap_2 from "../assets/icon_tangy/tangyMap-2.png";
+import tangyMap_3 from "../assets/icon_tangy/tangyMap-3.png";
+import card_1 from "../assets/icon_tangy/card_1.png";
+import card_2 from "../assets/icon_tangy/card_2.png";
+import card_3 from "../assets/icon_tangy/card_3.png";
+import tangyIcon from "../assets/icon_tangy/tangy_Icon.png";
+import tangyIcon_2 from "../assets/icon_tangy/tangy_icon_2.png";
 import banner_768 from "../assets/icon_tangy/banner_768.png";
 import banner from "../assets/icon_tangy/banner.png";
 import map from "../assets/icon_tangy/map.png";
+import user from "../assets/icon_tangy/user.png";
+import type { Swiper as SwiperType } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import {
   BannerBox,
   BannerImg,
-  BannerMapImg,
-  ContainerBanner,
+  CardFlex,
+  Container,
   FlexTypeBanner,
-  H1,
   HeadingBanner,
+  IndexBox,
   SpanTypeBanner,
 } from "./index.styled";
 import SearchIcon from "@mui/icons-material/Search";
@@ -18,9 +32,16 @@ import { Box, useMediaQuery } from "@mui/material";
 import { media } from "../styles/helper/media";
 import { FlexType } from "../styles/components/flex";
 import { CourseMap } from "../components/CourseMap/CourseMap";
+import { CardSm } from "../components/CardSm/CardSm";
+import { CourseSection } from "../components/CourseSection/CourseSection";
+import { CardSection } from "../components/CardSection/CardSection";
+import { Button } from "../components/Button/Button";
+import { useRef } from "react";
 
 export function Index() {
   const isMobile = useMediaQuery(`${media.sm}`);
+  const isLgMobile = useMediaQuery(`${media.xsLg}`);
+  const swiperRef = useRef<SwiperType | null>(null);
   return (
     <>
       {/* Banner */}
@@ -32,17 +53,17 @@ export function Index() {
         }}
       >
         <BannerImg
-          $isMobile={isMobile}
-          src={isMobile ? banner : banner_768}
+          $isLgMobile={isLgMobile}
+          src={isLgMobile ? banner : banner_768}
           alt="手機板banner"
         />
         <BannerBox>
           <FlexTypeBanner
             $direction={"column"}
-            $align={{ xs: "center", sm: "flex-start" }}
-            $gap={{ xs: "spc", sm: "lg" }}
+            $align={{ xs: "center", xsLg: "flex-start" }}
+            $gap={{ xs: "spc", xsLg: "lg" }}
           >
-            <HeadingBanner $size={{ xs: "lg", sm: "xxxl" }}>
+            <HeadingBanner $size={{ xs: "lg", xsLg: "xxxl" }}>
               碳吉人生
               <br /> 從學習理財開始
             </HeadingBanner>
@@ -51,7 +72,7 @@ export function Index() {
               style={{
                 width: "100%",
                 padding: "12px 12px",
-                maxWidth: isMobile ? "430px" : "unset",
+                maxWidth: isLgMobile ? "430px" : "unset",
               }}
               $size={"sm"}
             >
@@ -66,12 +87,10 @@ export function Index() {
           </FlexTypeBanner>
         </BannerBox>
       </Box>
-      <ContainerBanner>
-        {/* 學習地圖 */}
-        <FlexType style={{ padding: "24px 0" }} $direction={"column"}>
-          <BannerMapImg src={map} />
-          <H1>碳吉學院學習地圖</H1>
-        </FlexType>
+      {/*TODO  data 字數需限制 */}
+      {/* 學習地圖 */}
+      <IndexBox>
+        <CourseSection img={map} title={"碳吉學院學習地圖"} />
         {/* 新手推薦 */}
         <CourseMap
           imgSrc={tangyNew}
@@ -100,7 +119,149 @@ export function Index() {
             },
           ]}
         />
-      </ContainerBanner>
+        <CourseMap
+          imgSrc={tangyMap_2}
+          title="投資推薦"
+          reverse={true}
+          secTitle="建立家庭儲蓄，提升投資能力"
+          cardData={[
+            {
+              imgSrc: course_1,
+              title: "理財新手財務啟蒙之旅入門指南",
+              name: "碳吉老師",
+              stars: "4.5",
+              people: "8,932",
+              time: "4.6小時",
+              price: "3,600",
+              originalPrice: "5,800",
+            },
+            {
+              imgSrc: course_1,
+              title:
+                "之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南",
+              name: "碳吉老師2",
+              stars: "4.52",
+              people: "8,9322",
+              time: "4.62小時",
+              price: "3,6002",
+              originalPrice: "5,8002",
+            },
+          ]}
+        />
+        <CourseMap
+          imgSrc={tangyMap_3}
+          title="退休推薦"
+          secTitle="財富自由，掌握未來！"
+          cardData={[
+            {
+              imgSrc: course_1,
+              title: "理財新手財務啟蒙之旅入門指南",
+              name: "碳吉老師",
+              stars: "4.5",
+              people: "8,932",
+              time: "4.6小時",
+              price: "3,600",
+              originalPrice: "5,800",
+            },
+            {
+              imgSrc: course_1,
+              title: "理財新手財務啟蒙之旅入門指南2",
+              name: "碳吉老師2",
+              stars: "4.52",
+              people: "8,9322",
+              time: "4.62小時",
+              price: "3,6002",
+              originalPrice: "5,8002",
+            },
+          ]}
+        />
+      </IndexBox>
+      {/* 碳吉好學院 */}
+      <Container>
+        <IndexBox>
+          <FlexType
+            $direction={"column"}
+            style={{ width: "100%" }}
+            $gap={"none"}
+          >
+            <CourseSection img={tangyIcon} title={"碳吉學院好在哪 !?"} />
+            <CardFlex
+              $direction={{ xs: "column", sm: "row" }}
+              $align={"flex-start"}
+              $gap={"lg"}
+            >
+              <CardSm
+                img={card_1}
+                title={"全方位財務知識"}
+                content={
+                  "涵蓋上班族、創業家、退休族各個人生階段、各行業財務知識"
+                }
+              />
+              <CardSm
+                img={card_2}
+                title={"實力派碳吉講師"}
+                content={
+                  "每位講師都具備實戰績效、授課經驗，真的可以帶你碳大吉的講師！"
+                }
+              />
+              <CardSm
+                img={card_3}
+                title={"豐富的學習資源"}
+                content={
+                  "除了課程內容以外，碳吉學院還提供額外的學習資源下載，龍吼你碳！"
+                }
+              />
+            </CardFlex>
+          </FlexType>
+        </IndexBox>
+      </Container>
+      {/* 學員評價 */}
+      <IndexBox>
+        <FlexType
+          $direction={"column"}
+          style={{ width: "100%", padding: "48px 0" }}
+          $gap={"none"}
+        >
+          <CourseSection
+            img={tangyIcon_2}
+            title={"超過 1 萬位碳吉學員 5 ⭐ 好評"}
+          />
+          <FlexType
+            $direction={{ xs: "column", sm: "row" }}
+            $gap={{ xs: "none", sm: "lg" }}
+          >
+            {/* button */}
+            <Button
+              style={{ display: isMobile ? "block" : "none", padding: "8px" }}
+              onClick={() => swiperRef.current?.slidePrev()}
+              icon={<ArrowBackIosOutlinedIcon />}
+            />
+            {/* swiper */}
+            <CardSection
+              userName={"Vivian"}
+              userWork={"家庭主婦"}
+              time={"2024.08.12"}
+              userImg={user}
+              content={
+                "這門課真的太實用了!老師將複雜的稅務問題講得淺顯易懂,搭配許多實務案例,讓我對網購店家的稅務有了更深入的了解。尤其是電子發票的部分,老師的解說讓我豁然開朗,省下不少時間"
+              }
+            />
+            {/* button */}
+            <FlexType $gap={"spc"}>
+              <Button
+                style={{ display: isMobile ? "none" : "block", padding: "8px" }}
+                onClick={() => swiperRef.current?.slidePrev()}
+                icon={<ArrowBackIosOutlinedIcon />}
+              />
+              <Button
+                style={{ padding: "8px" }}
+                onClick={() => swiperRef.current?.slideNext()}
+                icon={<ArrowForwardIosOutlinedIcon />}
+              />
+            </FlexType>
+          </FlexType>
+        </FlexType>
+      </IndexBox>
     </>
   );
 }

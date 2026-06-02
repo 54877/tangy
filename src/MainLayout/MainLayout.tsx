@@ -111,7 +111,7 @@ export function MainLayout() {
             $align={{ xs: "flex-start" }}
           >
             <FlexType
-              $gap={{ xs: "lg", sm: "xl" }}
+              $gap={{ xs: "lg", sm: "xxl" }}
               $direction="column"
               $align="flex-start"
             >
@@ -131,7 +131,7 @@ export function MainLayout() {
 
             {/* 認識碳吉 */}
             <FlexType
-              $gap={{ sm: "xxl", xs: "lg" }}
+              $gap={{ sm: "xxxl", xs: "lg" }}
               $direction={{ sm: "row", xs: "column" }}
               $align="flex-start"
             >

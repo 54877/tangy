@@ -3,6 +3,7 @@ import StarIcon from "@mui/icons-material/Star";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { FlexType } from "../../styles/components/flex";
 import { media } from "../../styles/helper/media";
+import { Heading } from "../../styles/components/span";
 
 export const Img = styled.img`
   width: 100%;
@@ -60,6 +61,14 @@ export const FlexCard = styled(FlexType)`
   width: 100%;
   ${media.md} {
     flex: 1;
-    min-height: 178px;
   }
+`;
+
+export const TitleHeading = styled(Heading)`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+
+  position: relative;
 `;

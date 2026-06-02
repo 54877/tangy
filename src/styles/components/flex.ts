@@ -6,7 +6,9 @@ type SpaceKey = keyof typeof spaces;
 export const FlexType = styled.div<{
   $display?: Responsive<"block" | "flex" | "none">;
 
-  $direction?: Responsive<"row" | "column" | "none">;
+  $direction?: Responsive<
+    "row" | "column" | "none" | "row-reverse" | "column-reverse"
+  >;
 
   $align?: Responsive<
     "flex-start" | "center" | "flex-end" | "stretch" | "none"
@@ -19,6 +21,7 @@ export const FlexType = styled.div<{
   $gap?: Responsive<SpaceKey>;
 }>`
   display: flex;
+
   ${({ theme, $display = "flex" }) =>
     responsiveStyle("display", $display, theme.breakpoints)}
 

@@ -3,10 +3,12 @@ import { breakpoints } from "../tokens/breakpoints";
 
 // lg: "1320px"
 // md: "1024px"
-// sm: "768px"
+// sm: "869px"
 // xs: "375px"
+// xsLg: "425px"
 export const media = {
   xs: `@media (min-width: ${breakpoints.xs})`,
+  xsLg: `@media (min-width: ${breakpoints.xsLg})`,
   sm: `@media (min-width: ${breakpoints.sm})`,
   md: `@media (min-width: ${breakpoints.md})`,
   lg: `@media (min-width: ${breakpoints.lg})`,

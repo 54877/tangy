@@ -3,10 +3,10 @@ import { media } from "../styles/helper/media";
 import { FlexType } from "../styles/components/flex";
 import { Heading, SpanType } from "../styles/components/span";
 
-export const BannerImg = styled.img<{ $isMobile?: boolean }>`
+export const BannerImg = styled.img<{ $isLgMobile?: boolean }>`
   width: 100%;
   height: 100%;
-  height: ${({ $isMobile }) => ($isMobile ? "480px" : "375px")};
+  height: ${({ $isLgMobile }) => ($isLgMobile ? "480px" : "375px")};
   object-fit: cover;
   display: block;
 `;
@@ -19,7 +19,7 @@ export const BannerBox = styled.div(() => ({
 
   margin: "0 auto",
   maxWidth: "1320px",
-  [media.sm]: {
+  [media.lg]: {
     padding: "0",
   },
 }));
@@ -31,7 +31,7 @@ export const FlexTypeBanner = styled(FlexType)`
 export const HeadingBanner = styled(Heading)`
   color: white;
   text-align: center;
-  ${media.sm} {
+  ${media.xsLg} {
     text-align: start;
     color: ${({ theme }) => theme.colors.gray[950]};
   }
@@ -47,22 +47,28 @@ export const SpanTypeBanner = styled(SpanType)`
   background-color: #0000008f;
 `;
 
-export const ContainerBanner = styled.div`
+export const Container = styled.footer(({ theme }) => ({
+  backgroundColor: theme.colors.gray[50],
+  padding: "24px 0",
+
+  [media.sm]: {
+    padding: "48px 0",
+  },
+}));
+
+export const IndexBox = styled.div`
   margin: 0 auto;
   max-width: 1320px;
   width: 100%;
   padding: 0 16px;
+  ${media.lg} {
+    padding: 0;
+  }
 `;
 
-export const BannerMapImg = styled.img<{ $isMobile?: boolean }>`
-  height: 120px;
-  object-fit: cover;
-  display: block;
-`;
-
-export const H1 = styled.h1`
-  ${({ theme }) => theme.typography.heading.md};
+export const CardFlex = styled(FlexType)`
+  padding: 16px 0;
   ${media.sm} {
-    ${({ theme }) => theme.typography.heading.xxxl};
+    padding: 48px 0;
   }
 `;

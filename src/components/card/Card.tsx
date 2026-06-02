@@ -1,3 +1,4 @@
+import { Tooltip, useMediaQuery } from "@mui/material";
 import { FlexType } from "../../styles/components/flex";
 import { Heading, SpanType } from "../../styles/components/span";
 import {
@@ -7,9 +8,12 @@ import {
   FlexEnd,
   FavoriteContainer,
   FlexCard,
+  TitleHeading,
 } from "./Card.styled";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { useState } from "react";
+import { breakpoints } from "../../styles/tokens/breakpoints";
 // import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 export interface CardProps {
@@ -35,8 +39,15 @@ export function Card({
   price,
   originalPrice,
 }: CardProps) {
+  const isMobile = useMediaQuery(`(max-width:${breakpoints.md})`);
+  const [open, setOpen] = useState(false);
   return (
-    <FlexType $direction={{ xs: "column", md: "row" }} $gap={"spc"}>
+    <FlexType
+      style={{ width: "100%" }}
+      $direction={{ xs: "column", md: "row" }}
+      $gap={"spc"}
+      $align={"stretch"}
+    >
       <div style={{ position: "relative" }}>
         <Img src={imgSrc} alt="img" />
         <FavoriteContainer>
@@ -44,7 +55,19 @@ export function Card({
         </FavoriteContainer>
       </div>
       <FlexCard $direction={"column"} $align={"flex-start"} $gap={"spc"}>
-        <Heading>{title}</Heading>
+        <Tooltip title={title}>
+          <TitleHeading
+            onClick={() => {
+              if (isMobile) setOpen((v) => !v);
+            }}
+            style={{
+              WebkitLineClamp: isMobile && open ? "unset" : 2,
+              cursor: isMobile ? "pointer" : "default",
+            }}
+          >
+            {title}
+          </TitleHeading>
+        </Tooltip>
         <FlexType $justify={"flex-start"} $gap={"xs"}>
           <SpanType $size={"sm"}>by {name}</SpanType>
         </FlexType>

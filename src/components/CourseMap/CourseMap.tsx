@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { media } from "../../styles/helper/media";
-import { Img, MapContainer, Location } from "./CourseMap.styled";
+import { Img, MapContainer, Location, FlexTypeMap } from "./CourseMap.styled";
 import { FlexType } from "../../styles/components/flex";
 import { Heading, SpanType } from "../../styles/components/span";
 import { ButtonOutlined } from "../Button/Button";
@@ -17,12 +17,14 @@ interface CourseMapProps {
   imgSrc: string;
   title: string;
   secTitle: string;
+  reverse?: boolean;
   cardData: CardProps[];
 }
 
 export function CourseMap({
   imgSrc,
   title,
+  reverse,
   secTitle,
   cardData,
 }: CourseMapProps) {
@@ -30,26 +32,17 @@ export function CourseMap({
   const swiperRef = useRef<SwiperType | null>(null);
   return (
     <MapContainer>
-      <FlexType
-        $direction={{ xs: "column", sm: "row" }}
+      <FlexTypeMap
+        $direction={{ xs: "column", sm: reverse ? "row-reverse" : "row" }}
         $align={"center"}
         $gap={"lg"}
       >
         {/* img */}
-        <Img src={imgSrc} alt="img" />
-        <FlexType
-          style={{
-            width: "100%",
-            minWidth: 0,
-          }}
-          $direction={"column"}
-          $gap={"lg"}
-        >
-          <FlexType
-            style={{ width: "100%" }}
-            $align={"flex-end"}
-            $justify={"space-between"}
-          >
+        <FlexTypeMap>
+          <Img src={imgSrc} alt="img" />
+        </FlexTypeMap>
+        <FlexTypeMap $direction={"column"} $gap={"lg"}>
+          <FlexTypeMap $align={"flex-end"} $justify={"space-between"}>
             <FlexType
               $direction={{ xs: "column", md: "row" }}
               $align={{ xs: "flex-start", md: "flex-end" }}
@@ -79,14 +72,15 @@ export function CourseMap({
                 icon={<ArrowForwardIcon />}
               />
             </FlexType>
-          </FlexType>
+          </FlexTypeMap>
+
           {/* Cards/ swiper */}
           {isTablet ? (
-            <FlexType $direction="column" $gap="lg">
+            <FlexTypeMap $direction="column" $gap="lg">
               {cardData.map((item, index) => (
                 <Card key={`${item.title}-${index}`} {...item} />
               ))}
-            </FlexType>
+            </FlexTypeMap>
           ) : (
             <Swiper
               style={{ width: "100%", minWidth: 0 }}
@@ -102,8 +96,8 @@ export function CourseMap({
               ))}
             </Swiper>
           )}
-        </FlexType>
-      </FlexType>
+        </FlexTypeMap>
+      </FlexTypeMap>
     </MapContainer>
   );
 }
