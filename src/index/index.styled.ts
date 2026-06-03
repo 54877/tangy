@@ -72,3 +72,13 @@ export const CardFlex = styled(FlexType)`
     padding: 48px 0;
   }
 `;
+
+export const HeadingEndBanner = styled(Heading)`
+  color: white;
+  text-align: start;
+`;
+
+export const ImgContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;

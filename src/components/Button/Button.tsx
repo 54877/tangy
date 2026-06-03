@@ -35,7 +35,12 @@ export function Button({
           {icon}
         </ButtonType>
       ) : (
-        <ButtonType style={{ ...style }} disabled={disabled} onClick={onClick}>
+        <ButtonType
+          className={className}
+          style={{ ...style }}
+          disabled={disabled}
+          onClick={onClick}
+        >
           {icon_left}
           {text}
           {icon_right}
@@ -51,6 +56,7 @@ export function ButtonOutlined({
   icon_right,
   icon_left,
   disabled,
+  className,
   onClick,
   style,
 }: btnType) {
@@ -59,6 +65,7 @@ export function ButtonOutlined({
       {icon ? (
         <ButtonOutlinedType
           disabled={disabled}
+          className={className}
           style={{ borderRadius: "100px", padding: "12px", ...style }}
           onClick={onClick}
         >
@@ -67,6 +74,7 @@ export function ButtonOutlined({
       ) : (
         <ButtonOutlinedType
           style={{ ...style }}
+          className={className}
           disabled={disabled}
           onClick={onClick}
         >

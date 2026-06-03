@@ -1,5 +1,5 @@
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Fb from "../assets/icon_tangy/facebook.png";
 import ig from "../assets/icon_tangy/IG.png";
 import line from "../assets/icon_tangy/line.png";
@@ -39,6 +39,11 @@ import { useState } from "react";
 export function MainLayout() {
   const isMobile = useMediaQuery(`${media.sm}`);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const loginRouterOnclick = () => {
+    navigate("/login");
+  };
 
   return (
     <>
@@ -65,20 +70,20 @@ export function MainLayout() {
               />
               {/* Menu */}
               {isMobile ? (
-                <Button text={"登入/註冊"}></Button>
+                <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
               ) : open ? (
                 <>
                   <ButtonIcon
                     onClick={() => setOpen(false)}
                     icon={<CloseIcon />}
-                  ></ButtonIcon>
+                  />
                 </>
               ) : (
                 <>
                   <ButtonIcon
                     onClick={() => setOpen(true)}
                     icon={<MenuIcon />}
-                  ></ButtonIcon>
+                  />
                 </>
               )}
             </FlexType>
@@ -230,7 +235,7 @@ export function MainLayout() {
               <ArrowForwardIosIcon />
             </Li>
           </FlexType>
-          <Button text={"登入/註冊"}></Button>
+          <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
         </ListMenu>
       </Drawer>
     </>
