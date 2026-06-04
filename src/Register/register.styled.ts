@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Button } from "../components/Button/Button";
 import { LinkPrimary } from "../components/Link/Link";
 
-export const ButtonLogin = styled(Button)`
+export const ButtonRegister = styled(Button)`
   && {
     background: rgb(31, 136, 61);
     width: 100%;

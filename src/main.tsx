@@ -5,7 +5,8 @@ import { ThemeProvider } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./context/auth/AuthProvider.tsx";
 import mainRoute from "./MainLayout/index.tsx";
-import loginRoute from "./login/index.ts";
+import loginRoute from "./LoginMainLout/index.tsx";
+
 const router = createBrowserRouter([mainRoute, loginRoute], {
   basename: "/tangy/",
 });
