@@ -1,11 +1,21 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import styled from "styled-components";
+import { FlexType } from "../../styles/components/flex";
+import { media } from "../../styles/helper/media";
 
-export const TangyIcon = styled.img(() => ({
-  width: "50px",
-  height: "50px",
-  objectFit: "cover",
-}));
+export const TangyIcon = styled.img<{ $type: boolean }>`
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  object-fit: cover;
+
+  transform: ${({ $type }) =>
+    $type ? "translate(-14%, -45px)" : "translate(-110%, -5px)"};
+
+  ${media.sm} {
+    transform: translate(-110%, -5px);
+  }
+`;
 
 export const TangyTitle = styled(Typography)`
   && {
@@ -16,8 +26,20 @@ export const TangyTitle = styled(Typography)`
   }
 `;
 
-export const TangyLogoBox = styled(Box)(() => ({
+export const FlexLogo = styled(FlexType)<{ $type: boolean }>`
+  margin: 0 0 0 -18px;
+`;
+
+export const LogoWrapper = styled.div({
   display: "flex",
-  alignContent: "center",
-  justifyContent: "center",
-}));
+  alignItems: "center",
+  position: "relative",
+});
+
+export const Container = styled(FlexType)<{ $type: boolean }>`
+  padding-left: ${({ $type }) => ($type ? "20px" : "67px")};
+
+  ${media.sm} {
+    padding-left: 67px;
+  }
+`;

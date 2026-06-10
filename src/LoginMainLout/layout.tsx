@@ -1,9 +1,9 @@
-import { Container, Img, LoginContainer } from "./layout.styled";
+import { Outlet } from "react-router-dom";
 import bgi from "../assets/icon_tangy/loginBgi.png";
 import bgiSm from "../assets/icon_tangy/loginBgiSm.png";
-import { FlexType } from "../styles/components/flex";
-import { Outlet } from "react-router-dom";
 import { LogoTangy } from "../components/LogoTangy/LogoTangy";
+import { FlexType } from "../styles/components/flex";
+import { Container, Img, LoginContainer } from "./layout.styled";
 
 export function LoginLayout() {
   return (
@@ -21,7 +21,7 @@ export function LoginLayout() {
           <LoginContainer $justify={"center"} $align={"center"}>
             <FlexType style={{ width: "352px" }} $direction={"column"}>
               <FlexType style={{ width: "100%" }}>
-                <LogoTangy />
+                <LogoTangy type={true} />
               </FlexType>
               <Outlet />
             </FlexType>
