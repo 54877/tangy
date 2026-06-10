@@ -9,6 +9,7 @@ interface btnType {
   icon_right?: ReactNode;
   icon_left?: ReactNode;
   onClick?: () => void;
+  textStyle?: CSSProperties;
   disabled?: boolean;
   style?: CSSProperties;
 }
@@ -17,6 +18,7 @@ export function Button({
   icon,
   text,
   className,
+  textStyle,
   icon_right,
   icon_left,
   disabled,
@@ -42,7 +44,7 @@ export function Button({
           onClick={onClick}
         >
           {icon_left}
-          {text}
+          <span style={{ ...textStyle }}>{text}</span>
           {icon_right}
         </ButtonType>
       )}

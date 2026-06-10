@@ -20,14 +20,17 @@ export function Federated({ location = "up" }: Type) {
         </FlexType>
       )}
       <ButtonSec
+        textStyle={{ width: "200px", textAlign: "start" }}
         icon_left={<Icon src={google} alt="Google" />}
         text={"Continue with Google "}
       />
       <ButtonSec
+        textStyle={{ width: "200px", textAlign: "start" }}
         icon_left={<Icon src={fb} alt="fb" />}
         text={"Continue with FaceBook "}
       />
       <ButtonSec
+        textStyle={{ width: "200px", textAlign: "start" }}
         icon_left={<Icon src={ig} alt="ig" />}
         text={"Continue with Instagram "}
       />

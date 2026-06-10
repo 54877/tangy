@@ -1,7 +1,7 @@
 import { FlexType } from "../styles/components/flex";
-import { ButtonLogin, Link } from "./login.styled";
 import { Federated } from "../components/FederatedLogin/FederatedLogin";
 import { FromInput } from "../components/Input/Input";
+import { ButtonAuth, LinkAuth } from "../MainLayout/MainLayout.styled";
 
 export function LoginPage() {
   return (
@@ -14,12 +14,12 @@ export function LoginPage() {
             to={"forgot"}
             titleSec={"Forgot password?"}
           />
-          <ButtonLogin text={"登入"}></ButtonLogin>
+          <ButtonAuth text={"登入"}></ButtonAuth>
         </FlexType>
       </form>
       <Federated />
       <FlexType style={{ width: "100%" }}>
-        <Link to={"register"} text={"Create an account?"} />
+        <LinkAuth to={"register"} text={"Create an account?"} />
       </FlexType>
     </>
   );

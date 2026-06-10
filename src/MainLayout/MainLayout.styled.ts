@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { List, ListItem } from "@mui/material";
 import { Button } from "../components/Button/Button";
+import { LinkPrimary } from "../components/Link/Link";
 
 export const ContainerLayout = styled.div(() => ({
   padding: "0 24px",
@@ -129,5 +130,25 @@ export const ListMenu = styled(List)`
   justify-content: space-between;
   && {
     padding: 8px 16px 16px 16px;
+  }
+`;
+
+export const ButtonAuth = styled(Button)`
+  && {
+    background: #658245;
+    width: 100%;
+    transition: 0.2s ease;
+    &:hover {
+      transform: translateY(-1px);
+      background: rgb(24, 110, 49);
+    }
+  }
+`;
+
+export const LinkAuth = styled(LinkPrimary)`
+  color: #87996b;
+  &:hover {
+    transform: translateY(-1px);
+    color: white;
   }
 `;

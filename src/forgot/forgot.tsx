@@ -1,6 +1,6 @@
 import { FromInput } from "../components/Input/Input";
+import { ButtonAuth, LinkAuth } from "../MainLayout/MainLayout.styled";
 import { FlexType } from "../styles/components/flex";
-import { ButtonForgot, Link } from "./forgot.styled";
 
 export function ForgotPassword() {
   return (
@@ -8,11 +8,11 @@ export function ForgotPassword() {
       <form style={{ width: "100%" }}>
         <FlexType $direction={"column"} $gap={"lg"} $align={"flex-start"}>
           <FromInput title={"Email"} required={true} />
-          <ButtonForgot text={"發送密碼重置郵件"}></ButtonForgot>
+          <ButtonAuth text={"發送密碼重置郵件"}></ButtonAuth>
         </FlexType>
       </form>
       <FlexType style={{ width: "100%" }}>
-        <Link to={"/login"} text={"Back to Sign in →"} />
+        <LinkAuth to={"/login"} text={"Back to Sign in →"} />
       </FlexType>
     </>
   );

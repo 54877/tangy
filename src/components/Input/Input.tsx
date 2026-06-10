@@ -1,5 +1,6 @@
+import { LinkAuth } from "../../MainLayout/MainLayout.styled";
 import { SpanType } from "../../styles/components/span";
-import { Flex, Input, Link, Required } from "./Input.styled";
+import { Flex, Input, Required } from "./Input.styled";
 
 type Props = {
   title: string;
@@ -24,7 +25,7 @@ export function FromInput({
             {title}
             <Required $required={required}> *</Required>
           </SpanType>
-          <Link to={to} text={titleSec} />
+          <LinkAuth to={to} text={titleSec} />
         </Flex>
         <Input variant="outlined" fullWidth size="small" />
         {content && content != "" && (

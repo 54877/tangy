@@ -1,7 +1,7 @@
 import { Federated } from "../components/FederatedLogin/FederatedLogin";
 import { FromInput } from "../components/Input/Input";
+import { ButtonAuth, LinkAuth } from "../MainLayout/MainLayout.styled";
 import { FlexType } from "../styles/components/flex";
-import { ButtonRegister, Link } from "./register.styled";
 
 export function Register() {
   return (
@@ -16,11 +16,11 @@ export function Register() {
             content={"密碼長度需8~15個字符，其中包含數字和大小寫字母。"}
           />
           <FromInput title={"Username"} required={true} />
-          <ButtonRegister text={"註冊"}></ButtonRegister>
+          <ButtonAuth text={"註冊"}></ButtonAuth>
         </FlexType>
       </form>
       <FlexType style={{ width: "100%" }}>
-        <Link to={"/login"} text={"Already have an account? Sign in →"} />
+        <LinkAuth to={"/login"} text={"Already have an account? Sign in →"} />
       </FlexType>
     </>
   );

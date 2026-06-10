@@ -1,6 +1,5 @@
 import { TextField } from "@mui/material";
 import styled from "styled-components";
-import { LinkPrimary } from "../Link/Link";
 import { FlexType } from "../../styles/components/flex";
 
 export const Input = styled(TextField)`
@@ -16,14 +15,6 @@ export const Input = styled(TextField)`
     .MuiOutlinedInput-notchedOutline legend {
       display: none;
     }
-  }
-`;
-
-export const Link = styled(LinkPrimary)`
-  color: #e3f2fd;
-  &:hover {
-    transform: translateY(-1px);
-    color: white;
   }
 `;
 

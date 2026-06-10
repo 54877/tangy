@@ -3,13 +3,13 @@ import { Button } from "../Button/Button";
 
 export const ButtonSec = styled(Button)`
   && {
-    background: #e3f2fd;
+    background: white;
     color: Black;
     width: 100%;
     transition: 0.2s ease;
     &:hover {
       transform: translateY(-1px);
-      background: white;
+      background: #e3f2fd;
     }
   }
 `;
