@@ -44,6 +44,14 @@ export function MainLayout() {
     navigate("/login");
   };
 
+  const button = () => {
+    return open ? (
+      <ButtonIcon onClick={() => setOpen(false)} icon={<CloseIcon />} />
+    ) : (
+      <ButtonIcon onClick={() => setOpen(true)} icon={<MenuIcon />} />
+    );
+  };
+
   return (
     <>
       {/*     TOP NAV   */}
@@ -70,20 +78,8 @@ export function MainLayout() {
               {/* Menu */}
               {isMobile ? (
                 <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
-              ) : open ? (
-                <>
-                  <ButtonIcon
-                    onClick={() => setOpen(false)}
-                    icon={<CloseIcon />}
-                  />
-                </>
               ) : (
-                <>
-                  <ButtonIcon
-                    onClick={() => setOpen(true)}
-                    icon={<MenuIcon />}
-                  />
-                </>
+                button()
               )}
             </FlexType>
           </FlexTypeHeader>

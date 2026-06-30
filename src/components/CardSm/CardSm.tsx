@@ -1,13 +1,13 @@
 import { FlexType } from "../../styles/components/flex";
 import { Heading, SpanType } from "../../styles/components/span";
 
-interface cardType {
-  img: string;
-  title: string;
-  content: string;
+interface CardType {
+  readonly img: string;
+  readonly title: string;
+  readonly content: string;
 }
 
-export function CardSm({ img, title, content }: cardType) {
+export function CardSm({ img, title, content }: CardType) {
   return (
     <FlexType $direction={"column"} $gap={"spc"}>
       <img src={img} alt={img} />

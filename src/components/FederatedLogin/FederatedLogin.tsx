@@ -6,7 +6,7 @@ import { SpanType } from "../../styles/components/span";
 import { ButtonSec, Icon } from "./FederatedLogin.styled";
 
 interface Type {
-  location?: "up" | "down";
+  readonly location?: "up" | "down";
 }
 
 export function Federated({ location = "up" }: Type) {

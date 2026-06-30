@@ -1,4 +1,4 @@
-import type { RuleSet } from "styled-components";
+import { css, type RuleSet } from "styled-components";
 import { breakpoints } from "../tokens/breakpoints";
 
 // lg: "1320px"
@@ -17,15 +17,18 @@ export const media = {
 type BreakpointKey = keyof typeof breakpoints;
 export type Responsive<T> = T | Partial<Record<BreakpointKey, T>>;
 
-//元件用
 export const responsiveStyle = <T extends string>(
   property: string,
   value: T | Partial<Record<string, T>>,
   breakpoints: Record<string, string>,
   transform?: (v: T) => string | RuleSet<object>,
-) => {
+): RuleSet<object> => {
   if (typeof value !== "object" || value === null) {
-    return `${property}: ${transform ? transform(value as T) : value};`;
+    const finalValue = transform ? transform(value) : value;
+
+    return css`
+      ${property}: ${finalValue};
+    `;
   }
 
   return Object.entries(value as Record<string, T>)
@@ -33,14 +36,21 @@ export const responsiveStyle = <T extends string>(
       const finalValue = transform ? transform(v) : v;
 
       if (bp === "xs") {
-        return `${property}: ${finalValue};`;
+        return css`
+          ${property}: ${finalValue};
+        `;
       }
 
-      return `
+      return css`
         @media (min-width: ${breakpoints[bp]}) {
           ${property}: ${finalValue};
         }
       `;
     })
-    .join("");
+    .reduce(
+      (acc, cur) => css`
+        ${acc}${cur}
+      `,
+      css``,
+    );
 };

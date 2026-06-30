@@ -2,16 +2,16 @@ import { type ReactNode } from "react";
 import type { CSSProperties } from "styled-components";
 import { ButtonOutlinedType, ButtonType } from "./Button.styled";
 
-interface btnType {
-  icon?: ReactNode;
-  text?: string;
-  className?: string;
-  icon_right?: ReactNode;
-  icon_left?: ReactNode;
-  onClick?: () => void;
-  textStyle?: CSSProperties;
-  disabled?: boolean;
-  style?: CSSProperties;
+interface BtnType {
+  readonly icon?: ReactNode;
+  readonly text?: string;
+  readonly className?: string;
+  readonly icon_right?: ReactNode;
+  readonly icon_left?: ReactNode;
+  readonly onClick?: () => void;
+  readonly textStyle?: CSSProperties;
+  readonly disabled?: boolean;
+  readonly style?: CSSProperties;
 }
 
 export function Button({
@@ -24,7 +24,7 @@ export function Button({
   disabled,
   onClick,
   style,
-}: btnType) {
+}: BtnType) {
   return (
     <>
       {icon ? (
@@ -61,7 +61,7 @@ export function ButtonOutlined({
   className,
   onClick,
   style,
-}: btnType) {
+}: BtnType) {
   return (
     <>
       {icon ? (

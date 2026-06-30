@@ -14,11 +14,11 @@ import { ButtonOutlined } from "../Button/Button";
 import { Card, type CardProps } from "../card/Card";
 
 interface CourseMapProps {
-  imgSrc: string;
-  title: string;
-  secTitle: string;
-  reverse?: boolean;
-  cardData: CardProps[];
+  readonly imgSrc: string;
+  readonly title: string;
+  readonly secTitle: string;
+  readonly reverse?: boolean;
+  readonly cardData: CardProps[];
 }
 
 export function CourseMap({

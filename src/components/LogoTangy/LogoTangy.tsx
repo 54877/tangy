@@ -9,30 +9,28 @@ import {
   TangyTitle,
 } from "./LogoTangy.styled";
 
-interface logoType {
-  type?: boolean;
+interface LogoType {
+  readonly type?: boolean;
 }
 
-export function LogoTangy({ type = false }: logoType) {
+export function LogoTangy({ type = false }: LogoType) {
   return (
-    <>
-      <Link to="/">
-        <Container $type={type}>
-          <LogoWrapper>
-            <TangyIcon $type={type} src={logo2} alt="Tangy Logo" />
-            <FlexLogo
-              $type={type}
-              $direction={"column"}
-              $align={"center"}
-              $justify={"center"}
-              $gap={"none"}
-            >
-              <TangyTitle variant="inherit">碳吉學院</TangyTitle>
-              <SpanType $size={"xs"}>TANJI ACADEMY</SpanType>
-            </FlexLogo>
-          </LogoWrapper>
-        </Container>
-      </Link>
-    </>
+    <Link to="/">
+      <Container $type={type}>
+        <LogoWrapper>
+          <TangyIcon $type={type} src={logo2} alt="Tangy Logo" />
+          <FlexLogo
+            $type={type}
+            $direction={"column"}
+            $align={"center"}
+            $justify={"center"}
+            $gap={"none"}
+          >
+            <TangyTitle variant="inherit">碳吉學院</TangyTitle>
+            <SpanType $size={"xs"}>TANJI ACADEMY</SpanType>
+          </FlexLogo>
+        </LogoWrapper>
+      </Container>
+    </Link>
   );
 }

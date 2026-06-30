@@ -2,13 +2,13 @@ import type { ReactNode } from "react";
 import { NavLinkType } from "./Link.styled";
 import type { CSSProperties } from "styled-components";
 
-interface linkType {
-  text?: string;
-  icon_right?: ReactNode;
-  icon_left?: ReactNode;
-  to: string;
-  className?: string;
-  style?: CSSProperties;
+interface LinkType {
+  readonly text?: string;
+  readonly icon_right?: ReactNode;
+  readonly icon_left?: ReactNode;
+  readonly to: string;
+  readonly className?: string;
+  readonly style?: CSSProperties;
 }
 
 export function LinkPrimary({
@@ -18,14 +18,12 @@ export function LinkPrimary({
   text,
   icon_right,
   icon_left,
-}: linkType) {
+}: LinkType) {
   return (
-    <>
-      <NavLinkType className={className} style={{ ...style }} to={to}>
-        {icon_left}
-        {text}
-        {icon_right}
-      </NavLinkType>
-    </>
+    <NavLinkType className={className} style={{ ...style }} to={to}>
+      {icon_left}
+      {text}
+      {icon_right}
+    </NavLinkType>
   );
 }

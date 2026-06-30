@@ -14,17 +14,16 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useState } from "react";
 import { breakpoints } from "../../styles/tokens/breakpoints";
-// import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 export interface CardProps {
-  imgSrc: string;
-  title: string;
-  name: string;
-  stars: string;
-  people: string;
-  time: string;
-  price: string;
-  originalPrice: string;
+  readonly imgSrc: string;
+  readonly title: string;
+  readonly name: string;
+  readonly stars: string;
+  readonly people: string;
+  readonly time: string;
+  readonly price: string;
+  readonly originalPrice: string;
 }
 
 //TODO 待補上新增置收藏api 與切換收藏狀態的功能

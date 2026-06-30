@@ -2,19 +2,19 @@ import { FlexType } from "../../styles/components/flex";
 import { SpanType } from "../../styles/components/span";
 import { Card, CardBorder, Content, Start } from "./CardSection.styled";
 import { Img } from "../CourseSection/CourseSection.styled";
-// Todo  data{
+// TODO  data{
 // time : 時間  ,
 // content : 內容 ,
 // name :發文者名稱
 // img: 發文者照片 ,
 // work: 發文者職業}
 
-interface cardSectionType {
-  time: string;
-  content: string;
-  userName: string;
-  userImg: string;
-  userWork: string;
+interface CardSectionType {
+  readonly time: string;
+  readonly content: string;
+  readonly userName: string;
+  readonly userImg: string;
+  readonly userWork: string;
 }
 
 export function CardSection({
@@ -23,7 +23,7 @@ export function CardSection({
   userName,
   userImg,
   userWork,
-}: cardSectionType) {
+}: CardSectionType) {
   return (
     <Card>
       <CardBorder>
