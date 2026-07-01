@@ -1,11 +1,11 @@
-import type { ForgotProps } from "../forgot/forgot";
-import type { UserProps } from "../login/login";
-import { createApi } from "./util";
+import type { ForgotProps, UserProps } from "../types/authType";
+import { createApi } from "./utils/createApi";
 
 const _register = createApi(`register`);
 const _login = createApi(`login`);
 const _forgotPassword = createApi(`forgotPassword`);
 const _resetPassword = createApi(`resetPassword`);
+
 //註冊
 export const register = async (information: UserProps) => {
   return await _register.post("/", {
@@ -35,6 +35,6 @@ export const resetPassword = async (information: ForgotProps) => {
   return await _resetPassword.put("/", {
     email: information.email,
     code: information.code,
-    password: information.newPassword,
+    newPassword: information.newPassword,
   });
 };

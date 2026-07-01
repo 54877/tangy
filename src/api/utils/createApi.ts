@@ -1,7 +1,5 @@
 import axios from "axios";
-import setupInterceptors from "./interceptor";
-
-export const TOKEN_KEY = "GSIMS_Token";
+import setupInterceptors from "../interceptor";
 
 export const createApi = (endpoint: string) => {
   return axios.create({

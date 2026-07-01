@@ -9,7 +9,7 @@ export function LoginLayout() {
   return (
     <>
       <picture>
-        <source media="(max-width: 600px)" srcSet={bgiSm} />
+        <source media="(max-width: 869px)" srcSet={bgiSm} />
         <Img src={bgi} alt="" />
       </picture>
       <Container>

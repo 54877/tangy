@@ -3,7 +3,7 @@ import {
   type AxiosInstance,
   type InternalAxiosRequestConfig,
 } from "axios";
-import { TOKEN_KEY } from "./util";
+import { TOKEN_KEY } from "./utils/token";
 
 let isRedirecting = false;
 

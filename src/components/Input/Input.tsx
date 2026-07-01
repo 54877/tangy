@@ -1,15 +1,20 @@
+import { useState, type ReactNode } from "react";
 import { LinkAuth } from "../../MainLayout/MainLayout.styled";
 import { SpanType } from "../../styles/components/span";
+import type { FormError, StringKeys } from "../../types/errorType";
 import { Flex, Input, Required } from "./Input.styled";
-
+import { Eye, EyeOff } from "lucide-react";
+import { InputAdornment } from "@mui/material";
 type Props<T> = {
+  readonly err?: FormError<T>;
   readonly title: string;
   readonly to?: string;
   readonly disabled?: boolean;
   readonly titleSec?: string;
   readonly required?: boolean;
-  readonly content?: string;
-  readonly fieldKey: keyof T;
+  readonly content?: ReactNode | string;
+  readonly type?: string;
+  readonly fieldKey: StringKeys<T>;
   readonly information: T;
   readonly extra?: Partial<T>;
   readonly onChange: (
@@ -22,6 +27,7 @@ type Props<T> = {
 export function FromInput<T>({
   title,
   to = "",
+  type,
   disabled,
   titleSec,
   required = false,
@@ -29,8 +35,26 @@ export function FromInput<T>({
   fieldKey,
   information,
   extra,
+  err,
   onChange,
 }: Props<T>) {
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+
+  const renderPasswordToggle = () => {
+    if (type !== "password") return undefined;
+
+    return (
+      <InputAdornment position="end">
+        <button
+          type="button"
+          onClick={() => setPasswordVisible((prev) => !prev)}
+        >
+          {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      </InputAdornment>
+    );
+  };
+
   return (
     <Flex $direction={"column"} $gap={"sm"} $align={"flex-start"}>
       <Flex $justify={"space-between"}>
@@ -48,8 +72,16 @@ export function FromInput<T>({
         onChange={(e) => onChange(e.target.value, fieldKey, extra)}
         disabled={disabled}
         variant="outlined"
+        type={passwordVisible ? "text" : (type ?? "text")}
         fullWidth
         size="small"
+        helperText={err?.[fieldKey] ?? ""}
+        $isError={!!err?.[fieldKey]}
+        slotProps={{
+          input: {
+            endAdornment: renderPasswordToggle(),
+          },
+        }}
       />
       {/* 底下備註 */}
       {content && content != "" && (
