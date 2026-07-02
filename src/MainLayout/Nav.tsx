@@ -50,6 +50,7 @@ export const Nav = ({ isMobile }: NavProps) => {
   const loginRouterOnclick = () => {
     navigate("/login");
   };
+
   const button = () => {
     return open ? (
       <ButtonIcon onClick={() => setOpen(false)} icon={<CloseIcon />} />
