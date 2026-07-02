@@ -42,8 +42,8 @@ type NavProps = {
 };
 
 export const Nav = ({ isMobile }: NavProps) => {
-  const [open, setOpen] = useState(true);
-  const [borderState, setBorderState] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [borderState, setBorderState] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
