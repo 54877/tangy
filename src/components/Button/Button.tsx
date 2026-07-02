@@ -4,7 +4,7 @@ import { ButtonOutlinedType, ButtonType } from "./Button.styled";
 
 interface BtnType {
   readonly icon?: ReactNode;
-  readonly text?: string;
+  readonly text?: ReactNode;
   readonly className?: string;
   readonly icon_right?: ReactNode;
   readonly icon_left?: ReactNode;

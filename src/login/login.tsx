@@ -10,13 +10,15 @@ import { handleApiError } from "../utils/apiError";
 import { useState } from "react";
 import { login } from "../api/auth";
 import { formValidate } from "../utils/formValidate";
-import { TOKEN_KEY } from "../api/utils/token";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth/useAuth";
 
 export function LoginPage() {
   const { information, handleOnChange } = useInformation<UserProps>(userInit);
   const [err, setErr] = useState<Partial<UserProps>>({});
   const navigate = useNavigate();
+  const { setAuthToken } = useAuth();
+
   //登入API
   const loginApi = async () => {
     try {
@@ -25,7 +27,7 @@ export function LoginPage() {
       if (!token) {
         return;
       }
-      sessionStorage.setItem(TOKEN_KEY, token);
+      setAuthToken(token);
       navigate("/");
     } catch (err) {
       handleApiError(err, setErr);
