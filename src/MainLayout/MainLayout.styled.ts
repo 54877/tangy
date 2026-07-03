@@ -60,7 +60,11 @@ export const HeaderSearch = styled.input`
   }
 `;
 export const Search = styled(SearchIcon)`
-  margin: 12px;
+  && {
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+  }
   ${media.sm} {
     position: absolute;
     left: 0;

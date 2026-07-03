@@ -1,14 +1,9 @@
-import { MenuIcon, Search } from "lucide-react";
 import CloseIcon from "@mui/icons-material/Close";
 import { LogoTangy } from "../components/LogoTangy/LogoTangy";
 import { FlexType } from "../styles/components/flex";
 import { SpanType } from "../styles/components/span";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import {
   HeaderFixed,
@@ -24,8 +19,10 @@ import {
   BorderReverse,
   UserListMenu,
   UserContainer,
+  Search,
+  MenuIcon,
 } from "./MainLayout.styled";
-import { Button } from "../components/Button/Button";
+import { Button, ButtonOutlined } from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { Drawer } from "@mui/material";
 import { useState } from "react";
@@ -36,6 +33,10 @@ import {
   UserListButton,
 } from "../components/NavUserList/List";
 import { UserLi } from "../components/NavUserList/List.styled";
+import { UserList } from "./userList";
+import { MenuNav } from "../components/Menu/Menu";
+import { useMenu } from "../components/Menu/menuHook";
+import { CourseList } from "./courseList";
 
 type NavProps = {
   isMobile: boolean;
@@ -44,18 +45,47 @@ type NavProps = {
 export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
   const [borderState, setBorderState] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, clearAuthToken } = useAuth();
   const navigate = useNavigate();
+  const menu = useMenu();
 
+  //登入跳轉手頁
   const loginRouterOnclick = () => {
     navigate("/login");
   };
 
+  //關閉menu
+  const closeClick = () => {
+    setOpen(false);
+    setBorderState(false);
+  };
+
+  //登出
+  const logout = () => {
+    clearAuthToken();
+    closeClick();
+    menu.closeClick();
+  };
+
+  //手機板關閉menu切換UI
   const button = () => {
     return open ? (
-      <ButtonIcon onClick={() => setOpen(false)} icon={<CloseIcon />} />
+      <ButtonIcon onClick={closeClick} icon={<CloseIcon />} />
     ) : (
       <ButtonIcon onClick={() => setOpen(true)} icon={<MenuIcon />} />
+    );
+  };
+
+  //電腦 登入登出切換 UI
+  const macLogin = () => {
+    return isAuthenticated ? (
+      <ButtonOutlined
+        onClick={menu.openClick("user")}
+        style={{ padding: "0", border: "0" }}
+        text={<UserImg />}
+      />
+    ) : (
+      <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
     );
   };
 
@@ -66,8 +96,16 @@ export const Nav = ({ isMobile }: NavProps) => {
           <LogoTangy />
 
           <FlexType $display={{ xs: "none", sm: "flex" }}>
-            <SpanType>課程分類</SpanType>
-            <KeyboardArrowDownIcon />
+            <ButtonOutlined
+              onClick={menu.openClick("course")}
+              style={{ padding: "12px 0", border: "0" }}
+              text={
+                <>
+                  <SpanType>課程分類</SpanType>
+                  <KeyboardArrowDownIcon />
+                </>
+              }
+            />
           </FlexType>
 
           <FlexTypeHeader $gap={{ xs: "none", sm: "lg" }}>
@@ -79,14 +117,15 @@ export const Nav = ({ isMobile }: NavProps) => {
             <FlexType $gap={{ xs: "none", sm: "sm" }}>
               {/* cart */}
               <ShoppingCartOutlinedIcon
-                sx={{ margin: "12px", cursor: "pointer" }}
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  padding: "12px",
+                  cursor: "pointer",
+                }}
               />
               {/* Menu */}
-              {isMobile ? (
-                <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
-              ) : (
-                button()
-              )}
+              {isMobile ? macLogin() : button()}
             </FlexType>
           </FlexTypeHeader>
         </ContainerHeader>
@@ -151,27 +190,12 @@ export const Nav = ({ isMobile }: NavProps) => {
                 </FlexType>
               }
             />
+            {/* User 列表 */}
             <UserListMenu>
-              <FlexType $direction={"column"} $gap={"sm"}>
-                <UserListButton
-                  icon={<AccountCircleOutlinedIcon />}
-                  text={"個人檔案"}
-                />
-                <UserListButton
-                  icon={<MenuBookOutlinedIcon />}
-                  text={"我的學習"}
-                />
-                <UserListButton
-                  icon={<FavoriteBorderOutlinedIcon />}
-                  text={"我的收藏"}
-                />
-                <UserListButton
-                  icon={<FormatListBulletedOutlinedIcon />}
-                  text={"訂單紀錄"}
-                />
-              </FlexType>
+              <UserList />
             </UserListMenu>
             <UserListButton
+              onClick={logout}
               as={"div"}
               icon={<LogoutOutlinedIcon />}
               text={"登出"}
@@ -179,20 +203,46 @@ export const Nav = ({ isMobile }: NavProps) => {
           </UserContainer>
         ) : (
           <ListMenu>
-            <FlexType $direction={"column"} $gap={"sm"}>
-              <UserLi style={{ padding: "12px 0" }}>
-                <SpanType $type="label">所有領域</SpanType>
-              </UserLi>
-              <ListButtonDefault text={"個人理財"} />
-              <ListButtonDefault text={"家族財富"} />
-              <ListButtonDefault text={"投資規劃"} />
-              <ListButtonDefault text={"財務分析"} />
-              <ListButtonDefault text={"風險管理"} />
-            </FlexType>
-            <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
+            {/* course List */}
+            <CourseList />
+            {!isAuthenticated && (
+              <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
+            )}
           </ListMenu>
         )}
       </Drawer>
+
+      {/* mac user menu list & mac course menu list*/}
+      <MenuNav
+        open={menu.isOpen}
+        menuRef={menu.ref}
+        onClickAway={menu.closeClick}
+        text={
+          <>
+            {/* userList menu */}
+            {menu.activeKey === "user" && (
+              <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
+                <UserLi style={{ paddingBottom: "12px" }}>
+                  <SpanType>HI UserNameUserNameUserNameUserName</SpanType>
+                </UserLi>
+                <UserList />
+                <UserListButton
+                  onClick={logout}
+                  as={"div"}
+                  icon={<LogoutOutlinedIcon />}
+                  text={"登出"}
+                />
+              </UserListMenu>
+            )}
+            {/* 課程分類menu */}
+            {menu.activeKey === "course" && (
+              <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
+                <CourseList />
+              </UserListMenu>
+            )}
+          </>
+        }
+      />
     </>
   );
 };

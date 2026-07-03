@@ -12,10 +12,12 @@ import { login } from "../api/auth";
 import { formValidate } from "../utils/formValidate";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth/useAuth";
+import type { FormError } from "../types/errorType";
+import { SpanType } from "../styles/components/span";
 
 export function LoginPage() {
   const { information, handleOnChange } = useInformation<UserProps>(userInit);
-  const [err, setErr] = useState<Partial<UserProps>>({});
+  const [err, setErr] = useState<FormError<UserProps>>({});
   const navigate = useNavigate();
   const { setAuthToken } = useAuth();
 
@@ -23,6 +25,7 @@ export function LoginPage() {
   const loginApi = async () => {
     try {
       const res = await login(information);
+      console.log(res);
       const token = res.data.accessToken;
       if (!token) {
         return;
@@ -65,6 +68,13 @@ export function LoginPage() {
             to={"forgot"}
             titleSec={"Forgot password?"}
           />
+          {err.message && (
+            <>
+              <SpanType $color={"danger"} $size={"xs"} $shade={600}>
+                {err.message}
+              </SpanType>
+            </>
+          )}
           <ButtonAuth onClick={handleOnclick} text={"登入"} />
         </FlexType>
       </form>

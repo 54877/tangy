@@ -8,13 +8,15 @@ type Type = {
   icon?: ReactNode;
   text: ReactNode;
   as?: string;
+  onClick?: () => void;
   paddingType?: boolean;
 };
 
-export const UserListButton = ({ icon, text, as }: Type) => {
+export const UserListButton = ({ icon, text, as, onClick }: Type) => {
   return (
     <UserLi as={as}>
       <ListButton
+        onClick={onClick}
         text={
           <FlexType style={{ width: "100%" }} $justify={"flex-start"}>
             {icon}
@@ -26,10 +28,11 @@ export const UserListButton = ({ icon, text, as }: Type) => {
   );
 };
 
-export const ListButtonDefault = ({ text, as, paddingType }: Type) => {
+export const ListButtonDefault = ({ text, as, paddingType, onClick }: Type) => {
   return (
     <UserLi as={as}>
       <ListButton
+        onClick={onClick}
         style={{ padding: paddingType ? 0 : "12px" }}
         text={
           <FlexType style={{ width: "100%" }} $justify={"space-between"}>
