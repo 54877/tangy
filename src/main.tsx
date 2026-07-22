@@ -1,13 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { GlobalStyle, theme } from "./styles/global.styled.ts";
-import { ThemeProvider } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 import { AuthProvider } from "./context/auth/AuthProvider.tsx";
-import mainRoute from "./MainLayout/index.tsx";
 import loginRoute from "./LoginMainLout/index.tsx";
+import mainRoute from "./MainLayout/index.tsx";
+import profileRoute from "./profile/index.ts";
+import { GlobalStyle, theme } from "./styles/global.styled.ts";
 
-const router = createBrowserRouter([mainRoute, loginRoute], {
+const router = createBrowserRouter([mainRoute, loginRoute, profileRoute], {
   basename: "/tangy/",
 });
 
