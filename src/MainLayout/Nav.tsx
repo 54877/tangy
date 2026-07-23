@@ -32,11 +32,11 @@ import {
   ListButtonDefault,
   UserListButton,
 } from "../components/NavUserList/List";
-import { UserLi } from "../components/NavUserList/List.styled";
 import { UserList } from "./userList";
 import { MenuNav } from "../components/Menu/Menu";
 import { useMenu } from "../components/Menu/menuHook";
 import { CourseList } from "./courseList";
+import { ChartMenu, CourseMenu, UserMenu } from "./menu";
 
 type NavProps = {
   isMobile: boolean;
@@ -116,13 +116,10 @@ export const Nav = ({ isMobile }: NavProps) => {
             </SearchFlex>
             <FlexType $gap={{ xs: "none", sm: "sm" }}>
               {/* cart */}
-              <ShoppingCartOutlinedIcon
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  padding: "12px",
-                  cursor: "pointer",
-                }}
+              <ButtonOutlined
+                onClick={menu.openClick("chart")}
+                style={{ padding: "12px", border: "0" }}
+                text={<ShoppingCartOutlinedIcon />}
               />
               {/* Menu */}
               {isMobile ? macLogin() : button()}
@@ -212,7 +209,7 @@ export const Nav = ({ isMobile }: NavProps) => {
         )}
       </Drawer>
 
-      {/* mac user menu list & mac course menu list*/}
+      {/* mac menu*/}
       <MenuNav
         open={menu.isOpen}
         menuRef={menu.ref}
@@ -220,25 +217,12 @@ export const Nav = ({ isMobile }: NavProps) => {
         text={
           <>
             {/* userList menu */}
-            {menu.activeKey === "user" && (
-              <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
-                <UserLi style={{ paddingBottom: "12px" }}>
-                  <SpanType>HI UserNameUserNameUserNameUserName</SpanType>
-                </UserLi>
-                <UserList />
-                <UserListButton
-                  onClick={logout}
-                  as={"div"}
-                  icon={<LogoutOutlinedIcon />}
-                  text={"登出"}
-                />
-              </UserListMenu>
-            )}
+            {menu.activeKey === "user" && <UserMenu logout={logout} />}
             {/* 課程分類menu */}
-            {menu.activeKey === "course" && (
-              <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
-                <CourseList />
-              </UserListMenu>
+            {menu.activeKey === "course" && <CourseMenu />}
+            {/* 購物車menu */}
+            {menu.activeKey === "chart" && (
+              <ChartMenu close={menu.closeClick} />
             )}
           </>
         }

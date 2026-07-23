@@ -5,11 +5,11 @@ import { FlexType } from "../../styles/components/flex";
 
 export const Img = styled.img`
   width: 100%;
-  height: 240px;
+  max-height: 240px;
   object-fit: contain;
   display: block;
   ${media.sm} {
-    height: 452px;
+    max-height: 452px;
   }
 `;
 

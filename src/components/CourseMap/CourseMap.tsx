@@ -14,19 +14,23 @@ import { ButtonOutlined } from "../Button/Button";
 import { Card, type CardProps } from "../card/Card";
 
 interface CourseMapProps {
-  readonly imgSrc: string;
+  readonly imgSrc?: string;
   readonly title: string;
-  readonly secTitle: string;
+  readonly secTitle?: string;
+  readonly macColumn?: boolean;
   readonly reverse?: boolean;
   readonly cardData: CardProps[];
+  readonly ImgWidth?: string;
 }
 
 export function CourseMap({
   imgSrc,
   title,
   reverse,
+  macColumn,
   secTitle,
   cardData,
+  ImgWidth,
 }: CourseMapProps) {
   const isTablet = useMediaQuery(`${media.md}`);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -38,18 +42,23 @@ export function CourseMap({
         $gap={"lg"}
       >
         {/* img */}
-        <FlexTypeMap>
-          <Img src={imgSrc} alt="img" />
-        </FlexTypeMap>
+        {imgSrc && (
+          <FlexTypeMap>
+            <Img src={imgSrc} alt="img" />
+          </FlexTypeMap>
+        )}
         <FlexTypeMap $direction={"column"} $gap={"lg"}>
-          <FlexTypeMap $align={"flex-end"} $justify={"space-between"}>
+          <FlexTypeMap
+            $align={secTitle ? "flex-end" : "center"}
+            $justify={"space-between"}
+          >
             <FlexType
               $direction={{ xs: "column", md: "row" }}
               $align={{ xs: "flex-start", md: "flex-end" }}
               $gap={{ sm: "spc", xs: "sm" }}
             >
               <FlexType $justify={"flex-start"} $align={"center"}>
-                <Location />
+                {secTitle && <Location />}
                 <Heading
                   style={{ whiteSpace: "nowrap" }}
                   $size={{ xs: "md", sm: "xl" }}
@@ -57,7 +66,7 @@ export function CourseMap({
                   {title}
                 </Heading>
               </FlexType>
-              <SpanType>{secTitle}</SpanType>
+              {secTitle && <SpanType>{secTitle}</SpanType>}
             </FlexType>
 
             <FlexType $display={{ xs: "flex", md: "none" }}>
@@ -76,9 +85,14 @@ export function CourseMap({
 
           {/* Cards/ swiper */}
           {isTablet ? (
-            <FlexTypeMap $direction="column" $gap="lg">
+            // 電腦板 卡片排序
+            <FlexTypeMap $direction={macColumn ? "row" : "column"} $gap="lg">
               {cardData.map((item, index) => (
-                <Card key={`${item.title}-${index}`} {...item} />
+                <Card
+                  key={`${item.title}-${index}`}
+                  {...item}
+                  ImgWidth={ImgWidth}
+                />
               ))}
             </FlexTypeMap>
           ) : (

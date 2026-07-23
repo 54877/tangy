@@ -36,3 +36,11 @@ export const Card = styled.div`
     padding: 0;
   }
 `;
+
+export const Img = styled.img`
+  width: 40px;
+  height: 40px;
+  display: block;
+  object-fit: cover;
+  border-radius: 1000px;
+`;

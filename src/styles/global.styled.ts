@@ -1,4 +1,3 @@
-import "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { breakpoints } from "./tokens/breakpoints";
 import { colors } from "./tokens/colors";
