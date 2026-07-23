@@ -69,11 +69,9 @@ export function LoginPage() {
             titleSec={"Forgot password?"}
           />
           {err.message && (
-            <>
-              <SpanType $color={"danger"} $size={"xs"} $shade={600}>
-                {err.message}
-              </SpanType>
-            </>
+            <SpanType $color={"danger"} $size={"xs"} $shade={600}>
+              {err.message}
+            </SpanType>
           )}
           <ButtonAuth onClick={handleOnclick} text={"登入"} />
         </FlexType>

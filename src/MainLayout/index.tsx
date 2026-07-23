@@ -1,3 +1,4 @@
+import course from "../course";
 import { Index } from "../index/indexPage";
 
 export default {
@@ -22,5 +23,6 @@ export default {
       index: true,
       element: <Index />,
     },
+    course,
   ],
 };

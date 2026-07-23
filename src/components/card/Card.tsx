@@ -9,6 +9,7 @@ import {
   FavoriteContainer,
   FlexCard,
   TitleHeading,
+  FlexTypeCard,
 } from "./Card.styled";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -21,33 +22,54 @@ export interface CardProps {
   readonly name: string;
   readonly stars: string;
   readonly people: string;
+  readonly tag: string[];
   readonly time: string;
   readonly price: string;
   readonly originalPrice: string;
+  readonly macType?: boolean;
+  readonly width?: string;
+  readonly lgWidth?: string;
+  readonly xslgWidth?: string;
+  readonly ImgWidth?: string;
 }
 
 //TODO 待補上新增置收藏api 與切換收藏狀態的功能
 
 export function Card({
+  xslgWidth,
+  lgWidth,
+  width,
+  macType,
   imgSrc,
   title,
   name,
   stars,
+  tag,
   people,
   time,
   price,
+  ImgWidth,
   originalPrice,
 }: CardProps) {
   const isMobile = useMediaQuery(`(max-width:${breakpoints.md})`);
   const [open, setOpen] = useState(false);
   return (
-    <FlexType
+    <FlexTypeCard
       style={{ width: "100%" }}
-      $direction={{ xs: "column", md: "row" }}
+      $width={width}
+      $lgWidth={lgWidth}
+      $xslgWidth={xslgWidth}
+      $direction={{ xs: "column", md: macType ? "column" : "row" }}
       $gap={"spc"}
       $align={"stretch"}
     >
-      <div style={{ position: "relative" }}>
+      <div
+        style={{
+          width: ImgWidth ?? "100%",
+          minWidth: "0",
+          position: "relative",
+        }}
+      >
         <Img src={imgSrc} alt="img" />
         <FavoriteContainer>
           <FavoriteBorderOutlinedIcon />
@@ -70,7 +92,28 @@ export function Card({
         <FlexType $justify={"flex-start"} $gap={"xs"}>
           <SpanType $size={"sm"}>by {name}</SpanType>
         </FlexType>
-        <FlexType $justify={"flex-start"} $gap={"spc"}>
+        {tag.length > 0 && (
+          <FlexType style={{ flexWrap: "wrap" }} $justify={"flex-start"}>
+            {tag.map((item, index) => (
+              <SpanType
+                style={{
+                  padding: "6px 12px",
+                  backgroundColor: "#E9ECEF",
+                  borderRadius: "1000px",
+                }}
+                $size={"sm"}
+                key={`${index} - ${item}`}
+              >
+                #{item}
+              </SpanType>
+            ))}
+          </FlexType>
+        )}
+        <FlexType
+          style={{ flexWrap: "wrap" }}
+          $justify={"flex-start"}
+          $gap={"spc"}
+        >
           <FlexType $align={"center"} $gap={"none"}>
             <Start />
             <SpanType $size={"sm"}>{stars}</SpanType>
@@ -99,6 +142,6 @@ export function Card({
           </SpanType>
         </FlexEnd>
       </FlexCard>
-    </FlexType>
+    </FlexTypeCard>
   );
 }

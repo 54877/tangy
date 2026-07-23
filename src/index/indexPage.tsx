@@ -41,12 +41,13 @@ import { CardSection } from "../components/CardSection/CardSection";
 import { Button } from "../components/Button/Button";
 import { useRef } from "react";
 import { ButtonType } from "../components/Button/Button.styled";
+import { useNavigate } from "react-router-dom";
 
 export function Index() {
   const isMobile = useMediaQuery(`${media.sm}`);
   const isLgMobile = useMediaQuery(`${media.xsLg}`);
   const swiperRef = useRef<SwiperType | null>(null);
-
+  const navigate = useNavigate();
   //假資料
   const cardData = [
     {
@@ -151,12 +152,14 @@ export function Index() {
           imgSrc={tangyNew}
           title="新手推薦"
           secTitle="打好基礎，啟航財富之旅"
+          ImgWidth={"50%"}
           cardData={[
             {
               imgSrc: course_1,
               title: "理財新手財務啟蒙之旅入門指南",
               name: "碳吉老師",
               stars: "4.5",
+              tag: [],
               people: "8,932",
               time: "4.6小時",
               price: "3,600",
@@ -167,6 +170,7 @@ export function Index() {
               title: "理財新手財務啟蒙之旅入門指南2",
               name: "碳吉老師2",
               stars: "4.52",
+              tag: [],
               people: "8,9322",
               time: "4.62小時",
               price: "3,6002",
@@ -179,6 +183,7 @@ export function Index() {
           title="投資推薦"
           reverse={true}
           secTitle="建立家庭儲蓄，提升投資能力"
+          ImgWidth={"50%"}
           cardData={[
             {
               imgSrc: course_1,
@@ -187,6 +192,7 @@ export function Index() {
               stars: "4.5",
               people: "8,932",
               time: "4.6小時",
+              tag: [],
               price: "3,600",
               originalPrice: "5,800",
             },
@@ -197,6 +203,7 @@ export function Index() {
               name: "碳吉老師2",
               stars: "4.52",
               people: "8,9322",
+              tag: [],
               time: "4.62小時",
               price: "3,6002",
               originalPrice: "5,8002",
@@ -207,11 +214,13 @@ export function Index() {
           imgSrc={tangyMap_3}
           title="退休推薦"
           secTitle="財富自由，掌握未來！"
+          ImgWidth={"50%"}
           cardData={[
             {
               imgSrc: course_1,
               title: "理財新手財務啟蒙之旅入門指南",
               name: "碳吉老師",
+              tag: [],
               stars: "4.5",
               people: "8,932",
               time: "4.6小時",
@@ -223,6 +232,7 @@ export function Index() {
               title: "理財新手財務啟蒙之旅入門指南2",
               name: "碳吉老師2",
               stars: "4.52",
+              tag: [],
               people: "8,9322",
               time: "4.62小時",
               price: "3,6002",
@@ -297,15 +307,6 @@ export function Index() {
               icon={<ArrowBackIosOutlinedIcon />}
             />
             {/* swiper */}
-            {/* <CardSection
-              userName={"Vivian"}
-              userWork={"家庭主婦"}
-              time={"2024.08.12"}
-              userImg={user}
-              content={
-                "這門課真的太實用了!老師將複雜的稅務問題講得淺顯易懂,搭配許多實務案例,讓我對網購店家的稅務有了更深入的了解。尤其是電子發票的部分,老師的解說讓我豁然開朗,省下不少時間"
-              }
-            /> */}
             <Swiper
               slidesPerView={1}
               spaceBetween={24}
@@ -372,6 +373,9 @@ export function Index() {
             </HeadingEndBanner>
             {/*TODO 要連接到探索課程 */}
             <ButtonType
+              onClick={() => {
+                navigate("/course");
+              }}
               style={{
                 padding: "15px 24px",
                 backgroundColor: "white",

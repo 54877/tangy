@@ -74,7 +74,6 @@ export const CardFlex = styled(FlexType)`
 `;
 
 export const HeadingEndBanner = styled(Heading)`
-  color: white;
   text-align: start;
 `;
 

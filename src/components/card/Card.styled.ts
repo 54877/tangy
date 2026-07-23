@@ -7,19 +7,15 @@ import { Heading } from "../../styles/components/span";
 
 export const Img = styled.img`
   width: 100%;
-  min-height: 240px;
-  object-fit: fill;
+  height: 100%;
+  object-fit: cover;
   display: block;
   border-radius: 8px;
 
   ${media.md} {
-    min-height: 0;
-    min-width: 0;
-    width: 267px;
-    height: 178px;
+    min-width: 250px;
   }
 `;
-
 export const Start = styled(StarIcon)`
   color: #ffc107;
   && {
@@ -71,4 +67,19 @@ export const TitleHeading = styled(Heading)`
   overflow: hidden;
 
   position: relative;
+`;
+
+export const FlexTypeCard = styled(FlexType)<{
+  $width?: string;
+  $xslgWidth?: string;
+  $lgWidth?: string;
+}>`
+  ${media.xsLg} {
+    max-width: ${({ $xslgWidth }) => $xslgWidth};
+  }
+  ${media.lg} {
+    max-width: ${({ $lgWidth }) => $lgWidth};
+  }
+  width: 100%;
+  max-width: ${({ $width }) => $width ?? "100%"};
 `;

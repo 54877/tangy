@@ -42,9 +42,11 @@ export function getCommonValidators<T>(
     password: () => [
       requiredString<T>("請輸入密碼"),
       (v) => {
-        const password = String(v ?? "");
+        if (typeof v !== "string") {
+          return "密碼格式錯誤";
+        }
 
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(password)) {
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(v)) {
           return "密碼需包含英文大寫、小寫及數字";
         }
 

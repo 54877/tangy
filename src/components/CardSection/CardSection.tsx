@@ -1,8 +1,8 @@
 import { FlexType } from "../../styles/components/flex";
 import { SpanType } from "../../styles/components/span";
-import { Card, CardBorder, Content, Start } from "./CardSection.styled";
-import { Img } from "../CourseSection/CourseSection.styled";
-// TODO  data{
+import { Card, CardBorder, Content, Start, Img } from "./CardSection.styled";
+// TODO
+// data{
 // time : 時間  ,
 // content : 內容 ,
 // name :發文者名稱

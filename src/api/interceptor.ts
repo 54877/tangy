@@ -4,8 +4,13 @@ import {
   type InternalAxiosRequestConfig,
 } from "axios";
 import { TOKEN_KEY } from "./utils/token";
+import { refreshApi } from "./utils/createApi";
 
 let isRedirecting = false;
+
+interface RetryRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 const setupInterceptors = (instance: AxiosInstance) => {
   // Request
@@ -19,24 +24,44 @@ const setupInterceptors = (instance: AxiosInstance) => {
 
       return config;
     },
-    (error: AxiosError) => Promise.reject(error),
+    (error: AxiosError) => {
+      throw error;
+    },
   );
 
   // Response
   instance.interceptors.response.use(
     (response) => response,
-    (error: AxiosError) => {
-      if (error.response?.status === 401 && !isRedirecting) {
-        isRedirecting = true;
+    async (error: AxiosError) => {
+      const originalRequest = error.config as RetryRequestConfig;
+      if (
+        error.response?.status === 401 &&
+        !isRedirecting &&
+        !originalRequest._retry
+      ) {
+        isRedirecting = true; // 避免重複觸發API
+        originalRequest._retry = true;
+        try {
+          const { data } = await refreshApi.post("/refresh"); //透過API 重新取得accessToken
 
-        sessionStorage.removeItem(TOKEN_KEY);
+          sessionStorage.setItem(TOKEN_KEY, data.accessToken); // 重新寫入accessToken
 
-        if (globalThis.location.pathname !== "/login") {
-          globalThis.location.href = "/login";
+          originalRequest.headers = originalRequest.headers || {};
+          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`; // 在Header寫入新accessToken
+          console.log("從新取得accessToken", data);
+          return instance(originalRequest); //重新執行API
+        } catch {
+          sessionStorage.removeItem(TOKEN_KEY);
+
+          if (globalThis.location.pathname !== "/login") {
+            globalThis.location.href = "/login";
+          }
+          throw error;
+        } finally {
+          isRedirecting = false;
         }
       }
-
-      return Promise.reject(error);
+      throw error;
     },
   );
 };
