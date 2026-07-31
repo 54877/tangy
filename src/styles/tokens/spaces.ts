@@ -1,7 +1,7 @@
 export const spaces = {
   xxxl: "100px",
   xxl: "68px",
-  xl: "48ps",
+  xl: "48px",
   lg: "24px",
   md: "16px",
   sm: "8px",

@@ -10,12 +10,14 @@ type Type = {
   as?: string;
   onClick?: () => void;
   paddingType?: boolean;
+  disabled?: boolean;
 };
 
-export const UserListButton = ({ icon, text, as, onClick }: Type) => {
+export const UserListButton = ({ disabled, icon, text, as, onClick }: Type) => {
   return (
     <UserLi as={as}>
       <ListButton
+        disabled={disabled}
         onClick={onClick}
         text={
           <FlexType style={{ width: "100%" }} $justify={"flex-start"}>

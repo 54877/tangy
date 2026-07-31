@@ -8,6 +8,9 @@ import { CourseList } from "./courseList";
 import { FlexType } from "../styles/components/flex";
 import { Button } from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import { useMe } from "../api/common/profile.API";
+import { useEffect } from "react";
+import { useAuth } from "../context/auth/useAuth";
 
 type UiType = {
   logout: () => void;
@@ -18,10 +21,19 @@ type CartType = {
 };
 
 export const UserMenu = ({ logout }: UiType) => {
+  const { user, token } = useAuth();
+  const { getMe } = useMe();
+
+  useEffect(() => {
+    if (token) {
+      getMe();
+    }
+  }, []);
+
   return (
     <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
       <UserLi style={{ paddingBottom: "12px" }}>
-        <SpanType>HI UserNameUserNameUserNameUserName</SpanType>
+        <SpanType>HI {user.userName}</SpanType>
       </UserLi>
       <UserList />
       <UserListButton

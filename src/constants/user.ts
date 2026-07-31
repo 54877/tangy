@@ -1,3 +1,5 @@
+import type { UseUserProps } from "../types/authType";
+
 export const userInit = {
   email: "",
   password: "",
@@ -9,3 +11,10 @@ export const userForgotPasswordInit = {
   code: "",
   newPassword: "",
 };
+
+export const useUserInit = {
+  id: "",
+  email: "",
+  userName: "",
+  role: "user",
+} as UseUserProps;

@@ -9,3 +9,10 @@ export interface ForgotProps {
   code: string;
   newPassword: string;
 }
+
+export interface UseUserProps {
+  id: string;
+  email: string;
+  userName: string;
+  role: "user" | "admin";
+}

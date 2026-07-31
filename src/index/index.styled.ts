@@ -75,6 +75,10 @@ export const CardFlex = styled(FlexType)`
 
 export const HeadingEndBanner = styled(Heading)`
   text-align: start;
+  color: white;
+  ${media.sm} {
+    color: ${({ theme }) => theme.colors.gray[950]};
+  }
 `;
 
 export const ImgContainer = styled.div`

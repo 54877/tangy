@@ -364,7 +364,7 @@ export function Index() {
         <BannerBox>
           <FlexTypeBanner
             $direction={"column"}
-            $align={{ xs: "center", xsLg: "flex-start" }}
+            $align={"flex-start"}
             $gap={"lg"}
           >
             <HeadingEndBanner $size={{ xs: "lg", xsLg: "xxxl" }}>

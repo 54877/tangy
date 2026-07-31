@@ -5,6 +5,8 @@ const _register = createApi(`register`);
 const _login = createApi(`login`);
 const _forgotPassword = createApi(`forgotPassword`);
 const _resetPassword = createApi(`resetPassword`);
+const _logout = createApi(`logout`);
+const _refresh = createApi(`refresh`);
 
 //註冊
 export const register = async (information: UserProps) => {
@@ -37,4 +39,14 @@ export const resetPassword = async (information: ForgotProps) => {
     code: information.code,
     newPassword: information.newPassword,
   });
+};
+
+//登出
+export const logout = async () => {
+  return await _logout.post("/");
+};
+
+//401 刷新token
+export const refresh = async () => {
+  return await _refresh.post("/");
 };

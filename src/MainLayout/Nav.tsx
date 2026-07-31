@@ -25,7 +25,7 @@ import {
 import { Button, ButtonOutlined } from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { Drawer } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth/useAuth";
 import { UserImg } from "../components/UserImg/userImg";
 import {
@@ -37,6 +37,9 @@ import { MenuNav } from "../components/Menu/Menu";
 import { useMenu } from "../components/Menu/menuHook";
 import { CourseList } from "./courseList";
 import { ChartMenu, CourseMenu, UserMenu } from "./menu";
+import { logout } from "../api/auth";
+import { useUserInit } from "../constants/user";
+import { useMe } from "../api/common/profile.API";
 
 type NavProps = {
   isMobile: boolean;
@@ -45,9 +48,17 @@ type NavProps = {
 export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
   const [borderState, setBorderState] = useState(false);
-  const { isAuthenticated, clearAuthToken } = useAuth();
+  const { isAuthenticated, clearAuthToken, setUser } = useAuth();
   const navigate = useNavigate();
   const menu = useMenu();
+  const { user, token } = useAuth();
+  const { getMe } = useMe();
+
+  useEffect(() => {
+    if (token) {
+      getMe();
+    }
+  }, []);
 
   //登入跳轉手頁
   const loginRouterOnclick = () => {
@@ -61,10 +72,17 @@ export const Nav = ({ isMobile }: NavProps) => {
   };
 
   //登出
-  const logout = () => {
-    clearAuthToken();
-    closeClick();
-    menu.closeClick();
+  const logoutButton = async () => {
+    try {
+      await logout();
+      setUser(useUserInit);
+      navigate("/");
+      clearAuthToken();
+      closeClick();
+      menu.closeClick();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //手機板關閉menu切換UI
@@ -183,16 +201,20 @@ export const Nav = ({ isMobile }: NavProps) => {
               text={
                 <FlexType>
                   <UserImg width={"48px"} height={"48px"} />
-                  <SpanType>Anna Wu</SpanType>
+                  <SpanType>{user.userName}</SpanType>
                 </FlexType>
               }
             />
             {/* User 列表 */}
             <UserListMenu>
-              <UserList />
+              <UserList
+                close={() => {
+                  closeClick();
+                }}
+              />
             </UserListMenu>
             <UserListButton
-              onClick={logout}
+              onClick={logoutButton}
               as={"div"}
               icon={<LogoutOutlinedIcon />}
               text={"登出"}
@@ -217,7 +239,7 @@ export const Nav = ({ isMobile }: NavProps) => {
         text={
           <>
             {/* userList menu */}
-            {menu.activeKey === "user" && <UserMenu logout={logout} />}
+            {menu.activeKey === "user" && <UserMenu logout={logoutButton} />}
             {/* 課程分類menu */}
             {menu.activeKey === "course" && <CourseMenu />}
             {/* 購物車menu */}

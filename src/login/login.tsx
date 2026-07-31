@@ -19,13 +19,13 @@ export function LoginPage() {
   const { information, handleOnChange } = useInformation<UserProps>(userInit);
   const [err, setErr] = useState<FormError<UserProps>>({});
   const navigate = useNavigate();
-  const { setAuthToken } = useAuth();
+  const { setAuthToken, setUser } = useAuth();
 
   //登入API
   const loginApi = async () => {
     try {
       const res = await login(information);
-      console.log(res);
+      setUser(res.data.userDate);
       const token = res.data.accessToken;
       if (!token) {
         return;

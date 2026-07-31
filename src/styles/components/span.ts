@@ -6,7 +6,7 @@ type Size = "xs" | "sm" | "md" | "lg";
 
 type HeadingSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl";
 
-type Type = "heading" | "label" | "paragraph";
+type Type = "label" | "paragraph";
 
 type Color = keyof typeof colors;
 

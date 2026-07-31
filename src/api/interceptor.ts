@@ -53,8 +53,8 @@ const setupInterceptors = (instance: AxiosInstance) => {
         } catch {
           sessionStorage.removeItem(TOKEN_KEY);
 
-          if (globalThis.location.pathname !== "/login") {
-            globalThis.location.href = "/login";
+          if (globalThis.location.pathname !== "/tangy/login") {
+            globalThis.location.href = "/tangy/login";
           }
           throw error;
         } finally {

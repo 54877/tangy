@@ -5,10 +5,9 @@ import { ThemeProvider } from "styled-components";
 import { AuthProvider } from "./context/auth/AuthProvider.tsx";
 import loginRoute from "./LoginMainLout/index.tsx";
 import mainRoute from "./MainLayout/index.tsx";
-import profileRoute from "./profile/index.ts";
 import { GlobalStyle, theme } from "./styles/global.styled.ts";
 
-const router = createBrowserRouter([mainRoute, loginRoute, profileRoute], {
+const router = createBrowserRouter([mainRoute, loginRoute], {
   basename: "/tangy/",
 });
 
