@@ -1,11 +1,12 @@
-import { useReducer, useMemo, useCallback, type ReactNode } from "react";
+import { useCallback, useMemo, useReducer, type ReactNode } from "react";
+import { DeviceDialog } from "../../profile/individual/dialog/device/device";
+import { EditDialog } from "../../profile/individual/dialog/edit/editDialog";
 import {
   FormDialogContext,
   type DialogData,
   type DialogDataSec,
   type DialogLayer,
 } from "./dialogContext";
-import { EditDialog } from "../../profile/individual/dialog/editDialog";
 
 //context參數
 interface Props {
@@ -115,6 +116,7 @@ export function FormDialogProvider({ children }: Props) {
       {children}
       {/* --- 第一層 Dialogs --- */}
       {dialogState.first?.type === "EditDialog" && <EditDialog />}
+      {dialogState.first?.type === "DeviceDialog" && <DeviceDialog />}
       {/* --- 第二層 Dialogs --- */}
 
       {/* --- 第三層 Dialogs --- */}

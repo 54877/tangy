@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 //dialog類型
-export type DialogType = "EditDialog" | null;
+export type DialogType = "EditDialog" | "DeviceDialog" | null;
 
 //一 二層共用props類型
 export interface BaseDialogData {

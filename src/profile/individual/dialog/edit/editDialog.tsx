@@ -1,21 +1,21 @@
-import { DialogBase } from "../../../components/dialog/dialogBase";
-import { Flex } from "../../../components/Input/Input.styled";
-import { useDialog } from "../../../context/dialog/useDialog";
-import { Heading, SpanType } from "../../../styles/components/span";
-import CloseIcon from "@mui/icons-material/Close";
-import { useActiveDialog } from "../../../utils/dialogLayer";
-import { FromInput } from "../../../components/Input/Input";
-import type { ReactNode } from "react";
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import { useInformation } from "../../../utils/information";
-import type { ProfileDetailProps } from "../../../types/profile";
-import { profileDetailInit } from "../../../constants/profile";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { ButtonOutlined } from "../../../components/Button/Button";
+import CloseIcon from "@mui/icons-material/Close";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
+import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import { Heading } from "lucide-react";
+import { type ReactNode } from "react";
+import { DialogBase } from "../../../../components/dialog/dialogBase";
+import { FromInput } from "../../../../components/Input/Input";
+import { Flex } from "../../../../components/Input/Input.styled";
+import { profileDetailInit } from "../../../../constants/profile";
+import { useDialog } from "../../../../context/dialog/useDialog";
+import { SpanType } from "../../../../styles/components/span";
+import { type ProfileDetailProps } from "../../../../types/profile";
+import { useActiveDialog } from "../../../../utils/dialogLayer";
+import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";
 
 export interface Props {

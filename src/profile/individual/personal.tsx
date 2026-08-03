@@ -1,34 +1,44 @@
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import { Container, TitleButton } from "./personal.styled";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
+import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import TabletAndroidOutlinedIcon from "@mui/icons-material/TabletAndroidOutlined";
+import { useMediaQuery } from "@mui/material";
+import { Flex } from "../../components/Input/Input.styled";
+import { useDialog } from "../../context/dialog/useDialog";
+import { media } from "../../styles/helper/media";
+import { Container, TitleButton } from "./personal.styled";
 import {
   ProfileDeviceInfoItem,
   ProfileInfoItem,
   ProfileInfoItemTitle,
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import TabletAndroidOutlinedIcon from "@mui/icons-material/TabletAndroidOutlined";
-import { Flex } from "../../components/Input/Input.styled";
-import { useMediaQuery } from "@mui/material";
-import { media } from "../../styles/helper/media";
-import { useDialog } from "../../context/dialog/useDialog";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const { openDialog } = useDialog();
 
-  const editButton = () => {
+  const editOnclick = () => {
     openDialog(
       {
         type: "EditDialog",
         title: "編輯個人資訊",
+      },
+      1,
+    );
+  };
+
+  const deviceOnclick = () => {
+    openDialog(
+      {
+        type: "DeviceDialog",
+        title: "查看裝置詳細資料",
       },
       1,
     );
@@ -46,7 +56,7 @@ export const Personal = () => {
           }
           RightButton={
             <TitleButton
-              onClick={editButton}
+              onClick={editOnclick}
               icon_left={<EditOutlinedIcon />}
               text={"編輯"}
             />
@@ -94,6 +104,8 @@ export const Personal = () => {
           secTitle={"為您帳號增加額外安全層"}
         />
       </Container>
+
+      {/* 登入裝置 */}
       <Container $direction={"column"}>
         <ProfileInfoItemTitle
           context={"登入裝置"}
@@ -108,6 +120,7 @@ export const Personal = () => {
           }
         />
         <ProfileDeviceInfoItem
+          onclick={deviceOnclick}
           icon={<TabletAndroidOutlinedIcon />}
           title={"Windows · Chrome"}
           secTitle={"台灣 · 台北市"}

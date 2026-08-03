@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonOutlined } from "../../../components/Button/Button";
+import { ButtonOutlined } from "../../../../components/Button/Button";
 
 export const ProfileButton = styled(ButtonOutlined)`
   color: ${({ theme }) => theme.colors.primary[950]};
