@@ -34,10 +34,9 @@ export const Profile = () => {
   const navigate = useNavigate();
   const item = ["個人檔案", "我的學習", "我的收藏", "訂單紀錄"];
   const { getMe } = useMe();
-
   const isTablet = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
-  const isLgMac = useMediaQuery(`${media.md}`);
+
   useEffect(() => {
     getMe();
   }, []);
@@ -48,7 +47,7 @@ export const Profile = () => {
         {/* mac sideBar */}
         {isMac && (
           <SideBarContainer $align={"stretch"}>
-            <Flex $direction="column">
+            <Flex $direction="column" $justify={"flex-start"}>
               {/* item */}
               <MacItemFlex $direction="column">
                 {item.map((item, index) => (
@@ -70,19 +69,12 @@ export const Profile = () => {
               </MacItemFlex>
               {/* 探索課程 */}
               <Flex style={{ padding: "16px" }}>
-                <FlexGray $direction={isLgMac ? "row" : "column"}>
+                <FlexGray $direction={"column"}>
                   <img style={{ width: "60px" }} src={image3} alt="" />
 
-                  <Flex
-                    $direction={"column"}
-                    $align={isLgMac ? "flex-start" : "center"}
-                  >
+                  <Flex $direction={"column"} $align={"center"}>
                     <Heading $size={"xs"}>不知道學什麼?</Heading>
-                    <Flex
-                      $align={isLgMac ? "flex-start" : "center"}
-                      $direction={"column"}
-                      $gap={"none"}
-                    >
+                    <Flex $align={"center"} $direction={"column"} $gap={"none"}>
                       <SpanType $size={"xs"} $shade={500}>
                         探索學習路徑
                       </SpanType>
@@ -93,13 +85,15 @@ export const Profile = () => {
                     <Button
                       style={{
                         fontSize: "12px",
-                        whiteSpace: "nowrap",
-                        padding: "12px 12px",
                       }}
                       onClick={() => {
                         navigate("/course");
                       }}
-                      icon_right={<ArrowForwardIcon />}
+                      icon_right={
+                        <ArrowForwardIcon
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                      }
                       text={"探索學習"}
                     />
                   </Flex>

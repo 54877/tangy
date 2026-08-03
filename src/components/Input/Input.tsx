@@ -6,27 +6,29 @@ import { Flex, Input, Required } from "./Input.styled";
 import { Eye, EyeOff } from "lucide-react";
 import { InputAdornment } from "@mui/material";
 type Props<T> = {
-  readonly err?: FormError<T>;
-  readonly title: string;
-  readonly to?: string;
-  readonly disabled?: boolean;
-  readonly titleSec?: string;
-  readonly required?: boolean;
-  readonly content?: ReactNode | string;
-  readonly type?: string;
+  readonly title: ReactNode;
   readonly fieldKey: StringKeys<T>;
+  readonly direction?: "row" | "column";
   readonly information: T;
-  readonly extra?: Partial<T>;
   readonly onChange: (
     value: string,
     fieldKey: keyof T,
     extra?: Partial<T>,
   ) => void;
+  readonly err?: FormError<T>;
+  readonly to?: string;
+  readonly disabled?: boolean;
+  readonly titleSec?: string;
+  readonly required?: boolean;
+  readonly content?: ReactNode;
+  readonly type?: string;
+  readonly extra?: Partial<T>;
 };
 
 export function FromInput<T>({
   title,
   to = "",
+  direction = "column",
   type,
   disabled,
   titleSec,
@@ -56,8 +58,17 @@ export function FromInput<T>({
   };
 
   return (
-    <Flex $direction={"column"} $gap={"sm"} $align={"flex-start"}>
-      <Flex $justify={"space-between"}>
+    <Flex
+      $direction={direction}
+      $gap={"sm"}
+      $align={direction === "row" ? "center" : "flex-start"}
+    >
+      <Flex
+        style={{
+          width: direction === "row" ? "190px" : "100%",
+        }}
+        $justify={"space-between"}
+      >
         {/* 標題 */}
         <SpanType $type={"label"}>
           {title}
@@ -68,6 +79,9 @@ export function FromInput<T>({
       </Flex>
       {/* input表單 */}
       <Input
+        style={{
+          width: "100%",
+        }}
         value={information[fieldKey] ?? ""}
         onChange={(e) => onChange(e.target.value, fieldKey, extra)}
         disabled={disabled}

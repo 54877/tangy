@@ -26,6 +26,14 @@ export interface ProfileDeviceInfoItemProps {
   icon: ReactNode;
   title: string;
   secTitle: string;
-  time: string;
   onclick?: () => void;
+}
+
+export interface ProfileDetailProps {
+  name: string;
+  email: string;
+  birthday: string;
+  createdAt: string;
+  gender: string;
+  introduction: string;
 }

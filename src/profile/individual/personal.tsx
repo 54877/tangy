@@ -16,10 +16,26 @@ import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import TabletAndroidOutlinedIcon from "@mui/icons-material/TabletAndroidOutlined";
 import { Flex } from "../../components/Input/Input.styled";
+import { useMediaQuery } from "@mui/material";
+import { media } from "../../styles/helper/media";
+import { useDialog } from "../../context/dialog/useDialog";
 
 export const Personal = () => {
+  const isMac = useMediaQuery(`${media.sm}`);
+  const { openDialog } = useDialog();
+
+  const editButton = () => {
+    openDialog(
+      {
+        type: "EditDialog",
+        title: "編輯個人資訊",
+      },
+      1,
+    );
+  };
+
   return (
-    <Flex $direction={"column"}>
+    <Flex $direction={isMac ? "row" : "column"} $align={"flex-start"}>
       <Container $direction={"column"}>
         <ProfileInfoItemTitle
           context={"個人簡介"}
@@ -29,7 +45,11 @@ export const Personal = () => {
             />
           }
           RightButton={
-            <TitleButton icon_left={<EditOutlinedIcon />} text={"編輯"} />
+            <TitleButton
+              onClick={editButton}
+              icon_left={<EditOutlinedIcon />}
+              text={"編輯"}
+            />
           }
         />
         <ProfileInfoItem
@@ -91,7 +111,56 @@ export const Personal = () => {
           icon={<TabletAndroidOutlinedIcon />}
           title={"Windows · Chrome"}
           secTitle={"台灣 · 台北市"}
-          time={"2024/07/30 14:30"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
+        />
+        <ProfileDeviceInfoItem
+          icon={<TabletAndroidOutlinedIcon />}
+          title={"Windows · Chrome"}
+          secTitle={"台灣 · 台北市"}
         />
       </Container>
     </Flex>

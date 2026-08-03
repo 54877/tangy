@@ -42,6 +42,7 @@ export const ProfileInfoItem = ({
   text,
 }: ProfileInfoItemProps) => {
   const isSmall = useMediaQuery(`${media.xs}`);
+  const isLgMac = useMediaQuery(`${media.md}`);
   return (
     <Flex
       style={{
@@ -50,7 +51,7 @@ export const ProfileInfoItem = ({
       }}
       $justify={"space-between"}
     >
-      <Flex style={{ width: "35%" }} $justify={"flex-start"}>
+      <Flex style={{ width: isLgMac ? "35%" : "40%" }} $justify={"flex-start"}>
         {isSmall && <> {icon}</>}
         <SpanType>{title} :</SpanType>
       </Flex>
@@ -94,10 +95,8 @@ export const ProfileDeviceInfoItem = ({
   title,
   secTitle,
   onclick,
-  time,
   borderType = true,
 }: ProfileDeviceInfoItemProps) => {
-  const isSmall = useMediaQuery(`${media.xsLg}`);
   return (
     <Flex
       style={{
@@ -114,9 +113,6 @@ export const ProfileDeviceInfoItem = ({
         </Flex>
       </Flex>
       <Flex style={{ width: "100%", flex: 1 }}>
-        {isSmall && (
-          <SpanType style={{ whiteSpace: "nowrap" }}>{time}</SpanType>
-        )}
         <Flex as={"button"} onClick={onclick}>
           <MoreVertOutlinedIcon />
         </Flex>
