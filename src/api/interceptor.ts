@@ -30,7 +30,6 @@ const setupInterceptors = (instance: AxiosInstance) => {
         .post("/refresh")
         .then(({ data }) => {
           sessionStorage.setItem(TOKEN_KEY, data.accessToken);
-          console.log("Access token refreshed:", data.accessToken);
           return data.accessToken;
         })
         .finally(() => {
@@ -52,7 +51,6 @@ const setupInterceptors = (instance: AxiosInstance) => {
       let token = sessionStorage.getItem(TOKEN_KEY);
       if (token) {
         if (shouldRefresh(token)) {
-          console.log("快過期了 提前跟換accessToken");
           token = await refreshAccessToken();
         }
 
@@ -80,7 +78,6 @@ const setupInterceptors = (instance: AxiosInstance) => {
         originalRequest._retry = true;
         try {
           const data = await refreshAccessToken();
-          console.log("過期了 跟換accessToken");
           originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers.Authorization = `Bearer ${data}`; // 在Header寫入新accessToken
 
