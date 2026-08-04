@@ -1,29 +1,31 @@
-import type { StringKeys } from "../../types/errorType";
 import {
-  LocalizationProvider,
-  DateTimePicker,
   DatePicker,
+  DateTimePicker,
+  LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { formatDateTime } from "../../utils/formatDateTime";
 import dayjs from "dayjs";
+import type { ReactNode } from "react";
+import type { StringKeys } from "../../types/errorType";
+import { formatDateTime } from "../../utils/formatDateTime";
+import { Flex } from "../Input/Input.styled";
 import {
   Btn,
   DatePickerBlock,
   DescriptionTitle,
   ItemContentBlock,
 } from "./dateTime.style";
-import { Flex } from "../Input/Input.styled";
 interface PickerType<T> {
   readonly fieldKey: StringKeys<T>;
-  readonly title: string;
+  readonly title: ReactNode;
   readonly information: T;
-  readonly extra?: Partial<T>;
   readonly onChange: (
     value: string,
     fieldKey: StringKeys<T>,
     extra?: Partial<T>,
   ) => void;
+  readonly direction?: "row" | "column";
+  readonly extra?: Partial<T>;
   readonly disabled?: boolean;
   readonly type?: "day" | "time";
   readonly now?: boolean;
@@ -36,6 +38,7 @@ export function DateTime<T>({
   extra,
   fieldKey,
   type = "day",
+  direction = "column",
   onChange,
   title,
   required = false,
@@ -103,8 +106,11 @@ export function DateTime<T>({
   );
 
   return (
-    <Flex $direction="column" $gap="sm" $align="flex-start">
-      <Flex $justify="space-between">
+    <Flex $direction={direction} $gap="sm">
+      <Flex
+        style={{ width: direction === "row" ? "190px" : "100%" }}
+        $justify="space-between"
+      >
         <DescriptionTitle required={required}>{title}</DescriptionTitle>
       </Flex>
 

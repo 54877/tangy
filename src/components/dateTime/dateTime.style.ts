@@ -1,7 +1,8 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import styled from "styled-components";
+import { FlexType } from "../../styles/components/flex";
 
-export const DatePickerBlock = styled(Box)<{
+export const DatePickerBlock = styled(FlexType)<{
   width?: string;
   height?: string;
 }>(
@@ -32,7 +33,7 @@ export const DatePickerBlock = styled(Box)<{
 `,
 );
 
-export const ItemContentBlock = styled(Box)`
+export const ItemContentBlock = styled(FlexType)`
   && {
     min-width: 0;
     background-color: #d9d9d9;

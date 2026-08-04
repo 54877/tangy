@@ -3,8 +3,7 @@ import { DeviceDialog } from "../../profile/individual/dialog/device/device";
 import { EditDialog } from "../../profile/individual/dialog/edit/editDialog";
 import {
   FormDialogContext,
-  type DialogData,
-  type DialogDataSec,
+  type BaseDialogData,
   type DialogLayer,
 } from "./dialogContext";
 
@@ -16,68 +15,58 @@ interface Props {
 
 //Reducer分層
 interface DialogState {
-  first: DialogData | null;
-  second: DialogDataSec | null;
-  third: DialogDataSec | null;
+  first: BaseDialogData | null;
+  second: BaseDialogData | null;
+  third: BaseDialogData | null;
 }
 
 //Reduce Action
 type DialogAction =
-  | { type: "OPEN_FIRST"; payload: DialogData }
+  | { type: "OPEN_FIRST"; payload: BaseDialogData }
   | { type: "CLOSE_FIRST" }
-  | { type: "OPEN_SECOND"; payload: DialogDataSec }
+  | { type: "OPEN_SECOND"; payload: BaseDialogData }
   | { type: "CLOSE_SECOND" }
-  | { type: "OPEN_THIRD"; payload: DialogDataSec }
+  | { type: "OPEN_THIRD"; payload: BaseDialogData }
   | { type: "CLOSE_THIRD" };
+
+const dialogReducer = (
+  state: DialogState,
+  action: DialogAction,
+): DialogState => {
+  switch (action.type) {
+    case "OPEN_FIRST":
+      return { ...state, first: action.payload };
+    case "CLOSE_FIRST":
+      return { ...state, first: null };
+    case "OPEN_SECOND":
+      return { ...state, second: action.payload };
+    case "CLOSE_SECOND":
+      return { ...state, second: null };
+    case "OPEN_THIRD":
+      return { ...state, third: action.payload };
+    case "CLOSE_THIRD":
+      return { ...state, third: null };
+    default:
+      return state;
+  }
+};
 
 // Dialog Provider元件
 export function FormDialogProvider({ children }: Props) {
-  const dialogReducer = (
-    state: DialogState,
-    action: DialogAction,
-  ): DialogState => {
-    switch (action.type) {
-      case "OPEN_FIRST":
-        return { ...state, first: action.payload };
-      case "CLOSE_FIRST":
-        return { ...state, first: null };
-      case "OPEN_SECOND":
-        return { ...state, second: action.payload };
-      case "CLOSE_SECOND":
-        return { ...state, second: null };
-      case "OPEN_THIRD":
-        return { ...state, third: action.payload };
-      case "CLOSE_THIRD":
-        return { ...state, third: null };
-      default:
-        return state;
-    }
-  };
-
   const [dialogState, dispatch] = useReducer(dialogReducer, {
     first: null,
     second: null,
     third: null,
   });
 
-  const dialogLayerSet = new Set([1, 2, 3]);
-
-  function isDialogLayer(value: number): value is DialogLayer {
-    return dialogLayerSet.has(value);
-  }
   const openDialog = useCallback(
-    (props: DialogData | DialogDataSec, layer: DialogLayer) => {
-      if (!isDialogLayer(layer)) {
-        console.error(`Unknown dialog layer: ${layer}`);
-        return;
-      }
-
+    (props: BaseDialogData, layer: DialogLayer) => {
       if (layer === 1) {
-        dispatch({ type: "OPEN_FIRST", payload: props as DialogData });
+        dispatch({ type: "OPEN_FIRST", payload: props });
       } else if (layer === 2) {
-        dispatch({ type: "OPEN_SECOND", payload: props as DialogDataSec });
+        dispatch({ type: "OPEN_SECOND", payload: props });
       } else {
-        dispatch({ type: "OPEN_THIRD", payload: props as DialogDataSec });
+        dispatch({ type: "OPEN_THIRD", payload: props });
       }
     },
     [],

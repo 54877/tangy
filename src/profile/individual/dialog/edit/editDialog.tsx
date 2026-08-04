@@ -1,11 +1,12 @@
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import { useMediaQuery } from "@mui/material";
 import { useEffect, type ReactNode } from "react";
+import { DateTime } from "../../../../components/dateTime/dateTime";
 import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
@@ -16,7 +17,6 @@ import { type ProfileDetailProps } from "../../../../types/profile";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";
-import { useMediaQuery } from "@mui/material";
 
 export interface Props {
   icon: ReactNode;
@@ -71,9 +71,9 @@ export const EditDialog = () => {
           onChange={handleOnChange}
         />
 
-        <FromInput
+        <DateTime
           title={titleUi({
-            icon: <CalendarMonthOutlinedIcon />,
+            icon: <AccessTimeOutlinedIcon />,
             title: "生日",
           })}
           direction={isSmall ? "column" : "row"}
@@ -90,13 +90,14 @@ export const EditDialog = () => {
           onChange={handleOnChange}
         />
 
-        <FromInput
+        <DateTime
           title={titleUi({
             icon: <AccessTimeOutlinedIcon />,
             title: "加入時間",
           })}
-          disabled={true}
+          type={"time"}
           direction={isSmall ? "column" : "row"}
+          disabled={true}
           fieldKey={"createdAt"}
           information={information}
           onChange={handleOnChange}
