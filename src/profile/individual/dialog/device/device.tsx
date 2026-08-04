@@ -32,7 +32,7 @@ export const DeviceDialog = () => {
         </Flex>
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
-        <ProfileButton text={"登出"} />
+        <ProfileButton text={"登出裝置"} />
       </Flex>
     </Flex>
   );

@@ -5,18 +5,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import { Heading } from "lucide-react";
 import { type ReactNode } from "react";
 import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
 import { profileDetailInit } from "../../../../constants/profile";
 import { useDialog } from "../../../../context/dialog/useDialog";
-import { SpanType } from "../../../../styles/components/span";
+import { Heading, SpanType } from "../../../../styles/components/span";
 import { type ProfileDetailProps } from "../../../../types/profile";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";
+import { useMediaQuery } from "@mui/material";
 
 export interface Props {
   icon: ReactNode;
@@ -29,7 +29,7 @@ export const EditDialog = () => {
   const { information, handleOnChange } =
     useInformation<ProfileDetailProps>(profileDetailInit);
   const { type, title } = activeDialog || {};
-
+  const isSmall = useMediaQuery("(max-width:500px)");
   const titleUi = ({ icon, title }: Props) => (
     <Flex $justify={"flex-start"}>
       {icon}
@@ -46,7 +46,7 @@ export const EditDialog = () => {
       <Flex $direction={"column"}>
         <FromInput
           title={titleUi({ icon: <PermIdentityOutlinedIcon />, title: "暱稱" })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"name"}
           information={information}
           onChange={handleOnChange}
@@ -57,7 +57,7 @@ export const EditDialog = () => {
             icon: <EmailOutlinedIcon />,
             title: "電子郵件",
           })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"email"}
           information={information}
           onChange={handleOnChange}
@@ -68,7 +68,7 @@ export const EditDialog = () => {
             icon: <CalendarMonthOutlinedIcon />,
             title: "生日",
           })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"birthday"}
           information={information}
           onChange={handleOnChange}
@@ -76,7 +76,7 @@ export const EditDialog = () => {
 
         <FromInput
           title={titleUi({ icon: <MaleOutlinedIcon />, title: "性別" })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"gender"}
           information={information}
           onChange={handleOnChange}
@@ -87,7 +87,7 @@ export const EditDialog = () => {
             icon: <AccessTimeOutlinedIcon />,
             title: "加入時間",
           })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"createdAt"}
           information={information}
           onChange={handleOnChange}
@@ -95,7 +95,7 @@ export const EditDialog = () => {
 
         <FromInput
           title={titleUi({ icon: <BadgeOutlinedIcon />, title: "簡介" })}
-          direction={"row"}
+          direction={isSmall ? "column" : "row"}
           fieldKey={"introduction"}
           information={information}
           onChange={handleOnChange}
@@ -107,5 +107,11 @@ export const EditDialog = () => {
     </Flex>
   );
 
-  return <DialogBase type={type ?? null} context={content} />;
+  return (
+    <DialogBase
+      type={type ?? null}
+      context={content}
+      width={isSmall ? "90%" : "500px"}
+    />
+  );
 };
