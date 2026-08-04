@@ -19,16 +19,25 @@ import {
   ProfileInfoItemTitle,
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
+import { useAuth } from "../../context/auth/useAuth";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const { openDialog } = useDialog();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    console.log("user", user);
+  }, [user]);
 
   const editOnclick = () => {
     openDialog(
       {
         type: "EditDialog",
         title: "編輯個人資訊",
+        user: user,
       },
       1,
     );
@@ -65,32 +74,36 @@ export const Personal = () => {
         <ProfileInfoItem
           icon={<PermIdentityOutlinedIcon />}
           title={"暱稱"}
-          text={"123"}
+          text={user.userName}
         />
         <ProfileInfoItem
           icon={<EmailOutlinedIcon />}
           title={"電子郵件"}
-          text={"123"}
+          text={user.email}
         />
         <ProfileInfoItem
           icon={<CalendarMonthOutlinedIcon />}
           title={"生日"}
-          text={"123"}
+          text={
+            user.birthday
+              ? dayjs(user.birthday).format("YYYY年MM月DD日")
+              : "未填寫"
+          }
         />
         <ProfileInfoItem
           icon={<MaleOutlinedIcon />}
           title={"性別"}
-          text={"123"}
+          text={user.gender}
         />
         <ProfileInfoItem
           icon={<AccessTimeOutlinedIcon />}
           title={"加入時間"}
-          text={"123"}
+          text={dayjs(user.createdAt).format("YYYY年MM月DD日")}
         />
         <ProfileInfoItem
           icon={<BadgeOutlinedIcon />}
           title={"簡介"}
-          text={"123"}
+          text={user.introduction ?? "未填寫"}
         />
         <ProfileSafetyInfoItem
           icon={<BuildOutlinedIcon />}

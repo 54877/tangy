@@ -1,5 +1,5 @@
 export const profileDetailInit = {
-  name: "",
+  userName: "",
   email: "",
   birthday: "",
   createdAt: "",

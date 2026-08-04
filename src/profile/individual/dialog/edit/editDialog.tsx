@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
@@ -26,10 +26,17 @@ export interface Props {
 export const EditDialog = () => {
   const { closeDialog } = useDialog();
   const { activeDialog, activeLayer } = useActiveDialog("EditDialog");
-  const { information, handleOnChange } =
+  const { information, handleOnChange, setInformation } =
     useInformation<ProfileDetailProps>(profileDetailInit);
-  const { type, title } = activeDialog || {};
+  const { type, title, user } = activeDialog || {};
   const isSmall = useMediaQuery("(max-width:500px)");
+
+  useEffect(() => {
+    if (user) {
+      setInformation(user);
+    }
+  }, []);
+
   const titleUi = ({ icon, title }: Props) => (
     <Flex $justify={"flex-start"}>
       {icon}
@@ -47,7 +54,7 @@ export const EditDialog = () => {
         <FromInput
           title={titleUi({ icon: <PermIdentityOutlinedIcon />, title: "暱稱" })}
           direction={isSmall ? "column" : "row"}
-          fieldKey={"name"}
+          fieldKey={"userName"}
           information={information}
           onChange={handleOnChange}
         />
@@ -57,6 +64,7 @@ export const EditDialog = () => {
             icon: <EmailOutlinedIcon />,
             title: "電子郵件",
           })}
+          disabled={true}
           direction={isSmall ? "column" : "row"}
           fieldKey={"email"}
           information={information}
@@ -87,6 +95,7 @@ export const EditDialog = () => {
             icon: <AccessTimeOutlinedIcon />,
             title: "加入時間",
           })}
+          disabled={true}
           direction={isSmall ? "column" : "row"}
           fieldKey={"createdAt"}
           information={information}

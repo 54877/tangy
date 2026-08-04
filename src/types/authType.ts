@@ -12,6 +12,10 @@ export interface ForgotProps {
 
 export interface UseUserProps {
   id: string;
+  birthday: string;
+  introduction: string;
+  gender: string;
+  createdAt: string;
   email: string;
   userName: string;
   role: "user" | "admin";

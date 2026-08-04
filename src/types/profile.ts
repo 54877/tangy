@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { UseUserProps } from "./authType";
 
 export interface ProfileInfoItemTitleProps {
   icon: ReactNode;
@@ -29,11 +30,4 @@ export interface ProfileDeviceInfoItemProps {
   onclick?: () => void;
 }
 
-export interface ProfileDetailProps {
-  name: string;
-  email: string;
-  birthday: string;
-  createdAt: string;
-  gender: string;
-  introduction: string;
-}
+export type ProfileDetailProps = Omit<UseUserProps, "id" | "role">;

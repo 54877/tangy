@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import type { UseUserProps } from "../../types/authType";
 
 //dialog類型
 export type DialogType = "EditDialog" | "DeviceDialog" | null;
@@ -11,7 +12,7 @@ export interface BaseDialogData {
 
 //第一層props類型
 export interface DialogData extends BaseDialogData {
-  AiTitleName?: string;
+  user?: UseUserProps;
 }
 
 //第二層props類型
