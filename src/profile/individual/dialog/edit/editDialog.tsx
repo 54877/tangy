@@ -2,10 +2,9 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { useMediaQuery } from "@mui/material";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { DateTime } from "../../../../components/dateTime/dateTime";
 import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
@@ -17,6 +16,10 @@ import { type ProfileDetailProps } from "../../../../types/profile";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";
+import { FormSelect } from "../../../../components/select/FromSelect";
+import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
+import { updatePersonal } from "../../../../api/profile";
+import { handleApiError } from "../../../../utils/apiError";
 
 export interface Props {
   icon: ReactNode;
@@ -25,10 +28,11 @@ export interface Props {
 
 export const EditDialog = () => {
   const { closeDialog } = useDialog();
+  const [err, setErr] = useState<Partial<ProfileDetailProps>>({});
   const { activeDialog, activeLayer } = useActiveDialog("EditDialog");
   const { information, handleOnChange, setInformation } =
     useInformation<ProfileDetailProps>(profileDetailInit);
-  const { type, title, user } = activeDialog || {};
+  const { type, title, user, gender, editProfileOnclick } = activeDialog || {};
   const isSmall = useMediaQuery("(max-width:500px)");
 
   useEffect(() => {
@@ -36,6 +40,18 @@ export const EditDialog = () => {
       setInformation(user);
     }
   }, []);
+
+  const updatePersonalApi = async () => {
+    try {
+      await updatePersonal(information);
+      closeDialog(activeLayer);
+      if (editProfileOnclick) {
+        await editProfileOnclick();
+      }
+    } catch (err) {
+      handleApiError(err, setErr);
+    }
+  };
 
   const titleUi = ({ icon, title }: Props) => (
     <Flex $justify={"flex-start"}>
@@ -52,6 +68,7 @@ export const EditDialog = () => {
       </Flex>
       <Flex $direction={"column"}>
         <FromInput
+          err={err}
           title={titleUi({ icon: <PermIdentityOutlinedIcon />, title: "暱稱" })}
           direction={isSmall ? "column" : "row"}
           fieldKey={"userName"}
@@ -64,6 +81,7 @@ export const EditDialog = () => {
             icon: <EmailOutlinedIcon />,
             title: "電子郵件",
           })}
+          err={err}
           disabled={true}
           direction={isSmall ? "column" : "row"}
           fieldKey={"email"}
@@ -82,11 +100,19 @@ export const EditDialog = () => {
           onChange={handleOnChange}
         />
 
-        <FromInput
-          title={titleUi({ icon: <MaleOutlinedIcon />, title: "性別" })}
+        <FormSelect
+          title={titleUi({
+            icon: <MaleOutlinedIcon />,
+            title: "性別",
+          })}
+          err={err}
+          defaultName={"請選擇性別"}
           direction={isSmall ? "column" : "row"}
-          fieldKey={"gender"}
+          list={gender ?? []}
+          valueKey={"key"}
+          labelKey={"label"}
           information={information}
+          fieldKey={"gender"}
           onChange={handleOnChange}
         />
 
@@ -105,6 +131,7 @@ export const EditDialog = () => {
 
         <FromInput
           title={titleUi({ icon: <BadgeOutlinedIcon />, title: "簡介" })}
+          err={err}
           direction={isSmall ? "column" : "row"}
           fieldKey={"introduction"}
           information={information}
@@ -112,7 +139,7 @@ export const EditDialog = () => {
         />
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
-        <ProfileButton text={"儲存"} />
+        <ProfileButton onClick={updatePersonalApi} text={"儲存"} />
       </Flex>
     </Flex>
   );

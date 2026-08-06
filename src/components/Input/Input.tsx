@@ -2,9 +2,10 @@ import { useState, type ReactNode } from "react";
 import { LinkAuth } from "../../MainLayout/MainLayout.styled";
 import { SpanType } from "../../styles/components/span";
 import type { FormError, StringKeys } from "../../types/errorType";
-import { Flex, Input, Required } from "./Input.styled";
+import { Flex, Input } from "./Input.styled";
 import { Eye, EyeOff } from "lucide-react";
 import { InputAdornment } from "@mui/material";
+import { DescriptionTitle } from "../dateTime/dateTime.style";
 type Props<T> = {
   readonly title: ReactNode;
   readonly fieldKey: StringKeys<T>;
@@ -70,10 +71,7 @@ export function FromInput<T>({
         $justify={"space-between"}
       >
         {/* 標題 */}
-        <SpanType $type={"label"}>
-          {title}
-          <Required $required={required}> *</Required>
-        </SpanType>
+        <DescriptionTitle required={required}>{title}</DescriptionTitle>
         {/* 標題右側連結 */}
         {titleSec && <LinkAuth to={to} text={titleSec} />}
       </Flex>

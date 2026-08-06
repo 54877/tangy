@@ -20,7 +20,7 @@ import image from "../assets/profile_image.png";
 import image2 from "../assets/profile_image2.png";
 import image3 from "../assets/icon_tangy/tangy_Icon.png";
 import { UserImg } from "../components/UserImg/userImg";
-import { useMe } from "../api/common/profile.API";
+import { useMe } from "../api/common/nav.API";
 import { useAuth } from "../context/auth/useAuth";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
@@ -134,23 +134,21 @@ export const Profile = () => {
                 {!isMac && (
                   <ItemFlex>
                     {item.map((item, index) => (
-                      <Flex
+                      <ItemContainer
+                        $activeIndex={activeIndex === index}
+                        $justify={"center"}
                         key={`${item}-${index}`}
-                        $direction="column"
                         onClick={() => setActiveIndex(index)}
                       >
-                        <SpanType
-                          style={{
-                            paddingBottom:
-                              activeIndex === index ? "8px" : "0px",
-                          }}
+                        <ItemSpan
+                          style={{ padding: "8px 0" }}
                           $shade={activeIndex === index ? 950 : 500}
                           $type="label"
                           $size="md"
                         >
                           {item}
-                        </SpanType>
-                      </Flex>
+                        </ItemSpan>
+                      </ItemContainer>
                     ))}
                   </ItemFlex>
                 )}

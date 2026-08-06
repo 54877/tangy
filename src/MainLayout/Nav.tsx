@@ -39,7 +39,7 @@ import { CourseList } from "./courseList";
 import { ChartMenu, CourseMenu, UserMenu } from "./menu";
 import { logout } from "../api/auth";
 import { useUserInit } from "../constants/user";
-import { useMe } from "../api/common/profile.API";
+import { useMe } from "../api/common/nav.API";
 
 type NavProps = {
   isMobile: boolean;

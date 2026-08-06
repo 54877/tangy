@@ -8,7 +8,7 @@ import { CourseList } from "./courseList";
 import { FlexType } from "../styles/components/flex";
 import { Button } from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
-import { useMe } from "../api/common/profile.API";
+import { useMe } from "../api/common/nav.API";
 import { useEffect } from "react";
 import { useAuth } from "../context/auth/useAuth";
 

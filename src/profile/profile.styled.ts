@@ -21,7 +21,6 @@ export const ItemFlex = styled(Flex)`
   background-color: white;
   border-radius: 16px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
-  padding: 24px 0;
   border-bottom: 1px solid #ccd1d5;
 `;
 

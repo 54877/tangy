@@ -6,6 +6,7 @@ import {
   type BaseDialogData,
   type DialogLayer,
 } from "./dialogContext";
+import { UpdatePasswordDialog } from "../../profile/individual/dialog/updatePassword/updatePassword";
 
 //context參數
 interface Props {
@@ -106,6 +107,9 @@ export function FormDialogProvider({ children }: Props) {
       {/* --- 第一層 Dialogs --- */}
       {dialogState.first?.type === "EditDialog" && <EditDialog />}
       {dialogState.first?.type === "DeviceDialog" && <DeviceDialog />}
+      {dialogState.first?.type === "UpdatePasswordDialog" && (
+        <UpdatePasswordDialog />
+      )}
       {/* --- 第二層 Dialogs --- */}
 
       {/* --- 第三層 Dialogs --- */}

@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import styled from "styled-components";
 import { FlexType } from "../../styles/components/flex";
+import { SpanType } from "../../styles/components/span";
 
 export const DatePickerBlock = styled(FlexType)<{
   width?: string;
@@ -50,10 +51,8 @@ export const Btn = styled(Button)`
   }
 `;
 
-export const DescriptionTitle = styled.h2<{ required?: boolean }>(
+export const DescriptionTitle = styled(SpanType)<{ required?: boolean }>(
   ({ required }) => ({
-    fontSize: "16px",
-    fontWeight: 600,
     "&::after": required
       ? {
           content: '"*"',

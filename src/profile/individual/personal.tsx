@@ -19,18 +19,51 @@ import {
   ProfileInfoItemTitle,
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
-import { useAuth } from "../../context/auth/useAuth";
-import { useEffect } from "react";
 import dayjs from "dayjs";
+import { personal } from "../../api/profile";
+import { useEffect, useState } from "react";
+import type { UseUserProps } from "../../types/authType";
+import { profileDetailInit } from "../../constants/profile";
+import type { OptionItem } from "../../types/select";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
+  const [user, setUser] = useState<UseUserProps>(profileDetailInit);
+  const [gender, setGender] = useState<OptionItem[]>();
   const { openDialog } = useDialog();
-  const { user } = useAuth();
+  const fetchUser = async () => {
+    try {
+      const res = await personal();
+
+      setUser(res.data.userDate);
+      setGender(res.data.genderSelect);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+    let cancelled = false;
+
+    const fetchUser = async () => {
+      try {
+        const res = await personal();
+
+        if (!cancelled) {
+          setUser(res.data.userDate);
+          setGender(res.data.genderSelect);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUser();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const editOnclick = () => {
     openDialog(
@@ -38,6 +71,8 @@ export const Personal = () => {
         type: "EditDialog",
         title: "編輯個人資訊",
         user: user,
+        gender: gender,
+        editProfileOnclick: fetchUser,
       },
       1,
     );
@@ -48,6 +83,16 @@ export const Personal = () => {
       {
         type: "DeviceDialog",
         title: "查看裝置詳細資料",
+      },
+      1,
+    );
+  };
+
+  const updatePasswordOnclick = () => {
+    openDialog(
+      {
+        type: "UpdatePasswordDialog",
+        title: "更新密碼",
       },
       1,
     );
@@ -74,39 +119,42 @@ export const Personal = () => {
         <ProfileInfoItem
           icon={<PermIdentityOutlinedIcon />}
           title={"暱稱"}
-          text={user.userName}
+          text={user?.userName}
         />
         <ProfileInfoItem
           icon={<EmailOutlinedIcon />}
           title={"電子郵件"}
-          text={user.email}
+          text={user?.email ?? ""}
         />
         <ProfileInfoItem
           icon={<CalendarMonthOutlinedIcon />}
           title={"生日"}
           text={
-            user.birthday
-              ? dayjs(user.birthday).format("YYYY年MM月DD日")
+            user?.birthday
+              ? dayjs(user?.birthday).format("YYYY年MM月DD日")
               : "未填寫"
           }
         />
         <ProfileInfoItem
           icon={<MaleOutlinedIcon />}
           title={"性別"}
-          text={user.gender}
+          text={gender?.find((x) => x.key)?.label ?? "未填寫"}
         />
         <ProfileInfoItem
           icon={<AccessTimeOutlinedIcon />}
           title={"加入時間"}
-          text={dayjs(user.createdAt).format("YYYY年MM月DD日")}
+          text={
+            dayjs(user?.createdAt).format("YYYY年MM月DD日 hh:mm") ?? "未填寫"
+          }
         />
         <ProfileInfoItem
           icon={<BadgeOutlinedIcon />}
           title={"簡介"}
-          text={user.introduction ?? "未填寫"}
+          text={user?.introduction ?? "未填寫"}
         />
         <ProfileSafetyInfoItem
           icon={<BuildOutlinedIcon />}
+          onclick={updatePasswordOnclick}
           title={"變更密碼"}
           secTitle={"定期更新密碼以保護帳號安全"}
         />

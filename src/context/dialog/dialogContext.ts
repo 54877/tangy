@@ -1,14 +1,17 @@
 import { createContext } from "react";
 import type { UseUserProps } from "../../types/authType";
+import type { OptionItem } from "../../types/select";
 
 //dialog類型
-export type DialogType = "EditDialog" | "DeviceDialog";
+export type DialogType = "EditDialog" | "DeviceDialog" | "UpdatePasswordDialog";
 
 //共用props類型
 export interface BaseDialogData {
   type: DialogType;
   title?: string;
   user?: UseUserProps;
+  gender?: OptionItem[];
+  editProfileOnclick?: () => Promise<void>;
 }
 
 //層數props類型

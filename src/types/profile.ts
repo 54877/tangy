@@ -31,3 +31,8 @@ export interface ProfileDeviceInfoItemProps {
 }
 
 export type ProfileDetailProps = Omit<UseUserProps, "id" | "role">;
+
+export type UpdatePasswordProps = {
+  oldPassword: string;
+  newPassword: string;
+};
