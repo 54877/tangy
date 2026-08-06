@@ -84,11 +84,11 @@ export function ForgotPassword() {
           <SpanType $size={"xs"} $shade={900}>
             沒收到代碼通知？
           </SpanType>
-          <button style={{ flex: "1" }} onClick={handleOnclick}>
+          <button type="button" style={{ flex: "1" }} onClick={handleOnclick}>
             <SpanType
-              $size={"xs"}
-              $shade={900}
               style={{ textDecoration: "underline" }}
+              $shade={900}
+              $size={"xs"}
             >
               請點此重新傳⁠送。
             </SpanType>

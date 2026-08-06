@@ -9,7 +9,7 @@ import { useInformation } from "../../../../utils/information";
 import { useMediaQuery } from "@mui/material";
 import type { UpdatePasswordProps } from "../../../../types/profile";
 import { updatePasswordInit } from "../../../../constants/profile";
-import { Heading } from "../../../../styles/components/span";
+import { Heading, SpanType } from "../../../../styles/components/span";
 import { updatePassword } from "../../../../api/profile";
 import { handleApiError } from "../../../../utils/apiError";
 import { useState } from "react";
@@ -51,18 +51,21 @@ export const UpdatePasswordDialog = () => {
           onChange={handleOnChange}
         />
 
-        <FromInput
-          err={err}
-          title={"新密碼"}
-          type={"password"}
-          direction={isSmall ? "column" : "row"}
-          fieldKey={"newPassword"}
-          information={information}
-          onChange={handleOnChange}
-        />
+        <Flex $direction={"column"} $align={"flex-end"}>
+          <FromInput
+            err={err}
+            title={"新密碼"}
+            type={"password"}
+            direction={isSmall ? "column" : "row"}
+            fieldKey={"newPassword"}
+            information={information}
+            onChange={handleOnChange}
+          />
+          <SpanType>123</SpanType>
+        </Flex>
       </Flex>
-      <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
-        <ProfileButton onClick={updatePasswordApi} text={"更新密碼"} />
+      <Flex $justify={"flex-end"} style={{ paddingTop: "16px" }}>
+        <ProfileButton onClick={updatePasswordApi} text={"確認"} />
       </Flex>
     </Flex>
   );
