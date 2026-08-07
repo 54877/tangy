@@ -15,3 +15,8 @@ export const updatePasswordInit = {
   oldPassword: "",
   newPassword: "",
 };
+export const profilePasswordInit = {
+  email: "",
+  code: "",
+  newPassword: "",
+};

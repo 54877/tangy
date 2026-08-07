@@ -14,6 +14,10 @@ import { updatePassword } from "../../../../api/profile";
 import { handleApiError } from "../../../../utils/apiError";
 import { useState } from "react";
 import type { FormError } from "../../../../types/errorType";
+import { logout } from "../../../../api/auth";
+import { useAuth } from "../../../../context/auth/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useUserInit } from "../../../../constants/user";
 
 export const UpdatePasswordDialog = () => {
   const { closeDialog } = useDialog();
@@ -22,8 +26,9 @@ export const UpdatePasswordDialog = () => {
   const { information, handleOnChange } =
     useInformation<UpdatePasswordProps>(updatePasswordInit);
   const { type, title } = activeDialog || {};
+  const { setUser, clearAuthToken } = useAuth();
   const isSmall = useMediaQuery("(max-width:500px)");
-
+  const navigate = useNavigate();
   //更新密碼API
   const updatePasswordApi = async () => {
     try {
@@ -31,6 +36,19 @@ export const UpdatePasswordDialog = () => {
       closeDialog(activeLayer);
     } catch (err) {
       handleApiError(err, setErr);
+    }
+  };
+
+  const onclick = async () => {
+    //登出
+    try {
+      await logout();
+      closeDialog(activeLayer);
+      clearAuthToken();
+      setUser(useUserInit);
+      navigate("/login/forgot");
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -61,7 +79,7 @@ export const UpdatePasswordDialog = () => {
             information={information}
             onChange={handleOnChange}
           />
-          <SpanType>123</SpanType>
+          <SpanType onClick={onclick}>忘記密碼</SpanType>
         </Flex>
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "16px" }}>

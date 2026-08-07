@@ -86,9 +86,9 @@ export function ForgotPassword() {
           </SpanType>
           <button type="button" style={{ flex: "1" }} onClick={handleOnclick}>
             <SpanType
-              style={{ textDecoration: "underline" }}
-              $shade={900}
               $size={"xs"}
+              $shade={900}
+              style={{ textDecoration: "underline" }}
             >
               請點此重新傳⁠送。
             </SpanType>

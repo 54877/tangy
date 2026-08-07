@@ -3,11 +3,7 @@ import type { UseUserProps } from "../../types/authType";
 import type { OptionItem } from "../../types/select";
 
 //dialog類型
-export type DialogType =
-  | "EditDialog"
-  | "DeviceDialog"
-  | "UpdatePasswordDialog"
-  | "ForgotPassword";
+export type DialogType = "EditDialog" | "DeviceDialog" | "UpdatePasswordDialog";
 
 //共用props類型
 export interface BaseDialogData {

@@ -107,7 +107,7 @@ export function FormDialogProvider({ children }: Props) {
       {/* --- 第一層 Dialogs --- */}
       {dialogState.first?.type === "EditDialog" && <EditDialog />}
       {dialogState.first?.type === "DeviceDialog" && <DeviceDialog />}
-      {/* {dialogState.first?.type === "ForgotPassword" && <ForgotPassword />} */}
+
       {dialogState.first?.type === "UpdatePasswordDialog" && (
         <UpdatePasswordDialog />
       )}

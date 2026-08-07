@@ -36,3 +36,9 @@ export type UpdatePasswordProps = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type ProfilePasswordProps = {
+  email: string;
+  code: string;
+  newPassword: string;
+};

@@ -1,16 +1,18 @@
-import type { PropsWithChildren } from "react";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "../styles/global.styled";
 import { FormDialogProvider } from "./dialog/dialogProvider";
 import { AuthProvider } from "./auth/AuthProvider";
+import { Outlet } from "react-router-dom";
 
-export const AppProviders = ({ children }: PropsWithChildren) => {
+export const AppProviders = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <FormDialogProvider>
-        <AuthProvider>{children}</AuthProvider>
-      </FormDialogProvider>
+      <AuthProvider>
+        <FormDialogProvider>
+          <Outlet />
+        </FormDialogProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

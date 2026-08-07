@@ -5,14 +5,20 @@ import loginRoute from "./LoginMainLout/index.tsx";
 import mainRoute from "./MainLayout/index.tsx";
 import { AppProviders } from "./context/provider.tsx";
 
-const router = createBrowserRouter([mainRoute, loginRoute], {
-  basename: "/tangy/",
-});
+const router = createBrowserRouter(
+  [
+    {
+      element: <AppProviders />,
+      children: [mainRoute, loginRoute],
+    },
+  ],
+  {
+    basename: "/tangy/",
+  },
+);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProviders>
-      <RouterProvider router={router} />
-    </AppProviders>
+    <RouterProvider router={router} />
   </StrictMode>,
 );
