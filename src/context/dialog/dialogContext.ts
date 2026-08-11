@@ -1,15 +1,20 @@
-import { createContext } from "react";
+import { createContext, type Dispatch, type SetStateAction } from "react";
 import type { UseUserProps } from "../../types/authType";
 import type { OptionItem } from "../../types/select";
 
 //dialog類型
-export type DialogType = "EditDialog" | "DeviceDialog" | "UpdatePasswordDialog";
+export type DialogType =
+  | "EditDialog"
+  | "DeviceDialog"
+  | "UpdatePasswordDialog"
+  | "SVDialog";
 
 //共用props類型
 export interface BaseDialogData {
   type: DialogType;
   title?: string;
   user?: UseUserProps;
+  setUser?: Dispatch<SetStateAction<UseUserProps>>;
   gender?: OptionItem[];
   editProfileOnclick?: () => Promise<void>;
 }

@@ -37,8 +37,7 @@ export type UpdatePasswordProps = {
   newPassword: string;
 };
 
-export type ProfilePasswordProps = {
+export type SVProps = {
   email: string;
   code: string;
-  newPassword: string;
 };

@@ -7,7 +7,7 @@ import { userForgotPasswordInit } from "../constants/user";
 import { useInformation } from "../utils/information";
 import { handleSubmit } from "../utils/formDefault";
 import type { ForgotProps } from "../types/authType";
-import { forgotPassword, resetPassword } from "../api/auth";
+import { resetPassword, sendEmail } from "../api/auth";
 import { handleApiError } from "../utils/apiError";
 import { formValidate } from "../utils/formValidate";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -27,9 +27,9 @@ export function ForgotPassword() {
   const navigate = useNavigate();
 
   //API 寄信
-  const forgotPasswordApi = async () => {
+  const sendEmailApi = async () => {
     try {
-      await forgotPassword(information.email);
+      await sendEmail(information.email);
       setSearchParams({ step: "verify", email: information.email });
     } catch (err) {
       handleApiError(err, setErr);
@@ -59,7 +59,7 @@ export function ForgotPassword() {
       information,
       fields: ["email"],
       setErr,
-      fn: forgotPasswordApi,
+      fn: sendEmailApi,
     });
   };
 

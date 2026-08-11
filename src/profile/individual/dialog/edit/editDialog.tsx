@@ -20,6 +20,7 @@ import { FormSelect } from "../../../../components/select/FromSelect";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import { updatePersonal } from "../../../../api/profile";
 import { handleApiError } from "../../../../utils/apiError";
+import type { FormError } from "../../../../types/errorType";
 
 export interface Props {
   icon: ReactNode;
@@ -28,7 +29,7 @@ export interface Props {
 
 export const EditDialog = () => {
   const { closeDialog } = useDialog();
-  const [err, setErr] = useState<Partial<ProfileDetailProps>>({});
+  const [err, setErr] = useState<FormError<ProfileDetailProps>>({});
   const { activeDialog, activeLayer } = useActiveDialog("EditDialog");
   const { information, handleOnChange, setInformation } =
     useInformation<ProfileDetailProps>(profileDetailInit);

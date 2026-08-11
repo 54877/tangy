@@ -53,6 +53,7 @@ export const Nav = ({ isMobile }: NavProps) => {
   const menu = useMenu();
   const { user, token } = useAuth();
   const { getMe } = useMe();
+  const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (token) {
@@ -73,6 +74,7 @@ export const Nav = ({ isMobile }: NavProps) => {
 
   //登出
   const logoutButton = async () => {
+    setLogoutLoading(true);
     try {
       await logout();
       setUser(useUserInit);
@@ -82,6 +84,8 @@ export const Nav = ({ isMobile }: NavProps) => {
       menu.closeClick();
     } catch (err) {
       console.log(err);
+    } finally {
+      setLogoutLoading(false);
     }
   };
 
@@ -239,7 +243,9 @@ export const Nav = ({ isMobile }: NavProps) => {
         text={
           <>
             {/* userList menu */}
-            {menu.activeKey === "user" && <UserMenu logout={logoutButton} />}
+            {menu.activeKey === "user" && (
+              <UserMenu loading={logoutLoading} logout={logoutButton} />
+            )}
             {/* 課程分類menu */}
             {menu.activeKey === "course" && <CourseMenu />}
             {/* 購物車menu */}

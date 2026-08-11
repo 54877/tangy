@@ -11,16 +11,18 @@ import { useNavigate } from "react-router-dom";
 import { useMe } from "../api/common/nav.API";
 import { useEffect } from "react";
 import { useAuth } from "../context/auth/useAuth";
+import { LoadingUi } from "../components/loading/loading";
 
 type UiType = {
   logout: () => void;
+  loading: boolean;
 };
 
 type CartType = {
   close: () => void;
 };
 
-export const UserMenu = ({ logout }: UiType) => {
+export const UserMenu = ({ logout, loading }: UiType) => {
   const { user, token } = useAuth();
   const { getMe } = useMe();
 
@@ -40,7 +42,7 @@ export const UserMenu = ({ logout }: UiType) => {
         onClick={logout}
         as={"div"}
         icon={<LogoutOutlinedIcon />}
-        text={"登出"}
+        text={loading ? <LoadingUi type={"button"} /> : "登出"}
       />
     </UserListMenu>
   );

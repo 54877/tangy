@@ -2,6 +2,7 @@ export interface UserProps {
   email: string;
   password: string;
   userName: string;
+  code: string;
 }
 
 export interface ForgotProps {
@@ -16,6 +17,7 @@ export interface UseUserProps {
   introduction: string;
   gender: string;
   createdAt: string;
+  svType: boolean;
   email: string;
   userName: string;
   role: "user" | "admin";

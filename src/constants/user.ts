@@ -4,6 +4,7 @@ export const userInit = {
   email: "",
   password: "",
   userName: "",
+  code: "",
 };
 
 export const userForgotPasswordInit = {
@@ -16,5 +17,6 @@ export const useUserInit = {
   id: "",
   email: "",
   userName: "",
+  svType: false,
   role: "user",
 } as UseUserProps;

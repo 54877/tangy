@@ -15,8 +15,7 @@ export const updatePasswordInit = {
   oldPassword: "",
   newPassword: "",
 };
-export const profilePasswordInit = {
+export const SVInit = {
   email: "",
   code: "",
-  newPassword: "",
 };

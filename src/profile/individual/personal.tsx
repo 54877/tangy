@@ -98,6 +98,18 @@ export const Personal = () => {
     );
   };
 
+  const SVOnclick = () => {
+    openDialog(
+      {
+        type: "SVDialog",
+        title: "兩步驟驗證",
+        user: user,
+        setUser: setUser,
+      },
+      1,
+    );
+  };
+
   return (
     <Flex $direction={isMac ? "row" : "column"} $align={"flex-start"}>
       <Container $direction={"column"}>
@@ -161,6 +173,7 @@ export const Personal = () => {
         <ProfileSafetyInfoItem
           borderType={false}
           icon={<SecurityOutlinedIcon />}
+          onclick={SVOnclick}
           title={"兩步驟驗證"}
           secTitle={"為您帳號增加額外安全層"}
         />
