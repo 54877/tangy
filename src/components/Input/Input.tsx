@@ -62,6 +62,7 @@ export function FromInput<T>({
     <Flex
       $direction={direction}
       $gap={"sm"}
+      $justify={"center"}
       $align={direction === "row" ? "center" : "flex-start"}
     >
       <Flex

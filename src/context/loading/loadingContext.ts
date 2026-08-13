@@ -1,8 +1,9 @@
-import { createContext, type Dispatch, type SetStateAction } from "react";
+import { createContext } from "react";
+import type { LoadingManager, LoadingScope } from "../../types/loadingType";
 
-interface LoadingProps {
-  loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+interface LoadingContextValue {
+  manager: LoadingManager;
+  loading: LoadingScope;
 }
 
-export const LoadingContext = createContext<LoadingProps | null>(null);
+export const LoadingContext = createContext<LoadingContextValue | null>(null);

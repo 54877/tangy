@@ -25,20 +25,28 @@ import { useEffect, useState } from "react";
 import type { UseUserProps } from "../../types/authType";
 import { profileDetailInit } from "../../constants/profile";
 import type { OptionItem } from "../../types/select";
+import { useLoading } from "../../context/loading/useLoading";
+import { LoadingUi } from "../../components/loading/loading";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const [user, setUser] = useState<UseUserProps>(profileDetailInit);
   const [gender, setGender] = useState<OptionItem[]>();
+  const [userReady, setUserReady] = useState(true);
+  const { loading } = useLoading();
   const { openDialog } = useDialog();
+
   const fetchUser = async () => {
+    loading(1).start();
     try {
       const res = await personal();
-
       setUser(res.data.userDate);
       setGender(res.data.genderSelect);
+      setUserReady(false);
     } catch (err) {
       console.log(err);
+    } finally {
+      loading(1).stop();
     }
   };
 
@@ -46,15 +54,18 @@ export const Personal = () => {
     let cancelled = false;
 
     const fetchUser = async () => {
+      loading(1).start();
       try {
         const res = await personal();
-
         if (!cancelled) {
           setUser(res.data.userDate);
           setGender(res.data.genderSelect);
+          setUserReady(false);
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        loading(1).stop();
       }
     };
 
@@ -122,61 +133,71 @@ export const Personal = () => {
           }
           RightButton={
             <TitleButton
+              disabled={userReady}
               onClick={editOnclick}
               icon_left={<EditOutlinedIcon />}
               text={"編輯"}
             />
           }
         />
-        <ProfileInfoItem
-          icon={<PermIdentityOutlinedIcon />}
-          title={"暱稱"}
-          text={user?.userName}
-        />
-        <ProfileInfoItem
-          icon={<EmailOutlinedIcon />}
-          title={"電子郵件"}
-          text={user?.email ?? ""}
-        />
-        <ProfileInfoItem
-          icon={<CalendarMonthOutlinedIcon />}
-          title={"生日"}
-          text={
-            user?.birthday
-              ? dayjs(user?.birthday).format("YYYY年MM月DD日")
-              : "未填寫"
-          }
-        />
-        <ProfileInfoItem
-          icon={<MaleOutlinedIcon />}
-          title={"性別"}
-          text={gender?.find((x) => x.key)?.label ?? "未填寫"}
-        />
-        <ProfileInfoItem
-          icon={<AccessTimeOutlinedIcon />}
-          title={"加入時間"}
-          text={
-            dayjs(user?.createdAt).format("YYYY年MM月DD日 hh:mm") ?? "未填寫"
-          }
-        />
-        <ProfileInfoItem
-          icon={<BadgeOutlinedIcon />}
-          title={"簡介"}
-          text={user?.introduction ?? "未填寫"}
-        />
-        <ProfileSafetyInfoItem
-          icon={<BuildOutlinedIcon />}
-          onclick={updatePasswordOnclick}
-          title={"變更密碼"}
-          secTitle={"定期更新密碼以保護帳號安全"}
-        />
-        <ProfileSafetyInfoItem
-          borderType={false}
-          icon={<SecurityOutlinedIcon />}
-          onclick={SVOnclick}
-          title={"兩步驟驗證"}
-          secTitle={"為您帳號增加額外安全層"}
-        />
+        {!user.userName ? (
+          <LoadingUi style={{ height: "580px" }} type={"spinner"} />
+        ) : (
+          <>
+            <ProfileInfoItem
+              icon={<PermIdentityOutlinedIcon />}
+              title={"暱稱"}
+              text={user?.userName}
+            />
+            <ProfileInfoItem
+              icon={<EmailOutlinedIcon />}
+              title={"電子郵件"}
+              text={user?.email ?? ""}
+            />
+            <ProfileInfoItem
+              icon={<CalendarMonthOutlinedIcon />}
+              title={"生日"}
+              text={
+                user?.birthday
+                  ? dayjs(user?.birthday).format("YYYY年MM月DD日")
+                  : "未填寫"
+              }
+            />
+            <ProfileInfoItem
+              icon={<MaleOutlinedIcon />}
+              title={"性別"}
+              text={
+                gender?.find((x) => x.key === user.gender)?.label ?? "未填寫"
+              }
+            />
+            <ProfileInfoItem
+              icon={<AccessTimeOutlinedIcon />}
+              title={"加入時間"}
+              text={
+                dayjs(user?.createdAt).format("YYYY年MM月DD日 hh:mm") ??
+                "未填寫"
+              }
+            />
+            <ProfileInfoItem
+              icon={<BadgeOutlinedIcon />}
+              title={"簡介"}
+              text={user?.introduction ?? "未填寫"}
+            />
+            <ProfileSafetyInfoItem
+              icon={<BuildOutlinedIcon />}
+              onclick={updatePasswordOnclick}
+              title={"變更密碼"}
+              secTitle={"定期更新密碼以保護帳號安全"}
+            />
+            <ProfileSafetyInfoItem
+              borderType={false}
+              icon={<SecurityOutlinedIcon />}
+              onclick={SVOnclick}
+              title={"兩步驟驗證"}
+              secTitle={"為您帳號增加額外安全層"}
+            />
+          </>
+        )}
       </Container>
 
       {/* 登入裝置 */}

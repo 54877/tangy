@@ -12,6 +12,7 @@ import { useMe } from "../api/common/nav.API";
 import { useEffect } from "react";
 import { useAuth } from "../context/auth/useAuth";
 import { LoadingUi } from "../components/loading/loading";
+import { useLoadingState } from "../utils/loading/loading.state";
 
 type UiType = {
   logout: () => void;
@@ -35,7 +36,10 @@ export const UserMenu = ({ logout, loading }: UiType) => {
   return (
     <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
       <UserLi style={{ paddingBottom: "12px" }}>
-        <SpanType>HI {user.userName}</SpanType>
+        <SpanType>HI</SpanType>
+        <SpanType>
+          {useLoadingState(0) ? <LoadingUi type={"spinner"} /> : user.userName}
+        </SpanType>
       </UserLi>
       <UserList />
       <UserListButton

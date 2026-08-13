@@ -1,14 +1,16 @@
+import type { CSSProperties } from "styled-components";
 import { Flex } from "../Input/Input.styled";
 import { LoadingDot, LoadingText, Spinner } from "./loading.styled";
 
 interface Loading {
   type: "button" | "spinner" | "all";
+  style?: CSSProperties;
 }
 
-export const LoadingUi = ({ type }: Loading) => {
+export const LoadingUi = ({ type, style }: Loading) => {
   if (type === "button") {
     return (
-      <Flex>
+      <Flex style={{ ...style }}>
         <LoadingText>
           <LoadingDot $delay={0}>L</LoadingDot>
           <LoadingDot $delay={0.1}>o</LoadingDot>
@@ -27,7 +29,7 @@ export const LoadingUi = ({ type }: Loading) => {
 
   if (type === "spinner") {
     return (
-      <Flex>
+      <Flex style={{ ...style }}>
         <Spinner />
       </Flex>
     );

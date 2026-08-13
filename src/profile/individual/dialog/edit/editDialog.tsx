@@ -21,6 +21,11 @@ import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import { updatePersonal } from "../../../../api/profile";
 import { handleApiError } from "../../../../utils/apiError";
 import type { FormError } from "../../../../types/errorType";
+import { useLoading } from "../../../../context/loading/useLoading";
+import { useLoadingState } from "../../../../utils/loading/loading.state";
+import { LoadingUi } from "../../../../components/loading/loading";
+import { formValidate } from "../../../../utils/formValidate";
+import { FromRemark } from "../../../../components/remark/remark";
 
 export interface Props {
   icon: ReactNode;
@@ -35,6 +40,7 @@ export const EditDialog = () => {
     useInformation<ProfileDetailProps>(profileDetailInit);
   const { type, title, user, gender, editProfileOnclick } = activeDialog || {};
   const isSmall = useMediaQuery("(max-width:500px)");
+  const { loading } = useLoading();
 
   useEffect(() => {
     if (user) {
@@ -42,16 +48,30 @@ export const EditDialog = () => {
     }
   }, []);
 
+  //更新api
   const updatePersonalApi = async () => {
+    loading(2).start();
     try {
       await updatePersonal(information);
-      closeDialog(activeLayer);
       if (editProfileOnclick) {
         await editProfileOnclick();
       }
+      await loading(2).stop();
+      closeDialog(activeLayer);
     } catch (err) {
+      loading(2).stop();
       handleApiError(err, setErr);
     }
+  };
+
+  //表單驗證
+  const handleOnclick = () => {
+    formValidate<ProfileDetailProps>({
+      information,
+      fields: ["userName"],
+      setErr,
+      fn: updatePersonalApi,
+    });
   };
 
   const titleUi = ({ icon, title }: Props) => (
@@ -130,9 +150,10 @@ export const EditDialog = () => {
           onChange={handleOnChange}
         />
 
-        <FromInput
+        <FromRemark
           title={titleUi({ icon: <BadgeOutlinedIcon />, title: "簡介" })}
           err={err}
+          rows={3}
           direction={isSmall ? "column" : "row"}
           fieldKey={"introduction"}
           information={information}
@@ -140,7 +161,10 @@ export const EditDialog = () => {
         />
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
-        <ProfileButton onClick={updatePersonalApi} text={"儲存"} />
+        <ProfileButton
+          onClick={handleOnclick}
+          text={useLoadingState(2) ? <LoadingUi type={"button"} /> : "儲存"}
+        />
       </Flex>
     </Flex>
   );

@@ -16,18 +16,20 @@ import type { FormError } from "../types/errorType";
 import { SpanType } from "../styles/components/span";
 import { useLoading } from "../context/loading/useLoading";
 import { LoadingUi } from "../components/loading/loading";
+import { useLoadingState } from "../utils/loading/loading.state";
+import { Flex } from "../components/Input/Input.styled";
 
 export function LoginPage() {
   const { information, handleOnChange } = useInformation<UserProps>(userInit);
   const [err, setErr] = useState<FormError<UserProps>>({});
   const [state, setState] = useState<boolean>(false);
+  const { loading } = useLoading();
   const navigate = useNavigate();
   const { setAuthToken, setUser } = useAuth();
-  const { loading, setLoading } = useLoading();
 
   //登入API
   const loginApi = async () => {
-    setLoading(true);
+    loading(0).start();
     try {
       let res;
       if (state) {
@@ -50,18 +52,31 @@ export function LoginPage() {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      setLoading(false);
+      loading(0).stop();
     }
   };
 
-  //表單驗證
-  const handleOnclick = () => {
+  const sendEmail = () => {
     formValidate<UserProps>({
       information,
       fields: ["email", "password"],
       setErr,
       fn: loginApi,
     });
+  };
+
+  //表單驗證
+  const handleOnclick = () => {
+    if (state) {
+      formValidate<UserProps>({
+        information,
+        fields: ["email", "password", "code"],
+        setErr,
+        fn: loginApi,
+      });
+      return;
+    }
+    sendEmail();
   };
 
   return (
@@ -83,20 +98,36 @@ export function LoginPage() {
                 information={information}
                 fieldKey={"password"}
                 onChange={handleOnChange}
-                title={"Password"}
+                title={"密碼"}
                 to={"forgot"}
-                titleSec={"Forgot password?"}
+                titleSec={"忘記密碼?"}
               />
             </>
           )}
           {state && (
-            <FromInput
-              err={err}
-              information={information}
-              fieldKey={"code"}
-              onChange={handleOnChange}
-              title={"驗證碼"}
-            />
+            <Flex $direction={"column"} $align={"flex-end"}>
+              <FromInput
+                err={err}
+                information={information}
+                fieldKey={"code"}
+                onChange={handleOnChange}
+                title={"驗證碼"}
+              />
+              <button
+                onClick={sendEmail}
+                disabled={loading(0).isLoading()}
+                type="button"
+                style={{ flex: "1" }}
+              >
+                <SpanType
+                  $size={"xs"}
+                  $shade={900}
+                  style={{ textDecoration: "underline" }}
+                >
+                  請點此重新傳⁠送。
+                </SpanType>
+              </button>
+            </Flex>
           )}
           {err.message && (
             <SpanType $color={"danger"} $size={"xs"} $shade={600}>
@@ -105,14 +136,19 @@ export function LoginPage() {
           )}
           <ButtonAuth
             onClick={handleOnclick}
-            text={loading ? <LoadingUi type={"button"} /> : "登入"}
+            disabled={useLoadingState(0)}
+            text={useLoadingState(0) ? <LoadingUi type={"button"} /> : "登入"}
           />
         </FlexType>
       </form>
       <Federated />
-      <FlexType style={{ width: "100%" }}>
-        <LinkAuth to={"register"} text={"Create an account?"} />
-      </FlexType>
+      <Flex>
+        <LinkAuth
+          style={{ color: "black" }}
+          to={"register"}
+          text={"創建新帳戶?"}
+        />
+      </Flex>
     </>
   );
 }

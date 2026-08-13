@@ -27,6 +27,8 @@ import { useMediaQuery } from "@mui/material";
 import { Button } from "../components/Button/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useLoadingState } from "../utils/loading/loading.state";
+import { LoadingUi } from "../components/loading/loading";
 
 export const Profile = () => {
   const { user } = useAuth();
@@ -120,7 +122,16 @@ export const Profile = () => {
                   $align={"flex-start"}
                 >
                   <UserImg width="60px" height="60px" />
-                  <SpanType $type={"label"}>Hi, {user.userName}</SpanType>
+                  <FlexType>
+                    <SpanType $type={"label"}>Hi, </SpanType>
+                    <SpanType $type={"label"}>
+                      {useLoadingState(0) ? (
+                        <LoadingUi type={"spinner"} />
+                      ) : (
+                        user.userName
+                      )}
+                    </SpanType>
+                  </FlexType>
                   <FlexType
                     $direction={"column"}
                     $gap={"none"}

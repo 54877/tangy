@@ -27,7 +27,11 @@ function lengthString<T>(
 const LENGTH_RULES: Partial<Record<string, number>> = {
   email: 100,
   password: 40,
+  newPassword: 40,
+  oldPassword: 40,
   userName: 20,
+  introduction: 200,
+  code: 10,
 };
 
 //必填通用規則表
@@ -53,7 +57,23 @@ export function getCommonValidators<T>(
         return "";
       },
     ],
+    newPassword: () => [
+      requiredString<T>("請輸入新密碼"),
+      (v) => {
+        if (typeof v !== "string") {
+          return "密碼格式錯誤";
+        }
+
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(v)) {
+          return "密碼需包含英文大寫、小寫及數字";
+        }
+
+        return "";
+      },
+    ],
+    oldPassword: () => [requiredString<T>("請輸入舊密碼")],
     userName: () => [requiredString<T>("請輸入使用者名稱")],
+    code: () => [requiredString<T>("請輸入驗證碼")],
     // name: (title) => {
     //   const map: Record<string, ValidatorFn<T>[]> = {
     //     Material: [requiredString<T>("enter_product_name")],

@@ -18,6 +18,10 @@ import { logout } from "../../../../api/auth";
 import { useAuth } from "../../../../context/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useUserInit } from "../../../../constants/user";
+import { useLoading } from "../../../../context/loading/useLoading";
+import { useLoadingState } from "../../../../utils/loading/loading.state";
+import { LoadingUi } from "../../../../components/loading/loading";
+import { formValidate } from "../../../../utils/formValidate";
 
 export const UpdatePasswordDialog = () => {
   const { closeDialog } = useDialog();
@@ -29,19 +33,47 @@ export const UpdatePasswordDialog = () => {
   const { setUser, clearAuthToken } = useAuth();
   const isSmall = useMediaQuery("(max-width:500px)");
   const navigate = useNavigate();
+  const { loading } = useLoading();
+
+  //TODO 更新密碼後 登入裝置問題
   //更新密碼API
   const updatePasswordApi = async () => {
+    loading(3).start();
     try {
       await updatePassword(information);
       closeDialog(activeLayer);
     } catch (err) {
       handleApiError(err, setErr);
+    } finally {
+      loading(3).stop();
     }
   };
 
+  //表單驗證
+  const handleOnclick = () => {
+    if (
+      information.newPassword === information.oldPassword &&
+      information.newPassword !== ""
+    ) {
+      setErr({
+        newPassword: "新舊密碼不可相同",
+      });
+      return;
+    }
+
+    formValidate<UpdatePasswordProps>({
+      information,
+      fields: ["oldPassword", "newPassword"],
+      setErr,
+      fn: updatePasswordApi,
+    });
+  };
+
+  //忘記密碼
   const onclick = async () => {
-    //登出
+    loading(2).start();
     try {
+      //登出
       await logout();
       closeDialog(activeLayer);
       clearAuthToken();
@@ -49,6 +81,8 @@ export const UpdatePasswordDialog = () => {
       navigate("/login/forgot");
     } catch (err) {
       console.log(err);
+    } finally {
+      loading(2).stop();
     }
   };
 
@@ -79,11 +113,17 @@ export const UpdatePasswordDialog = () => {
             information={information}
             onChange={handleOnChange}
           />
-          <SpanType onClick={onclick}>忘記密碼</SpanType>
+          <SpanType as={"button"} onClick={onclick}>
+            {useLoadingState(2) ? <LoadingUi type={"button"} /> : "忘記密碼"}
+          </SpanType>
         </Flex>
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "16px" }}>
-        <ProfileButton onClick={updatePasswordApi} text={"確認"} />
+        <ProfileButton
+          disabled={useLoadingState(3)}
+          onClick={handleOnclick}
+          text={useLoadingState(3) ? <LoadingUi type={"button"} /> : "確認"}
+        />
       </Flex>
     </Flex>
   );

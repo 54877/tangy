@@ -40,6 +40,8 @@ import { ChartMenu, CourseMenu, UserMenu } from "./menu";
 import { logout } from "../api/auth";
 import { useUserInit } from "../constants/user";
 import { useMe } from "../api/common/nav.API";
+import { LoadingUi } from "../components/loading/loading";
+import { useLoadingState } from "../utils/loading/loading.state";
 
 type NavProps = {
   isMobile: boolean;
@@ -54,6 +56,7 @@ export const Nav = ({ isMobile }: NavProps) => {
   const { user, token } = useAuth();
   const { getMe } = useMe();
   const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
+  const userIsLoading = useLoadingState(0);
 
   useEffect(() => {
     if (token) {
@@ -205,7 +208,13 @@ export const Nav = ({ isMobile }: NavProps) => {
               text={
                 <FlexType>
                   <UserImg width={"48px"} height={"48px"} />
-                  <SpanType>{user.userName}</SpanType>
+                  <SpanType>
+                    {userIsLoading ? (
+                      <LoadingUi type={"spinner"} />
+                    ) : (
+                      user.userName
+                    )}
+                  </SpanType>
                 </FlexType>
               }
             />
