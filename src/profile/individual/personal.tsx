@@ -27,12 +27,14 @@ import { profileDetailInit } from "../../constants/profile";
 import type { OptionItem } from "../../types/select";
 import { useLoading } from "../../context/loading/useLoading";
 import { LoadingUi } from "../../components/loading/loading";
+import type { DeviceProps } from "../../types/profile";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const [user, setUser] = useState<UseUserProps>(profileDetailInit);
   const [gender, setGender] = useState<OptionItem[]>();
   const [userReady, setUserReady] = useState(true);
+  const [device, serDevice] = useState<DeviceProps[]>();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
 
@@ -40,8 +42,8 @@ export const Personal = () => {
     loading(1).start();
     try {
       const res = await personal();
-      setUser(res.data.userDate);
-      setGender(res.data.genderSelect);
+      const data = res.data;
+      setUser(data.userDate);
       setUserReady(false);
     } catch (err) {
       console.log(err);
@@ -57,9 +59,12 @@ export const Personal = () => {
       loading(1).start();
       try {
         const res = await personal();
+        const data = res.data;
+        console.log(data);
         if (!cancelled) {
-          setUser(res.data.userDate);
-          setGender(res.data.genderSelect);
+          serDevice(data.deviceDate);
+          setUser(data.userDate);
+          setGender(data.genderSelect);
           setUserReady(false);
         }
       } catch (err) {
@@ -140,9 +145,7 @@ export const Personal = () => {
             />
           }
         />
-        {!user.userName ? (
-          <LoadingUi style={{ height: "580px" }} type={"spinner"} />
-        ) : (
+        {user.userName ? (
           <>
             <ProfileInfoItem
               icon={<PermIdentityOutlinedIcon />}
@@ -197,6 +200,8 @@ export const Personal = () => {
               secTitle={"為您帳號增加額外安全層"}
             />
           </>
+        ) : (
+          <LoadingUi style={{ height: "580px" }} type={"spinner"} />
         )}
       </Container>
 
@@ -214,62 +219,21 @@ export const Personal = () => {
             <TitleButton style={{ color: "red" }} text={"登出所有裝置"} />
           }
         />
-        <ProfileDeviceInfoItem
-          onclick={deviceOnclick}
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
-        <ProfileDeviceInfoItem
-          icon={<TabletAndroidOutlinedIcon />}
-          title={"Windows · Chrome"}
-          secTitle={"台灣 · 台北市"}
-        />
+        {device ? (
+          device.map((e) => (
+            <Flex key={e.id}>
+              <ProfileDeviceInfoItem
+                onclick={deviceOnclick}
+                isCurrent={e.isCurrent}
+                icon={<TabletAndroidOutlinedIcon />}
+                title={`${e.os} · ${e.browser}`}
+                secTitle={"台灣 · 台北市"}
+              />
+            </Flex>
+          ))
+        ) : (
+          <LoadingUi style={{ height: "560px" }} type={"spinner"} />
+        )}
       </Container>
     </Flex>
   );

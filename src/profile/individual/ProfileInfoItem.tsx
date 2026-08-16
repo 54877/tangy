@@ -96,6 +96,7 @@ export const ProfileDeviceInfoItem = ({
   secTitle,
   onclick,
   borderType = true,
+  isCurrent,
 }: ProfileDeviceInfoItemProps) => {
   return (
     <Flex
@@ -113,7 +114,14 @@ export const ProfileDeviceInfoItem = ({
         </Flex>
       </Flex>
       <Flex style={{ width: "100%", flex: 1 }}>
-        <Flex as={"button"} onClick={onclick}>
+        <SpanType
+          style={{ width: "100%", flexShrink: 0, whiteSpace: "nowrap" }}
+          $color={"success"}
+          $shade={400}
+        >
+          {isCurrent ? "目前裝置" : ""}
+        </SpanType>
+        <Flex style={{ flex: 1 }} as={"button"} onClick={onclick}>
           <MoreVertOutlinedIcon />
         </Flex>
       </Flex>

@@ -27,6 +27,7 @@ export interface ProfileDeviceInfoItemProps {
   icon: ReactNode;
   title: string;
   secTitle: string;
+  isCurrent: boolean;
   onclick?: () => void;
 }
 
@@ -41,3 +42,20 @@ export type SVProps = {
   email: string;
   code: string;
 };
+
+export interface DeviceProps {
+  id: string;
+  lastUseAt: string;
+  ip: string;
+  userId: string;
+  userAgent: string;
+  deviceType: string | null;
+  deviceVendor: string | null;
+  deviceModel: string | null;
+  os: string;
+  osVersion: string;
+  browser: string;
+  browserVersion: string;
+  createdAt: string;
+  isCurrent: boolean;
+}
