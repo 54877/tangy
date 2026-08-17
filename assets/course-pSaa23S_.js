@@ -1,4 +1,4 @@
-import{t as e}from"./Box-DAR55bI-.js";import{$t as t,Qt as n,Zt as r,ct as i,d as a,g as o,in as s,ln as c,m as l,nn as u,rn as d,u as f,un as p,v as m,x as h,y as g}from"./index-ClbT3eyK.js";var _=s.div`
+import{t as e}from"./Box-BLIwU5eh.js";import{$t as t,Qt as n,Zt as r,ct as i,d as a,g as o,in as s,ln as c,m as l,nn as u,rn as d,u as f,un as p,v as m,x as h,y as g}from"./index-BsebKiQX.js";var _=s.div`
   margin: 0 auto;
   max-width: 1320px;
   width: 100%;
