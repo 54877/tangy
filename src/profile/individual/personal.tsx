@@ -34,9 +34,10 @@ export const Personal = () => {
   const [user, setUser] = useState<UseUserProps>(profileDetailInit);
   const [gender, setGender] = useState<OptionItem[]>();
   const [userReady, setUserReady] = useState(true);
-  const [device, serDevice] = useState<DeviceProps[]>();
+  const [device, setDevice] = useState<DeviceProps[]>();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
+  const cookie = document.cookie;
 
   const fetchUser = async () => {
     loading(1).start();
@@ -62,7 +63,7 @@ export const Personal = () => {
         const data = res.data;
         console.log(data);
         if (!cancelled) {
-          serDevice(data.deviceDate);
+          setDevice(data.deviceDate);
           setUser(data.userDate);
           setGender(data.genderSelect);
           setUserReady(false);
@@ -128,6 +129,7 @@ export const Personal = () => {
 
   return (
     <Flex $direction={isMac ? "row" : "column"} $align={"flex-start"}>
+      <pre>document.cookie: {cookie || "空的"}</pre>
       <Container $direction={"column"}>
         <ProfileInfoItemTitle
           context={"個人簡介"}
