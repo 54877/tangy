@@ -37,7 +37,6 @@ export const Personal = () => {
   const [device, setDevice] = useState<DeviceProps[]>();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
-  const cookie = document.cookie;
 
   const fetchUser = async () => {
     loading(1).start();
@@ -129,7 +128,6 @@ export const Personal = () => {
 
   return (
     <Flex $direction={isMac ? "row" : "column"} $align={"flex-start"}>
-      <pre>document.cookie: {cookie || "空的"}</pre>
       <Container $direction={"column"}>
         <ProfileInfoItemTitle
           context={"個人簡介"}
