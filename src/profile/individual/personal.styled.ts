@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Flex } from "../../components/Input/Input.styled";
 import { ButtonOutlined } from "../../components/Button/Button";
+import { SpanType } from "../../styles/components/span";
 
 export const Container = styled(Flex)`
   padding: 16px;
@@ -24,4 +25,11 @@ export const TitleButton = styled(ButtonOutlined)`
     border: 0;
     color: ${({ theme }) => theme.colors.primary[700]};
   }
+`;
+
+export const Content = styled(SpanType)`
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;

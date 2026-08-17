@@ -10,6 +10,7 @@ import type {
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { media } from "../../styles/helper/media";
+import { Content } from "./personal.styled";
 
 export const ProfileInfoItemTitle = ({
   icon,
@@ -40,6 +41,7 @@ export const ProfileInfoItem = ({
   icon,
   title,
   text,
+  type = false,
 }: ProfileInfoItemProps) => {
   const isSmall = useMediaQuery(`${media.xs}`);
   const isLgMac = useMediaQuery(`${media.md}`);
@@ -50,12 +52,14 @@ export const ProfileInfoItem = ({
         padding: "16px 0",
       }}
       $justify={"space-between"}
+      $align={type ? "flex-start" : "center"}
+      $direction={type ? "column" : "row"}
     >
       <Flex style={{ width: isLgMac ? "35%" : "40%" }} $justify={"flex-start"}>
         {isSmall && <> {icon}</>}
         <SpanType>{title} :</SpanType>
       </Flex>
-      <SpanType style={{ flex: 1 }}>{text}</SpanType>
+      {type ? <SpanType>{text}</SpanType> : <Content>{text}</Content>}
     </Flex>
   );
 };
@@ -93,7 +97,6 @@ export const ProfileSafetyInfoItem = ({
 export const ProfileDeviceInfoItem = ({
   icon,
   title,
-  secTitle,
   onclick,
   borderType = true,
   isCurrent,
@@ -110,20 +113,15 @@ export const ProfileDeviceInfoItem = ({
         {icon}
         <Flex $direction={"column"} $align={"flex-start"} $gap={"none"}>
           <SpanType style={{ fontWeight: "bold" }}>{title}</SpanType>
-          <SpanType $shade={400}>{secTitle}</SpanType>
+          {isCurrent && (
+            <SpanType $color={"success"} $shade={400}>
+              目前裝置
+            </SpanType>
+          )}
         </Flex>
       </Flex>
-      <Flex style={{ width: "100%", flex: 1 }}>
-        <SpanType
-          style={{ width: "100%", flexShrink: 0, whiteSpace: "nowrap" }}
-          $color={"success"}
-          $shade={400}
-        >
-          {isCurrent ? "目前裝置" : ""}
-        </SpanType>
-        <Flex style={{ flex: 1 }} as={"button"} onClick={onclick}>
-          <MoreVertOutlinedIcon />
-        </Flex>
+      <Flex style={{ flex: 1 }} as={"button"} onClick={onclick}>
+        <MoreVertOutlinedIcon />
       </Flex>
     </Flex>
   );

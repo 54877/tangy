@@ -34,11 +34,12 @@ export const Profile = () => {
   const { user } = useAuth();
   const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
-  const item = ["個人檔案", "我的學習", "我的收藏", "訂單紀錄"];
-  const { getMe } = useMe();
   const isTablet = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
-
+  const item = isTablet
+    ? ["個人檔案", "我的學習", "我的收藏", "訂單紀錄"]
+    : ["檔案", "學習", "收藏", "訂單"];
+  const { getMe } = useMe();
   useEffect(() => {
     getMe();
   }, []);
@@ -154,8 +155,7 @@ export const Profile = () => {
                         <ItemSpan
                           style={{ padding: "8px 0" }}
                           $shade={activeIndex === index ? 950 : 500}
-                          $type="label"
-                          $size="md"
+                          $size={isTablet ? "md" : "sm"}
                         >
                           {item}
                         </ItemSpan>

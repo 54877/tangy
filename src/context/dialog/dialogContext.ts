@@ -1,6 +1,7 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
 import type { UseUserProps } from "../../types/authType";
 import type { OptionItem } from "../../types/select";
+import type { DeviceProps } from "../../types/profile";
 
 //dialog類型
 export type DialogType =
@@ -16,6 +17,7 @@ export interface BaseDialogData {
   user?: UseUserProps;
   setUser?: Dispatch<SetStateAction<UseUserProps>>;
   gender?: OptionItem[];
+  deviceData?: DeviceProps[];
   editProfileOnclick?: () => Promise<void>;
 }
 

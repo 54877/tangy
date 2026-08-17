@@ -12,6 +12,7 @@ export interface ProfileInfoItemProps {
   icon: ReactNode;
   title: string;
   text: string;
+  type?: boolean;
 }
 
 export interface ProfileSafetyInfoItemProps {
@@ -26,7 +27,6 @@ export interface ProfileDeviceInfoItemProps {
   borderType?: boolean;
   icon: ReactNode;
   title: string;
-  secTitle: string;
   isCurrent: boolean;
   onclick?: () => void;
 }

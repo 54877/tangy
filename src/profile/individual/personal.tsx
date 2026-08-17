@@ -31,6 +31,7 @@ import type { DeviceProps } from "../../types/profile";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
+  const isTablet = useMediaQuery(`${media.xs}`);
   const [user, setUser] = useState<UseUserProps>(profileDetailInit);
   const [gender, setGender] = useState<OptionItem[]>();
   const [userReady, setUserReady] = useState(true);
@@ -94,11 +95,12 @@ export const Personal = () => {
     );
   };
 
-  const deviceOnclick = () => {
+  const deviceOnclick = (id: string) => {
     openDialog(
       {
         type: "DeviceDialog",
         title: "查看裝置詳細資料",
+        deviceData: device?.find((e) => e.id === id),
       },
       1,
     );
@@ -125,6 +127,10 @@ export const Personal = () => {
       1,
     );
   };
+  const time = isTablet ? "YYYY年MM月DD日 hh:mm" : "YYYY年MM月DD日 ";
+  const createdAt = user?.createdAt
+    ? dayjs(user.createdAt).format(time)
+    : "未填寫";
 
   return (
     <Flex $direction={isMac ? "row" : "column"} $align={"flex-start"}>
@@ -176,14 +182,12 @@ export const Personal = () => {
             <ProfileInfoItem
               icon={<AccessTimeOutlinedIcon />}
               title={"加入時間"}
-              text={
-                dayjs(user?.createdAt).format("YYYY年MM月DD日 hh:mm") ??
-                "未填寫"
-              }
+              text={createdAt}
             />
             <ProfileInfoItem
               icon={<BadgeOutlinedIcon />}
               title={"簡介"}
+              type={true}
               text={user?.introduction ?? "未填寫"}
             />
             <ProfileSafetyInfoItem
@@ -209,7 +213,7 @@ export const Personal = () => {
       <Container $direction={"column"}>
         <ProfileInfoItemTitle
           context={"登入裝置"}
-          secContext={"管理所有登入裝置"}
+          secContext={"管理所有裝置"}
           icon={
             <TabletAndroidOutlinedIcon
               style={{ width: "30px", height: "30px" }}
@@ -223,11 +227,12 @@ export const Personal = () => {
           device.map((e) => (
             <Flex key={e.id}>
               <ProfileDeviceInfoItem
-                onclick={deviceOnclick}
+                onclick={() => {
+                  deviceOnclick(e.id);
+                }}
                 isCurrent={e.isCurrent}
                 icon={<TabletAndroidOutlinedIcon />}
                 title={`${e.os} · ${e.browser}`}
-                secTitle={"台灣 · 台北市"}
               />
             </Flex>
           ))
