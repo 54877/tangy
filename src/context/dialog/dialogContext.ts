@@ -17,7 +17,7 @@ export interface BaseDialogData {
   user?: UseUserProps;
   setUser?: Dispatch<SetStateAction<UseUserProps>>;
   gender?: OptionItem[];
-  deviceData?: DeviceProps[];
+  deviceData?: DeviceProps;
   editProfileOnclick?: () => Promise<void>;
 }
 
