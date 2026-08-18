@@ -11,6 +11,8 @@ const _updatePersonal = createTokenApi("updatePersonal");
 const _SvSendEmail = createTokenApi("SvSendEmail");
 const _2FA = createTokenApi("2FA");
 const _2FAClose = createTokenApi("2FAClose");
+const _DeviceCloseById = createTokenApi("DeviceCloseById");
+const _DeviceCloseByUserId = createTokenApi("DeviceCloseByUserId");
 
 export const personal = async () => {
   return await _personal.get("/");
@@ -47,4 +49,16 @@ export const FA = async (information: SVProps) => {
 
 export const FAClose = async () => {
   return await _2FAClose.post("/");
+};
+
+export const DeviceCloseById = async (id: string) => {
+  return await _DeviceCloseById.post("/", {
+    id: id,
+  });
+};
+
+export const DeviceCloseByUserId = async (userId: string) => {
+  return await _DeviceCloseByUserId.post("/", {
+    userId: userId,
+  });
 };

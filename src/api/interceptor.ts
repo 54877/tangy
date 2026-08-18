@@ -17,6 +17,7 @@ type TokenPayload = {
   exp: number;
   iat: number;
   id: string;
+  deviceId: string;
   email: string;
   role: string;
 };

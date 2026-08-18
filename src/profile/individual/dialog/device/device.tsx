@@ -8,12 +8,38 @@ import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { ProfileButton } from "../edit/editDialog.styled";
 import { DeviceItem } from "./item";
 import dayjs from "dayjs";
+import { DeviceCloseById } from "../../../../api/profile";
+import { useLoading } from "../../../../context/loading/useLoading";
+import { LoadingUi } from "../../../../components/loading/loading";
+import { useLoadingState } from "../../../../utils/loading/loading.state";
+
+//TODO 失敗回傳訊息開啟DIALOG 告知失敗
 
 export const DeviceDialog = () => {
   const { closeDialog } = useDialog();
   const { activeDialog, activeLayer } = useActiveDialog("DeviceDialog");
-  const { type, title, deviceData } = activeDialog || {};
+  const { type, title, deviceData, editProfileOnclick } = activeDialog || {};
+  const { loading } = useLoading();
   const isSmall = useMediaQuery("(max-width:500px)");
+
+  const DeviceCloseByIdApi = async (id?: string) => {
+    if (!id) {
+      return;
+    }
+    loading(2).start();
+    try {
+      const res = await DeviceCloseById(id);
+      if (editProfileOnclick) {
+        await editProfileOnclick();
+      }
+      console.log(res);
+      await loading(2).stop();
+      closeDialog(activeLayer);
+    } catch (err) {
+      await loading(2).stop();
+      console.log(err);
+    }
+  };
 
   const content = (
     <Flex $direction={"column"}>
@@ -50,7 +76,12 @@ export const DeviceDialog = () => {
         <DeviceItem title={"IP"} value={deviceData?.ip ?? "未提供"} />
       </Flex>
       <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
-        <ProfileButton text={"登出裝置"} />
+        <ProfileButton
+          onClick={() => {
+            DeviceCloseByIdApi(deviceData?.id);
+          }}
+          text={useLoadingState(2) ? <LoadingUi type={"button"} /> : "登出裝置"}
+        />
       </Flex>
     </Flex>
   );

@@ -20,7 +20,7 @@ import {
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
 import dayjs from "dayjs";
-import { personal } from "../../api/profile";
+import { DeviceCloseByUserId, personal } from "../../api/profile";
 import { useEffect, useState } from "react";
 import type { UseUserProps } from "../../types/authType";
 import { profileDetailInit } from "../../constants/profile";
@@ -28,6 +28,7 @@ import type { OptionItem } from "../../types/select";
 import { useLoading } from "../../context/loading/useLoading";
 import { LoadingUi } from "../../components/loading/loading";
 import type { DeviceProps } from "../../types/profile";
+import { useLoadingState } from "../../utils/loading/loading.state";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
@@ -45,11 +46,24 @@ export const Personal = () => {
       const res = await personal();
       const data = res.data;
       setUser(data.userDate);
+      setDevice(data.deviceDate);
       setUserReady(false);
     } catch (err) {
       console.log(err);
     } finally {
       loading(1).stop();
+    }
+  };
+
+  const DeviceCloseByUserIdApi = async () => {
+    loading(2).start();
+    try {
+      await DeviceCloseByUserId(user.id);
+      await fetchUser();
+      await loading(2).stop();
+    } catch (err) {
+      await loading(2).stop();
+      console.log(err);
     }
   };
 
@@ -101,6 +115,7 @@ export const Personal = () => {
         type: "DeviceDialog",
         title: "查看裝置詳細資料",
         deviceData: device?.find((e) => e.id === id),
+        editProfileOnclick: fetchUser,
       },
       1,
     );
@@ -220,7 +235,19 @@ export const Personal = () => {
             />
           }
           RightButton={
-            <TitleButton style={{ color: "red" }} text={"登出所有裝置"} />
+            <TitleButton
+              onClick={() => {
+                DeviceCloseByUserIdApi();
+              }}
+              style={{ color: "red" }}
+              text={
+                useLoadingState(2) ? (
+                  <LoadingUi type={"button"} />
+                ) : (
+                  "登出所有裝置"
+                )
+              }
+            />
           }
         />
         {device ? (
