@@ -12,14 +12,16 @@ import { DeviceCloseById } from "../../../../api/profile";
 import { useLoading } from "../../../../context/loading/useLoading";
 import { LoadingUi } from "../../../../components/loading/loading";
 import { useLoadingState } from "../../../../utils/loading/loading.state";
-
-//TODO 失敗回傳訊息開啟DIALOG 告知失敗
+import { useAuth } from "../../../../context/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export const DeviceDialog = () => {
   const { closeDialog } = useDialog();
   const { activeDialog, activeLayer } = useActiveDialog("DeviceDialog");
   const { type, title, deviceData, editProfileOnclick } = activeDialog || {};
   const { loading } = useLoading();
+  const { clearAuthToken } = useAuth();
+  const navigate = useNavigate();
   const isSmall = useMediaQuery("(max-width:500px)");
 
   const DeviceCloseByIdApi = async (id?: string) => {
@@ -28,11 +30,19 @@ export const DeviceDialog = () => {
     }
     loading(2).start();
     try {
-      const res = await DeviceCloseById(id);
+      await DeviceCloseById(id);
+      if (deviceData?.isCurrent) {
+        clearAuthToken();
+        loading(2).stop();
+        closeDialog(activeLayer);
+        navigate("/login");
+        return;
+      }
+
       if (editProfileOnclick) {
         await editProfileOnclick();
       }
-      console.log(res);
+
       await loading(2).stop();
       closeDialog(activeLayer);
     } catch (err) {

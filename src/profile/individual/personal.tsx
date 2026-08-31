@@ -29,6 +29,8 @@ import { useLoading } from "../../context/loading/useLoading";
 import { LoadingUi } from "../../components/loading/loading";
 import type { DeviceProps } from "../../types/profile";
 import { useLoadingState } from "../../utils/loading/loading.state";
+import { useAuth } from "../../context/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
@@ -37,9 +39,12 @@ export const Personal = () => {
   const [gender, setGender] = useState<OptionItem[]>();
   const [userReady, setUserReady] = useState(true);
   const [device, setDevice] = useState<DeviceProps[]>();
+  const { clearAuthToken } = useAuth();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
+  const navigate = useNavigate();
 
+  //查詢個人資料API
   const fetchUser = async () => {
     loading(1).start();
     try {
@@ -55,11 +60,13 @@ export const Personal = () => {
     }
   };
 
+  //登出所有裝置API
   const DeviceCloseByUserIdApi = async () => {
     loading(2).start();
     try {
       await DeviceCloseByUserId(user.id);
-      await fetchUser();
+      clearAuthToken();
+      navigate("/login");
       await loading(2).stop();
     } catch (err) {
       await loading(2).stop();
@@ -96,6 +103,7 @@ export const Personal = () => {
     };
   }, []);
 
+  //編輯個人資料dialog
   const editOnclick = () => {
     openDialog(
       {
@@ -109,6 +117,7 @@ export const Personal = () => {
     );
   };
 
+  //查看裝置詳細資料dialog
   const deviceOnclick = (id: string) => {
     openDialog(
       {
@@ -121,6 +130,7 @@ export const Personal = () => {
     );
   };
 
+  //更新密碼dialog
   const updatePasswordOnclick = () => {
     openDialog(
       {
@@ -131,6 +141,7 @@ export const Personal = () => {
     );
   };
 
+  //兩部驗證dialog
   const SVOnclick = () => {
     openDialog(
       {
