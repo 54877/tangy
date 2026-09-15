@@ -9,7 +9,6 @@ import {
   FlexGray,
   FlexRelative,
   ItemContainer,
-  ItemFlex,
   ItemSpan,
   MacContainer,
   MacItemFlex,
@@ -29,6 +28,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 export const Profile = () => {
   const { user } = useAuth();
@@ -36,9 +38,8 @@ export const Profile = () => {
   const navigate = useNavigate();
   const isTablet = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
-  const item = isTablet
-    ? ["個人檔案", "我的學習", "我的收藏", "訂單紀錄"]
-    : ["檔案", "學習", "收藏", "訂單"];
+  const item = ["個人檔案", "我的學習", "我的收藏", "訂單紀錄", "建立課程"];
+  const url = ["personal", "learn", "collect", "order", "createCourse"];
   const { getMe } = useMe();
   useEffect(() => {
     getMe();
@@ -144,24 +145,49 @@ export const Profile = () => {
                 </Container>
                 {/* item */}
                 {!isMac && (
-                  <ItemFlex>
+                  <Swiper
+                    slidesPerView={4}
+                    style={{
+                      width: "100%",
+                      minWidth: 0,
+                      backgroundColor: "white",
+                      borderRadius: "16px",
+                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.15)",
+                      borderBottom: "1px solid #ccd1d5",
+                    }}
+                    breakpoints={{
+                      0: {
+                        slidesPerView: 3,
+                      },
+                      500: {
+                        slidesPerView: 4,
+                      },
+                      620: {
+                        slidesPerView: 5,
+                      },
+                    }}
+                  >
                     {item.map((item, index) => (
-                      <ItemContainer
-                        $activeIndex={activeIndex === index}
-                        $justify={"center"}
-                        key={`${item}-${index}`}
-                        onClick={() => setActiveIndex(index)}
-                      >
-                        <ItemSpan
-                          style={{ padding: "8px 0" }}
-                          $shade={activeIndex === index ? 950 : 500}
-                          $size={isTablet ? "md" : "sm"}
+                      <SwiperSlide key={`${item}-${index}`}>
+                        <ItemContainer
+                          $activeIndex={activeIndex === index}
+                          $justify={"center"}
+                          key={`${item}-${index}`}
+                          onClick={() => {
+                            setActiveIndex(index);
+                            navigate(`${url[index]}`);
+                          }}
                         >
-                          {item}
-                        </ItemSpan>
-                      </ItemContainer>
+                          <ItemSpan
+                            style={{ padding: "8px 0" }}
+                            $shade={activeIndex === index ? 950 : 500}
+                          >
+                            {item}
+                          </ItemSpan>
+                        </ItemContainer>
+                      </SwiperSlide>
                     ))}
-                  </ItemFlex>
+                  </Swiper>
                 )}
               </FlexAbs>
             </FlexRelative>

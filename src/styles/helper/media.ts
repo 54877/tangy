@@ -14,6 +14,8 @@ export const media = {
   lg: `@media (min-width: ${breakpoints.lg})`,
 };
 
+console.log("media:", media);
+
 type BreakpointKey = keyof typeof breakpoints;
 export type Responsive<T> = T | Partial<Record<BreakpointKey, T>>;
 

@@ -1,3 +1,4 @@
+import createCourse from "./course";
 import personal from "./individual";
 
 export default {
@@ -8,5 +9,5 @@ export default {
     return { Component: Profile };
   },
 
-  children: [personal],
+  children: [personal, createCourse],
 };
