@@ -1,4 +1,3 @@
-import { useState, type ReactNode } from "react";
 import { LinkAuth } from "../../MainLayout/MainLayout.styled";
 import { SpanType } from "../../styles/components/span";
 import type { FormError, StringKeys } from "../../types/errorType";
@@ -6,6 +5,7 @@ import { Flex, Input } from "./Input.styled";
 import { Eye, EyeOff } from "lucide-react";
 import { InputAdornment } from "@mui/material";
 import { DescriptionTitle } from "../dateTime/dateTime.style";
+import { useState, type InputHTMLAttributes, type ReactNode } from "react";
 type Props<T> = {
   readonly title: ReactNode;
   readonly fieldKey: StringKeys<T>;
@@ -23,6 +23,8 @@ type Props<T> = {
   readonly required?: boolean;
   readonly content?: ReactNode;
   readonly type?: string;
+  readonly placeholder?: string;
+  readonly inputMode?: InputHTMLAttributes<HTMLInputElement>["inputMode"];
   readonly extra?: Partial<T>;
 };
 
@@ -31,6 +33,8 @@ export function FromInput<T>({
   to = "",
   direction = "column",
   type,
+  placeholder,
+  inputMode,
   disabled,
   titleSec,
   required = false,
@@ -86,11 +90,15 @@ export function FromInput<T>({
         disabled={disabled}
         variant="outlined"
         type={passwordVisible ? "text" : (type ?? "text")}
+        placeholder={placeholder}
         fullWidth
         size="small"
         helperText={err?.[fieldKey] ?? ""}
         $isError={!!err?.[fieldKey]}
         slotProps={{
+          htmlInput: {
+            inputMode,
+          },
           input: {
             endAdornment: renderPasswordToggle(),
           },

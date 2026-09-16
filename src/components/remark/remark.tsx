@@ -5,21 +5,21 @@ import { Flex } from "../Input/Input.styled";
 import { Remark } from "./remark.styled";
 
 type Props<T> = {
-  readonly err?: FormError<T>;
   readonly title: ReactNode;
-  readonly disabled?: boolean;
-  readonly label?: string;
-  readonly direction?: "row" | "column";
-  readonly required?: boolean;
   readonly fieldKey: StringKeys<T>;
   readonly information: T;
-  readonly extra?: Partial<T>;
   readonly rows: number;
   readonly onChange: (
     value: string,
     fieldKey: keyof T,
     extra?: Partial<T>,
   ) => void;
+  readonly err?: FormError<T>;
+  readonly disabled?: boolean;
+  readonly label?: string;
+  readonly direction?: "row" | "column";
+  readonly required?: boolean;
+  readonly extra?: Partial<T>;
 };
 
 export function FromRemark<T>({
