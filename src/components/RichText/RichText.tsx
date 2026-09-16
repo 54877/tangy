@@ -7,13 +7,14 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import { Bold, Italic, List, ListOrdered, Underline } from "lucide-react";
+import { Bold, Check, ImagePlus, Italic, List, ListOrdered, Palette, Underline } from "lucide-react";
 import type { FormError, StringKeys } from "../../types/errorType";
 import { DescriptionTitle } from "../dateTime/dateTime.style";
 import { Flex } from "../Input/Input.styled";
 import {
   Editor,
   EditorContainer,
+  ColorPicker,
   HelperText,
   ResizeHandle,
   Toolbar,
@@ -54,11 +55,14 @@ export function FromRichText<T>({
   minHeight = 180,
 }: Props<T>) {
   const editorRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const savedRangeRef = useRef<Range | null>(null);
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(
     null,
   );
   const [imageError, setImageError] = useState("");
+  const [pendingColor, setPendingColor] = useState("#232529");
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const value = sanitizeCourseContent(String(information[fieldKey] ?? ""));
 
   useEffect(() => {
@@ -203,6 +207,23 @@ export function FromRichText<T>({
     syncValue();
   };
 
+  const insertImageFile = (imageFile: File) => {
+    if (!["image/png", "image/jpeg", "image/gif", "image/webp"].includes(imageFile.type)) {
+      setImageError("僅支援 PNG、JPEG、GIF、WebP 圖片。");
+      return;
+    }
+    if (imageFile.size > 5 * 1024 * 1024) {
+      setImageError("圖片請小於 5MB。");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") insertImageSource(reader.result);
+    };
+    reader.readAsDataURL(imageFile);
+  };
+
   const startResize = (event: ReactPointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const image = selectedImage?.element;
@@ -243,19 +264,7 @@ export function FromRichText<T>({
     if (imageItem) {
       event.preventDefault();
       const imageFile = imageItem.getAsFile();
-      if (!imageFile) return;
-      if (imageFile.size > 5 * 1024 * 1024) {
-        setImageError("圖片請小於 5MB。");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          insertImageSource(String(reader.result ?? ""));
-        }
-      };
-      reader.readAsDataURL(imageFile);
+      if (imageFile) insertImageFile(imageFile);
       return;
     }
 
@@ -333,13 +342,61 @@ export function FromRichText<T>({
           >
             <ListOrdered size={16} />
           </button>
-          <input
-            type="color"
-            aria-label="文字顏色"
-            defaultValue="#232529"
-            onChange={(event) => applyInlineFormat("font", event.target.value)}
+          <button
+            type="button"
+            aria-label="開啟文字顏色選取器"
+            title="文字顏色"
+            onMouseDown={saveSelection}
+            onClick={() => setIsColorPickerOpen((open) => !open)}
             disabled={disabled}
+          >
+            <Palette size={16} />
+          </button>
+          <button
+            type="button"
+            aria-label="從相簿選取圖片"
+            title="從相簿選取圖片"
+            onMouseDown={saveSelection}
+            onClick={() => imageInputRef.current?.click()}
+            disabled={disabled}
+          >
+            <ImagePlus size={16} />
+          </button>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/gif,image/webp"
+            hidden
+            onChange={(event) => {
+              const imageFile = event.target.files?.[0];
+              if (imageFile) insertImageFile(imageFile);
+              event.target.value = "";
+            }}
           />
+          {isColorPickerOpen && (
+            <ColorPicker>
+              <input
+                type="color"
+                aria-label="選擇文字顏色"
+                value={pendingColor}
+                onChange={(event) => setPendingColor(event.target.value)}
+                disabled={disabled}
+              />
+              <button
+                type="button"
+                aria-label="確認文字顏色"
+                title="確認"
+                onMouseDown={saveSelection}
+                onClick={() => {
+                  applyInlineFormat("font", pendingColor);
+                  setIsColorPickerOpen(false);
+                }}
+                disabled={disabled}
+              >
+                <Check size={16} />
+              </button>
+            </ColorPicker>
+          )}
         </Toolbar>
 
         <Editor

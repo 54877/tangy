@@ -6,6 +6,7 @@ export const EditorContainer = styled.div`
 `;
 
 export const Toolbar = styled.div`
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -45,6 +46,38 @@ export const Toolbar = styled.div`
     padding: 3px;
   }
 
+`;
+
+export const ColorPicker = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + 8px);
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.gray[200]};
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 8px 20px rgb(35 37 41 / 16%);
+
+  input[type="color"] {
+    width: 44px;
+    height: 36px;
+    padding: 3px;
+  }
+
+  button {
+    min-width: 36px;
+    color: ${({ theme }) => theme.semanticColors.text.white};
+    background: ${({ theme }) => theme.colors.primary[600]};
+
+    &:hover {
+      color: ${({ theme }) => theme.semanticColors.text.white};
+      background: ${({ theme }) => theme.colors.primary[700]};
+    }
+  }
 `;
 
 export const Editor = styled.div<{ $isError?: boolean; $minHeight: number }>`
