@@ -1,4 +1,4 @@
-import{t as e}from"./Box-D-5T4D4V.js";import{S as t,_ as n,an as r,b as i,d as a,dt as o,en as s,f as c,fn as l,h as u,nn as d,on as f,pn as p,sn as m,tn as h,y as g}from"./index-HTduA8lV.js";var _=m.div`
+import{t as e}from"./Box-B1_0Qu-1.js";import{S as t,_ as n,an as r,b as i,d as a,dt as o,en as s,f as c,fn as l,h as u,nn as d,on as f,pn as p,sn as m,tn as h,y as g}from"./index-DPC-s_16.js";var _=m.div`
   margin: 0 auto;
   max-width: 1320px;
   width: 100%;
