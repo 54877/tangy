@@ -59,3 +59,10 @@ export interface DeviceProps {
   createdAt: string;
   isCurrent: boolean;
 }
+
+export type ProfileContext = {
+  userList: UseUserProps;
+  setUserList: React.Dispatch<React.SetStateAction<UseUserProps>>;
+  device: DeviceProps[] | undefined;
+  setDevice: React.Dispatch<React.SetStateAction<DeviceProps[] | undefined>>;
+};

@@ -1,5 +1,5 @@
 import { FlexType } from "../styles/components/flex";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
 import {
@@ -31,8 +31,13 @@ import { LoadingUi } from "../components/loading/loading";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
+import type { UseUserProps } from "../types/authType";
+import type { DeviceProps } from "../types/profile";
+import { profileDetailInit } from "../constants/profile";
 
 export const Profile = () => {
+  const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
+  const [device, setDevice] = useState<DeviceProps[]>();
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -206,7 +211,7 @@ export const Profile = () => {
           </Container>
 
           <ContainerPrimary>
-            <Outlet />
+            <Outlet context={{ userList, setUserList, device, setDevice }} />
           </ContainerPrimary>
         </Flex>
       </MacContainer>

@@ -1,5 +1,8 @@
+import collect from "./collect";
 import CreateCourse from "./course";
 import personal from "./individual";
+import learn from "./learn";
+import order from "./order";
 
 export default {
   path: "profile",
@@ -9,5 +12,5 @@ export default {
     return { Component: Profile };
   },
 
-  children: [personal, CreateCourse],
+  children: [personal, CreateCourse, learn, collect, order],
 };

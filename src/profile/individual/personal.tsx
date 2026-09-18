@@ -22,23 +22,22 @@ import {
 import dayjs from "dayjs";
 import { DeviceCloseByUserId, personal } from "../../api/profile";
 import { useEffect, useState } from "react";
-import type { UseUserProps } from "../../types/authType";
-import { profileDetailInit } from "../../constants/profile";
+
 import type { OptionItem } from "../../types/select";
 import { useLoading } from "../../context/loading/useLoading";
 import { LoadingUi } from "../../components/loading/loading";
-import type { DeviceProps } from "../../types/profile";
+
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { useAuth } from "../../context/auth/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import type { ProfileContext } from "../../types/profile";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const isTablet = useMediaQuery(`${media.xs}`);
-  const [user, setUser] = useState<UseUserProps>(profileDetailInit);
+  const { userList, setUserList, device, setDevice } =
+    useOutletContext<ProfileContext>();
   const [gender, setGender] = useState<OptionItem[]>();
-  const [userReady, setUserReady] = useState(true);
-  const [device, setDevice] = useState<DeviceProps[]>();
   const { clearAuthToken } = useAuth();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
@@ -50,9 +49,8 @@ export const Personal = () => {
     try {
       const res = await personal();
       const data = res.data;
-      setUser(data.userDate);
+      setUserList(data.userDate);
       setDevice(data.deviceDate);
-      setUserReady(false);
     } catch (err) {
       console.log(err);
     } finally {
@@ -62,14 +60,14 @@ export const Personal = () => {
 
   //登出所有裝置API
   const DeviceCloseByUserIdApi = async () => {
-    loading(2).start();
+    loading(3).start();
     try {
-      await DeviceCloseByUserId(user.id);
+      await DeviceCloseByUserId(userList.id);
       clearAuthToken();
       navigate("/login");
-      await loading(2).stop();
+      await loading(3).stop();
     } catch (err) {
-      await loading(2).stop();
+      await loading(3).stop();
       console.log(err);
     }
   };
@@ -82,12 +80,10 @@ export const Personal = () => {
       try {
         const res = await personal();
         const data = res.data;
-        console.log(data);
         if (!cancelled) {
           setDevice(data.deviceDate);
-          setUser(data.userDate);
+          setUserList(data.userDate);
           setGender(data.genderSelect);
-          setUserReady(false);
         }
       } catch (err) {
         console.log(err);
@@ -109,7 +105,7 @@ export const Personal = () => {
       {
         type: "EditDialog",
         title: "編輯個人資訊",
-        user: user,
+        user: userList,
         gender: gender,
         editProfileOnclick: fetchUser,
       },
@@ -147,15 +143,15 @@ export const Personal = () => {
       {
         type: "SVDialog",
         title: "兩步驟驗證",
-        user: user,
-        setUser: setUser,
+        user: userList,
+        setUser: setUserList,
       },
       1,
     );
   };
   const time = isTablet ? "YYYY年MM月DD日 hh:mm" : "YYYY年MM月DD日 ";
-  const createdAt = user?.createdAt
-    ? dayjs(user.createdAt).format(time)
+  const createdAt = userList?.createdAt
+    ? dayjs(userList.createdAt).format(time)
     : "未填寫";
 
   return (
@@ -170,31 +166,31 @@ export const Personal = () => {
           }
           RightButton={
             <TitleButton
-              disabled={userReady}
+              disabled={!userList.userName}
               onClick={editOnclick}
               icon_left={<EditOutlinedIcon />}
               text={"編輯"}
             />
           }
         />
-        {user.userName ? (
+        {userList.userName ? (
           <>
             <ProfileInfoItem
               icon={<PermIdentityOutlinedIcon />}
               title={"暱稱"}
-              text={user?.userName}
+              text={userList?.userName}
             />
             <ProfileInfoItem
               icon={<EmailOutlinedIcon />}
               title={"電子郵件"}
-              text={user?.email ?? ""}
+              text={userList?.email ?? ""}
             />
             <ProfileInfoItem
               icon={<CalendarMonthOutlinedIcon />}
               title={"生日"}
               text={
-                user?.birthday
-                  ? dayjs(user?.birthday).format("YYYY年MM月DD日")
+                userList?.birthday
+                  ? dayjs(userList?.birthday).format("YYYY年MM月DD日")
                   : "未填寫"
               }
             />
@@ -202,7 +198,8 @@ export const Personal = () => {
               icon={<MaleOutlinedIcon />}
               title={"性別"}
               text={
-                gender?.find((x) => x.key === user.gender)?.label ?? "未填寫"
+                gender?.find((x) => x.key === userList.gender)?.label ??
+                "未填寫"
               }
             />
             <ProfileInfoItem
@@ -214,7 +211,7 @@ export const Personal = () => {
               icon={<BadgeOutlinedIcon />}
               title={"簡介"}
               type={true}
-              text={user?.introduction ?? "未填寫"}
+              text={userList?.introduction ?? "未填寫"}
             />
             <ProfileSafetyInfoItem
               icon={<BuildOutlinedIcon />}
@@ -247,12 +244,13 @@ export const Personal = () => {
           }
           RightButton={
             <TitleButton
+              disabled={!userList.userName}
               onClick={() => {
                 DeviceCloseByUserIdApi();
               }}
               style={{ color: "red" }}
               text={
-                useLoadingState(2) ? (
+                useLoadingState(3) ? (
                   <LoadingUi type={"button"} />
                 ) : (
                   "登出所有裝置"
