@@ -58,20 +58,6 @@ export const Fields = styled.div`
   }
 `;
 
-export const Preview = styled.div`
-  overflow: hidden;
-  margin-top: 20px;
-  border-radius: 10px;
-  background: ${({ theme }) => theme.colors.gray[100]};
-
-  img {
-    display: block;
-    width: 100%;
-    max-height: 280px;
-    object-fit: cover;
-  }
-`;
-
 export const Actions = styled.div`
   display: flex;
   flex-direction: column-reverse;

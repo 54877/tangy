@@ -7,7 +7,16 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import { Bold, Check, ImagePlus, Italic, List, ListOrdered, Palette, Underline } from "lucide-react";
+import {
+  Bold,
+  Check,
+  ImagePlus,
+  Italic,
+  List,
+  ListOrdered,
+  Palette,
+  Underline,
+} from "lucide-react";
 import type { FormError, StringKeys } from "../../types/errorType";
 import { DescriptionTitle } from "../dateTime/dateTime.style";
 import { Flex } from "../Input/Input.styled";
@@ -94,6 +103,7 @@ export function FromRichText<T>({
     );
   };
 
+  //儲存鼠標原始位置
   const saveSelection = () => {
     const range = getRange();
     if (range) savedRangeRef.current = range.cloneRange();
@@ -208,7 +218,11 @@ export function FromRichText<T>({
   };
 
   const insertImageFile = (imageFile: File) => {
-    if (!["image/png", "image/jpeg", "image/gif", "image/webp"].includes(imageFile.type)) {
+    if (
+      !["image/png", "image/jpeg", "image/gif", "image/webp"].includes(
+        imageFile.type,
+      )
+    ) {
       setImageError("僅支援 PNG、JPEG、GIF、WebP 圖片。");
       return;
     }

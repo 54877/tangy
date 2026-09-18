@@ -8,7 +8,8 @@ export type DialogType =
   | "EditDialog"
   | "DeviceDialog"
   | "UpdatePasswordDialog"
-  | "SVDialog";
+  | "SVDialog"
+  | "MessageDialog";
 
 //共用props類型
 export interface BaseDialogData {
@@ -19,6 +20,7 @@ export interface BaseDialogData {
   gender?: OptionItem[];
   deviceData?: DeviceProps;
   editProfileOnclick?: () => Promise<void>;
+  fileErrorMessage?: string;
 }
 
 //層數props類型

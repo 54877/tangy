@@ -1,5 +1,5 @@
 import { FlexType } from "../styles/components/flex";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
 import {
@@ -25,7 +25,7 @@ import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { Button } from "../components/Button/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -34,12 +34,15 @@ import "swiper/css/navigation";
 
 export const Profile = () => {
   const { user } = useAuth();
-  const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
   const isTablet = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
   const item = ["個人檔案", "我的學習", "我的收藏", "訂單紀錄", "建立課程"];
   const url = ["personal", "learn", "collect", "order", "createCourse"];
+  const initialSlide = url.findIndex((item) =>
+    location.pathname.endsWith(`/${item}`),
+  );
   const { getMe } = useMe();
   useEffect(() => {
     getMe();
@@ -54,22 +57,26 @@ export const Profile = () => {
             <Flex $direction="column" $justify={"flex-start"}>
               {/* item */}
               <MacItemFlex $direction="column">
-                {item.map((item, index) => (
-                  <ItemContainer
-                    $activeIndex={activeIndex === index}
-                    $justify={"flex-start"}
-                    key={`${item}-${index}`}
-                    onClick={() => setActiveIndex(index)}
-                  >
-                    <ItemSpan
-                      $shade={activeIndex === index ? 950 : 500}
-                      $type="label"
-                      $size="md"
+                {item.map((item, index) => {
+                  const isActive = location.pathname.endsWith(`/${url[index]}`);
+
+                  return (
+                    <ItemContainer
+                      $activeIndex={isActive}
+                      $justify="flex-start"
+                      key={`${item}-${index}`}
+                      onClick={() => navigate(url[index])}
                     >
-                      {item}
-                    </ItemSpan>
-                  </ItemContainer>
-                ))}
+                      <ItemSpan
+                        $shade={isActive ? 950 : 500}
+                        $type="label"
+                        $size="md"
+                      >
+                        {item}
+                      </ItemSpan>
+                    </ItemContainer>
+                  );
+                })}
               </MacItemFlex>
               {/* 探索課程 */}
               <Flex style={{ padding: "16px" }}>
@@ -146,6 +153,7 @@ export const Profile = () => {
                 {/* item */}
                 {!isMac && (
                   <Swiper
+                    initialSlide={Math.max(initialSlide, 0)}
                     slidesPerView={4}
                     style={{
                       width: "100%",
@@ -167,26 +175,30 @@ export const Profile = () => {
                       },
                     }}
                   >
-                    {item.map((item, index) => (
-                      <SwiperSlide key={`${item}-${index}`}>
-                        <ItemContainer
-                          $activeIndex={activeIndex === index}
-                          $justify={"center"}
-                          key={`${item}-${index}`}
-                          onClick={() => {
-                            setActiveIndex(index);
-                            navigate(`${url[index]}`);
-                          }}
-                        >
-                          <ItemSpan
-                            style={{ padding: "8px 0" }}
-                            $shade={activeIndex === index ? 950 : 500}
+                    {item.map((item, index) => {
+                      const isActive = location.pathname.endsWith(
+                        `/${url[index]}`,
+                      );
+
+                      return (
+                        <SwiperSlide key={`${item}-${index}`}>
+                          <ItemContainer
+                            $activeIndex={isActive}
+                            $justify="center"
+                            onClick={() => {
+                              navigate(url[index]);
+                            }}
                           >
-                            {item}
-                          </ItemSpan>
-                        </ItemContainer>
-                      </SwiperSlide>
-                    ))}
+                            <ItemSpan
+                              style={{ padding: "8px 0" }}
+                              $shade={isActive ? 950 : 500}
+                            >
+                              {item}
+                            </ItemSpan>
+                          </ItemContainer>
+                        </SwiperSlide>
+                      );
+                    })}
                   </Swiper>
                 )}
               </FlexAbs>

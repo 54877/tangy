@@ -5,18 +5,19 @@ import {
   Fields,
   Form,
   Intro,
-  Preview,
   Section,
   SectionHead,
 } from "./createCourse.styled";
 import { useInformation } from "../../utils/information";
 import { Heading, SpanType } from "../../styles/components/span";
 import { FromInput } from "../../components/Input/Input";
+import { FromFileInput } from "../../components/FileInput/FromFileInput";
 import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
 import type { CoursePayload } from "../../types/createType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
 import { useEffect } from "react";
+import { Flex } from "../../components/Input/Input.styled";
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -27,8 +28,9 @@ const initialCourse: CoursePayload = {
   content: "",
   price: "",
   originalPrice: "",
-  image: "",
-  video: "",
+  image: null,
+  video: null,
+  videoKey: "",
 };
 
 export function CreateCourse() {
@@ -49,6 +51,9 @@ export function CreateCourse() {
 
   useEffect(() => {
     console.log(information.content);
+
+    console.log(information.video);
+    console.log(information.image);
   }, [information]);
 
   return (
@@ -123,45 +128,48 @@ export function CreateCourse() {
         <Section>
           <SectionHead>
             <h2>課程素材</h2>
-            <p>請輸入已上傳至儲存空間的圖片與影片網址。</p>
+            <p>請選擇課程封面圖片與課程影片。</p>
           </SectionHead>
 
-          <Fields>
-            <FromInput
-              title={
-                <>
-                  <ImageIcon size={16} /> 封面圖片網址
-                </>
-              }
-              required
-              fieldKey="image"
-              information={information}
-              onChange={handleOnChange}
-              type="url"
-              placeholder="https://example.com/course-cover.jpg"
-              content="建議使用 16:9 橫式圖片，呈現效果最佳。"
-            />
+          <Flex
+            $align="flex-start"
+            $direction={{ xs: "column", sm: "row" }}
+            $gap="xl"
+          >
+            <Flex $direction="column" style={{ flex: "1 1 0", minWidth: 0 }}>
+              <FromFileInput
+                title={
+                  <>
+                    <ImageIcon size={16} /> 封面圖片
+                  </>
+                }
+                fieldKey="image"
+                information={information}
+                onChange={handleOnChange}
+                accept="image/jpeg,image/png"
+                allowedTypes={["image/jpeg", "image/png"]}
+                allowedExtensions={["jpg", "jpeg", "png"]}
+                preview="image"
+              />
+            </Flex>
 
-            <FromInput
-              title={
-                <>
-                  <PlayCircle size={16} /> 課程影片網址
-                </>
-              }
-              required
-              fieldKey="video"
-              information={information}
-              onChange={handleOnChange}
-              type="url"
-              placeholder="https://example.com/course-intro.mp4"
-            />
-          </Fields>
-
-          {information.image && (
-            <Preview>
-              <img src={information.image} alt="課程封面預覽" />
-            </Preview>
-          )}
+            <Flex $direction="column" style={{ flex: "1 1 0", minWidth: 0 }}>
+              <FromFileInput
+                title={
+                  <>
+                    <PlayCircle size={16} /> 課程影片
+                  </>
+                }
+                fieldKey="video"
+                information={information}
+                onChange={handleOnChange}
+                accept="video/mp4,video/webm"
+                allowedTypes={["video/mp4", "video/webm"]}
+                allowedExtensions={["mp4", "webm"]}
+                preview="video"
+              />
+            </Flex>
+          </Flex>
         </Section>
 
         <Actions>

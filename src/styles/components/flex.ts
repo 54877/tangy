@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { responsiveStyle, type Responsive } from "../helper/media";
-import type { spaces } from "../tokens/spaces";
+import { spaces } from "../tokens/spaces";
 type SpaceKey = keyof typeof spaces;
+
+console.log("spaces", spaces);
 
 export const FlexType = styled.div<{
   $display?: Responsive<"block" | "flex" | "none">;
