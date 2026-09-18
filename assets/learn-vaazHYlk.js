@@ -1,0 +1,1 @@
+import{tn as e}from"./index-B1hMaA-I.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`學習`});export{n as Learn};
