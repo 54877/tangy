@@ -1,0 +1,1 @@
+import{in as e}from"./index-U_-5Tdsc.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`學習`});export{n as Learn};
