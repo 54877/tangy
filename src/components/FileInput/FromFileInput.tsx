@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, FormHelperText } from "@mui/material";
 import {
   useEffect,
   useMemo,
@@ -14,6 +14,7 @@ import { Flex } from "../Input/Input.styled";
 import CloseIcon from "@mui/icons-material/Close";
 import { ImageCropDialog } from "./ImageCropDialog";
 import { Preview } from "./FromFileInput.styled";
+import type { FormError } from "../../types/errorType";
 
 type PreviewType = "image" | "video";
 
@@ -27,6 +28,7 @@ type Props<T> = {
     fieldKey: keyof T,
     extra?: Partial<T>,
   ) => void;
+  readonly err?: FormError<T>;
   readonly disabled?: boolean;
   readonly required?: boolean;
   readonly content?: ReactNode;
@@ -43,6 +45,7 @@ export function FromFileInput<T>({
   disabled,
   required = false,
   content,
+  err,
   fieldKey,
   information,
   extra,
@@ -147,6 +150,7 @@ export function FromFileInput<T>({
             <Button
               type="button"
               size="small"
+              color={err?.[fieldKey] ? "error" : "primary"}
               variant="outlined"
               disabled={disabled}
               onClick={() => fileInputRef.current?.click()}
@@ -155,6 +159,12 @@ export function FromFileInput<T>({
             </Button>
           </Flex>
         </Flex>
+
+        {err?.[fieldKey] && (
+          <FormHelperText error sx={{ m: 0 }}>
+            {err[fieldKey]}
+          </FormHelperText>
+        )}
 
         {content && content !== "" && (
           <SpanType $size="xs" $shade={900}>

@@ -12,7 +12,7 @@ import { SVInit } from "../../../../constants/profile";
 import { useInformation } from "../../../../utils/information";
 import { useState } from "react";
 import type { FormError } from "../../../../types/errorType";
-import { FA, FAClose, SvSendEmail } from "../../../../api/profile";
+import { FA, FAClose, SvSendEmail } from "../../../../api/profile.api";
 import { handleApiError } from "../../../../utils/apiError";
 import { useLoadingState } from "../../../../utils/loading/loading.state";
 import { useLoading } from "../../../../context/loading/useLoading";

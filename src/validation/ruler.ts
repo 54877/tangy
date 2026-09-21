@@ -32,6 +32,12 @@ const LENGTH_RULES: Partial<Record<string, number>> = {
   userName: 20,
   introduction: 200,
   code: 10,
+  title: 30,
+  teacher: 20,
+  duration: 10,
+  price: 10,
+  originalPrice: 10,
+  videoKey: 47,
 };
 
 //必填通用規則表
@@ -46,7 +52,7 @@ export function getCommonValidators<T>(
     password: () => [
       requiredString<T>("請輸入密碼"),
       (v) => {
-        if (typeof v !== "string") {
+        if (typeof v !== "string" || !v.trim()) {
           return "密碼格式錯誤";
         }
 
@@ -60,7 +66,7 @@ export function getCommonValidators<T>(
     newPassword: () => [
       requiredString<T>("請輸入新密碼"),
       (v) => {
-        if (typeof v !== "string") {
+        if (typeof v !== "string" || !v.trim()) {
           return "密碼格式錯誤";
         }
 
@@ -74,14 +80,49 @@ export function getCommonValidators<T>(
     oldPassword: () => [requiredString<T>("請輸入舊密碼")],
     userName: () => [requiredString<T>("請輸入使用者名稱")],
     code: () => [requiredString<T>("請輸入驗證碼")],
-    // name: (title) => {
-    //   const map: Record<string, ValidatorFn<T>[]> = {
-    //     Material: [requiredString<T>("enter_product_name")],
-    //     Factory: [requiredString<T>("please_enter_customerSite_name")],
-    //     contact: [requiredString<T>("contact_enterName")],
-    //     vendor: [requiredString<T>("enter_vendor_name")],
-    //     prodType: [requiredString<T>("enter_product_type_name")],
-    //   };
+
+    title: () => [requiredString<T>("請輸入課程標題")],
+
+    teacher: () => [requiredString<T>("請輸入講師名稱")],
+
+    duration: () => [requiredString<T>("請輸入課程時長")],
+
+    price: () => [requiredString<T>("請輸入課程售價")],
+
+    originalPrice: () => [requiredString<T>("請輸入課程原價")],
+
+    image: () => [
+      (v) => {
+        if (!(v instanceof File)) {
+          return "請選擇課程封面圖片";
+        }
+
+        return "";
+      },
+    ],
+
+    content: () => [
+      (v) => {
+        if (typeof v !== "string" || !v.trim()) {
+          return "請輸入課程內容";
+        }
+
+        if (v.length > 7_000_000) {
+          return "課程內容不可超過7MB";
+        }
+
+        return "";
+      },
+    ],
+    video: () => [
+      (v) => {
+        if (!(v instanceof File)) {
+          return "請選擇課程影片";
+        }
+
+        return "";
+      },
+    ],
   };
 
   const factory = map[key];

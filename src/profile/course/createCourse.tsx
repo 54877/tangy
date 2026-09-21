@@ -16,8 +16,15 @@ import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
 import type { CoursePayload } from "../../types/createType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Flex } from "../../components/Input/Input.styled";
+import { useLoading } from "../../context/loading/useLoading";
+import { createCourse, createCourseVideo } from "../../api/profile.api";
+import { handleApiError } from "../../utils/apiError";
+import type { FormError } from "../../types/errorType";
+import { LoadingUi } from "../../components/loading/loading";
+import { useLoadingState } from "../../utils/loading/loading.state";
+import { formValidate } from "../../utils/formValidate";
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -34,10 +41,12 @@ const initialCourse: CoursePayload = {
 };
 
 export function CreateCourse() {
-  const { information, handleOnChange } =
+  const { information, handleOnChange, setInformation } =
     useInformation<CoursePayload>(initialCourse);
+  const { loading } = useLoading();
+  const [err, setErr] = useState<FormError<CoursePayload>>({});
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const payload = {
@@ -45,8 +54,50 @@ export function CreateCourse() {
       content: sanitizeCourseContent(information.content),
     };
 
-    // 將 payload 直接作為建立課程 API 的 request body。
-    console.log("Create course payload", payload);
+    formValidate<CoursePayload>({
+      information,
+      fields: [
+        "title",
+        "teacher",
+        "duration",
+        "content",
+        "price",
+        "originalPrice",
+        "image",
+        "video",
+      ],
+      setErr,
+      fn: () => createCourseVideoApi(payload),
+    });
+  };
+
+  //影片API
+  const createCourseVideoApi = async (payload: CoursePayload) => {
+    loading(1).start();
+    try {
+      const res = await createCourseVideo(payload);
+      const data = res.data.dataSet;
+      const info = {
+        ...payload,
+        ...data,
+      };
+      await createCourseApi(info);
+    } catch (err) {
+      handleApiError(err, setErr);
+    } finally {
+      loading(1).stop();
+    }
+  };
+
+  //創建課程API
+  const createCourseApi = async (info: CoursePayload) => {
+    try {
+      await createCourse(info);
+      setInformation(initialCourse);
+    } catch (err) {
+      handleApiError(err, setErr);
+      loading(1).stop();
+    }
   };
 
   useEffect(() => {
@@ -72,6 +123,7 @@ export function CreateCourse() {
 
           <Fields>
             <FromInput
+              err={err}
               title="課程名稱"
               required
               fieldKey="title"
@@ -81,6 +133,7 @@ export function CreateCourse() {
             />
 
             <FromInput
+              err={err}
               title="講師名稱"
               required
               fieldKey="teacher"
@@ -90,6 +143,7 @@ export function CreateCourse() {
             />
 
             <FromInput
+              err={err}
               title="售價"
               required
               fieldKey="price"
@@ -100,6 +154,7 @@ export function CreateCourse() {
             />
 
             <FromInput
+              err={err}
               title="原價"
               required
               fieldKey="originalPrice"
@@ -113,9 +168,12 @@ export function CreateCourse() {
 
         <Section>
           <FromRichText
+            err={err}
             title={
               <SectionHead>
-                <h2>課程內容</h2>
+                <h2>
+                  課程內容 <span style={{ color: "#FF2D2D" }}>*</span>
+                </h2>
               </SectionHead>
             }
             fieldKey="content"
@@ -138,6 +196,8 @@ export function CreateCourse() {
           >
             <Flex $direction="column" style={{ flex: "1 1 0", minWidth: 0 }}>
               <FromFileInput
+                required
+                err={err}
                 title={
                   <>
                     <ImageIcon size={16} /> 封面圖片
@@ -155,6 +215,8 @@ export function CreateCourse() {
 
             <Flex $direction="column" style={{ flex: "1 1 0", minWidth: 0 }}>
               <FromFileInput
+                required
+                err={err}
                 title={
                   <>
                     <PlayCircle size={16} /> 課程影片
@@ -173,7 +235,9 @@ export function CreateCourse() {
         </Section>
 
         <Actions>
-          <Button text="儲存課程" />
+          <Button
+            text={useLoadingState(1) ? <LoadingUi type="button" /> : "儲存課程"}
+          />
         </Actions>
       </Form>
     </Container>

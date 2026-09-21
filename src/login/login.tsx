@@ -8,7 +8,7 @@ import { handleSubmit } from "../utils/formDefault";
 import type { UserProps } from "../types/authType";
 import { handleApiError } from "../utils/apiError";
 import { useState } from "react";
-import { login, loginSV } from "../api/auth";
+import { login, loginSV } from "../api/auth.api";
 import { formValidate } from "../utils/formValidate";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth/useAuth";

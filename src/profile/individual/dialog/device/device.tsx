@@ -8,7 +8,7 @@ import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { ProfileButton } from "../edit/editDialog.styled";
 import { DeviceItem } from "./item";
 import dayjs from "dayjs";
-import { DeviceCloseById } from "../../../../api/profile";
+import { DeviceCloseById } from "../../../../api/profile.api";
 import { useLoading } from "../../../../context/loading/useLoading";
 import { LoadingUi } from "../../../../components/loading/loading";
 import { useLoadingState } from "../../../../utils/loading/loading.state";

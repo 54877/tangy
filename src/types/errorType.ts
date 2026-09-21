@@ -4,7 +4,7 @@ export type StringKeys<T> = {
   [K in keyof T]: T[K] extends string ? K : never;
 }[keyof T];
 
-export type FormError<T> = Partial<Record<StringKeys<T>, string>> & {
+export type FormError<T> = Partial<Record<keyof T, string>> & {
   message?: string;
 };
 

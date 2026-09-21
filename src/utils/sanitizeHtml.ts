@@ -42,7 +42,7 @@ export const isSafeImageUrl = (value: string) => {
 };
 
 const isSafeImageDataUrl = (value: string) =>
-  /^data:image\/(png|jpeg|gif|webp);base64,[a-z0-9+/=\s]+$/i.test(value) &&
+  /^data:image\/(jpg|jpeg|webp);base64,[a-z0-9+/=\s]+$/i.test(value) &&
   value.length <= 7_000_000;
 
 export const isSafeImageSource = (value: string) =>

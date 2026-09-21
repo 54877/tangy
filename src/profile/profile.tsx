@@ -19,7 +19,7 @@ import image from "../assets/profile_image.png";
 import image2 from "../assets/profile_image2.png";
 import image3 from "../assets/icon_tangy/tangy_Icon.png";
 import { UserImg } from "../components/UserImg/userImg";
-import { useMe } from "../api/common/nav.API";
+import { useMe } from "../api/common/nav.common";
 import { useAuth } from "../context/auth/useAuth";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";

@@ -7,7 +7,7 @@ import { userForgotPasswordInit } from "../constants/user";
 import { useInformation } from "../utils/information";
 import { handleSubmit } from "../utils/formDefault";
 import type { ForgotProps } from "../types/authType";
-import { resetPassword, sendEmail } from "../api/auth";
+import { resetPassword, sendEmail } from "../api/auth.api";
 import { handleApiError } from "../utils/apiError";
 import { formValidate } from "../utils/formValidate";
 import { useNavigate, useSearchParams } from "react-router-dom";

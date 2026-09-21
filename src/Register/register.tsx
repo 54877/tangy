@@ -1,4 +1,4 @@
-import { register } from "../api/auth";
+import { register } from "../api/auth.api";
 import { Federated } from "../components/FederatedLogin/FederatedLogin";
 import { FromInput } from "../components/Input/Input";
 import { userInit } from "../constants/user";

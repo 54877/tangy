@@ -37,9 +37,9 @@ import { MenuNav } from "../components/Menu/Menu";
 import { useMenu } from "../components/Menu/menuHook";
 import { CourseList } from "./courseList";
 import { ChartMenu, CourseMenu, UserMenu } from "./menu";
-import { logout } from "../api/auth";
+import { logout } from "../api/auth.api";
 import { useUserInit } from "../constants/user";
-import { useMe } from "../api/common/nav.API";
+import { useMe } from "../api/common/nav.common";
 import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
 

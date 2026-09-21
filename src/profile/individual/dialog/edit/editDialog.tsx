@@ -18,7 +18,7 @@ import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";
 import { FormSelect } from "../../../../components/select/FromSelect";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
-import { updatePersonal } from "../../../../api/profile";
+import { updatePersonal } from "../../../../api/profile.api";
 import { handleApiError } from "../../../../utils/apiError";
 import type { FormError } from "../../../../types/errorType";
 import { useLoading } from "../../../../context/loading/useLoading";

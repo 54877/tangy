@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/auth/useAuth";
 import { useLoading } from "../../context/loading/useLoading";
-import { me } from "../nav";
+import { me } from "../nav.api";
 
 export const useMe = () => {
   const { setUser, user } = useAuth();

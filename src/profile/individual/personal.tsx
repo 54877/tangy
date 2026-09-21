@@ -20,7 +20,7 @@ import {
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
 import dayjs from "dayjs";
-import { DeviceCloseByUserId, personal } from "../../api/profile";
+import { DeviceCloseByUserId, personal } from "../../api/profile.api";
 import { useEffect, useState } from "react";
 
 import type { OptionItem } from "../../types/select";

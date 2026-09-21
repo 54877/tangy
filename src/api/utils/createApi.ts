@@ -1,5 +1,5 @@
 import axios from "axios";
-import setupInterceptors from "../interceptor";
+import setupInterceptors from "../interceptor.api";
 
 export const createApi = (endpoint: string) => {
   return axios.create({
