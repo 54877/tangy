@@ -273,7 +273,7 @@ export const Personal = () => {
             </Flex>
           ))
         ) : (
-          <LoadingUi style={{ height: "560px" }} type={"spinner"} />
+          <LoadingUi style={{ height: "558px" }} type={"spinner"} />
         )}
       </Container>
     </Flex>

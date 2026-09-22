@@ -21,4 +21,6 @@ export interface UseUserProps {
   email: string;
   userName: string;
   role: "user" | "admin";
+  imageUrl: string;
+  image: File | null;
 }

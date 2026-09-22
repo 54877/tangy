@@ -48,6 +48,10 @@ export const EditDialog = () => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(information);
+  }, [information]);
+
   //更新api
   const updatePersonalApi = async () => {
     loading(2).start();

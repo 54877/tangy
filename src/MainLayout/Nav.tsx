@@ -218,7 +218,7 @@ export const Nav = ({ isMobile }: NavProps) => {
                 </FlexType>
               }
             />
-            {/* User 列表 */}
+            {/* 手機板 User 列表 */}
             <UserListMenu>
               <UserList
                 close={() => {
@@ -253,7 +253,11 @@ export const Nav = ({ isMobile }: NavProps) => {
           <>
             {/* userList menu */}
             {menu.activeKey === "user" && (
-              <UserMenu loading={logoutLoading} logout={logoutButton} />
+              <UserMenu
+                loading={logoutLoading}
+                logout={logoutButton}
+                close={menu.closeClick}
+              />
             )}
             {/* 課程分類menu */}
             {menu.activeKey === "course" && <CourseMenu />}

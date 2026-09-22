@@ -10,6 +10,7 @@ import {
   FlexCard,
   TitleHeading,
   FlexTypeCard,
+  ImageContainer,
 } from "./Card.styled";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -17,15 +18,15 @@ import { useState } from "react";
 import { breakpoints } from "../../styles/tokens/breakpoints";
 
 export interface CardProps {
-  readonly imgSrc: string;
-  readonly title: string;
-  readonly name: string;
-  readonly stars: string;
-  readonly people: string;
-  readonly tag: string[];
-  readonly time: string;
-  readonly price: string;
+  readonly image: string;
   readonly originalPrice: string;
+  readonly price: string;
+  readonly rating: string;
+  readonly studentCount: string;
+  readonly teacher: string;
+  readonly title: string;
+  readonly duration: string;
+  readonly tag: string[];
   readonly macType?: boolean;
   readonly width?: string;
   readonly lgWidth?: string;
@@ -36,20 +37,20 @@ export interface CardProps {
 //TODO 待補上新增置收藏api 與切換收藏狀態的功能
 
 export function Card({
-  xslgWidth,
-  lgWidth,
-  width,
   macType,
-  imgSrc,
-  title,
-  name,
-  stars,
-  tag,
-  people,
-  time,
-  price,
+  lgWidth,
+  xslgWidth,
+  width,
   ImgWidth,
+  tag,
+  image,
   originalPrice,
+  price,
+  rating,
+  studentCount,
+  teacher,
+  duration,
+  title,
 }: CardProps) {
   const isMobile = useMediaQuery(`(max-width:${breakpoints.md})`);
   const [open, setOpen] = useState(false);
@@ -63,18 +64,17 @@ export function Card({
       $gap={"spc"}
       $align={"stretch"}
     >
-      <div
+      <ImageContainer
         style={{
           width: ImgWidth ?? "100%",
           minWidth: "0",
-          position: "relative",
         }}
       >
-        <Img src={imgSrc} alt="img" />
+        <Img src={image} alt="img" />
         <FavoriteContainer>
           <FavoriteBorderOutlinedIcon />
         </FavoriteContainer>
-      </div>
+      </ImageContainer>
       <FlexCard $direction={"column"} $align={"flex-start"} $gap={"spc"}>
         <Tooltip title={title}>
           <TitleHeading
@@ -90,7 +90,7 @@ export function Card({
           </TitleHeading>
         </Tooltip>
         <FlexType $justify={"flex-start"} $gap={"xs"}>
-          <SpanType $size={"sm"}>by {name}</SpanType>
+          <SpanType $size={"sm"}>by {teacher}</SpanType>
         </FlexType>
         {tag.length > 0 && (
           <FlexType style={{ flexWrap: "wrap" }} $justify={"flex-start"}>
@@ -116,15 +116,15 @@ export function Card({
         >
           <FlexType $align={"center"} $gap={"none"}>
             <Start />
-            <SpanType $size={"sm"}>{stars}</SpanType>
+            <SpanType $size={"sm"}>{rating}</SpanType>
           </FlexType>
           <FlexType $align={"center"} $gap={"none"}>
             <Icon />
-            <SpanType $size={"sm"}>{people}人學習</SpanType>
+            <SpanType $size={"sm"}>{studentCount}人學習</SpanType>
           </FlexType>
           <FlexType $align={"center"} $gap={"none"}>
             <Icon as={AccessTimeOutlinedIcon} />
-            <SpanType $size={"sm"}>{time}</SpanType>
+            <SpanType $size={"sm"}>{duration}</SpanType>
           </FlexType>
         </FlexType>
 

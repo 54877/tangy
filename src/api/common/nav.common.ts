@@ -10,8 +10,8 @@ export const useMe = () => {
       loading(0).start();
       try {
         const res = await me();
-
-        setUser(res.data.userDate);
+        const data = res.data.dataSet;
+        setUser(data);
       } catch (err) {
         console.log(err);
       } finally {

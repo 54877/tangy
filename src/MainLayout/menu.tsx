@@ -17,13 +17,14 @@ import { useLoadingState } from "../utils/loading/loading.state";
 type UiType = {
   logout: () => void;
   loading: boolean;
+  close: () => void;
 };
 
 type CartType = {
   close: () => void;
 };
 
-export const UserMenu = ({ logout, loading }: UiType) => {
+export const UserMenu = ({ logout, loading, close }: UiType) => {
   const { user, token } = useAuth();
   const { getMe } = useMe();
 
@@ -41,7 +42,7 @@ export const UserMenu = ({ logout, loading }: UiType) => {
           {useLoadingState(0) ? <LoadingUi type={"spinner"} /> : user.userName}
         </SpanType>
       </UserLi>
-      <UserList />
+      <UserList close={close} />
       <UserListButton
         onClick={logout}
         as={"div"}

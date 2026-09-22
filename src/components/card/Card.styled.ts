@@ -16,6 +16,13 @@ export const Img = styled.img`
     min-width: 250px;
   }
 `;
+
+export const ImageContainer = styled.div`
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  position: relative;
+`;
 export const Start = styled(StarIcon)`
   color: #ffc107;
   && {
