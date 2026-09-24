@@ -107,7 +107,7 @@ export const Nav = ({ isMobile }: NavProps) => {
       <ButtonOutlined
         onClick={menu.openClick("user")}
         style={{ padding: "0", border: "0" }}
-        text={<UserImg />}
+        text={<UserImg imageUrl={user?.imageUrl} />}
       />
     ) : (
       <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
@@ -183,16 +183,12 @@ export const Nav = ({ isMobile }: NavProps) => {
 
             <NavFlex $direction={"column"} $gap={"none"}>
               <NavButton
-                style={{ paddingTop: "8px" }}
                 onClick={() => {
                   setBorderState(true);
                 }}
                 text={
                   <SpanType style={{ padding: "6.5px 8px" }} $type={"label"}>
-                    <FlexType $direction={"row"}>
-                      <UserImg width={"32px"} height={"32px"} />
-                      關於我
-                    </FlexType>
+                    <FlexType $direction={"row"}>關於我</FlexType>
                   </SpanType>
                 }
               />
@@ -207,7 +203,11 @@ export const Nav = ({ isMobile }: NavProps) => {
               paddingType={true}
               text={
                 <FlexType>
-                  <UserImg width={"48px"} height={"48px"} />
+                  <UserImg
+                    imageUrl={user?.imageUrl}
+                    width={"48px"}
+                    height={"48px"}
+                  />
                   <SpanType>
                     {userIsLoading ? (
                       <LoadingUi type={"spinner"} />

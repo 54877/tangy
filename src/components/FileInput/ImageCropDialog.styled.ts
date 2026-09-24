@@ -18,19 +18,37 @@ export const Dialog = styled.div`
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
 `;
 
-export const CropArea = styled.div`
+export const CropStage = styled.div`
   position: relative;
-  overflow: hidden;
+  display: grid;
+  place-items: center;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: min(56vh, 520px);
   margin-top: 16px;
-  touch-action: none;
-  cursor: grab;
+  overflow: hidden;
   background: #171717;
+`;
 
-  &:active {
-    cursor: grabbing;
-  }
+export const Selection = styled.div<{ $radius: number | string }>`
+  position: absolute;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
+  touch-action: none;
+  cursor: move;
+  border-radius: ${({ $radius }) =>
+    typeof $radius === "number" ? `${$radius}px` : $radius};
+`;
+
+export const ResizeHandle = styled.div`
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #1976d2;
+  cursor: nwse-resize;
 `;
 
 export const CropImage = styled.img`
@@ -42,17 +60,15 @@ export const CropImage = styled.img`
   pointer-events: none;
 `;
 
-export const Controls = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
-`;
-
 export const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 24px;
+`;
+
+export const RotationControls = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 `;

@@ -18,7 +18,7 @@ import { useState } from "react";
 import { breakpoints } from "../../styles/tokens/breakpoints";
 
 export interface CardProps {
-  readonly image: string;
+  readonly imageUrl: string;
   readonly originalPrice: string;
   readonly price: string;
   readonly rating: string;
@@ -43,7 +43,7 @@ export function Card({
   width,
   ImgWidth,
   tag,
-  image,
+  imageUrl,
   originalPrice,
   price,
   rating,
@@ -70,7 +70,7 @@ export function Card({
           minWidth: "0",
         }}
       >
-        <Img src={image} alt="img" />
+        <Img src={imageUrl} alt="img" />
         <FavoriteContainer>
           <FavoriteBorderOutlinedIcon />
         </FavoriteContainer>

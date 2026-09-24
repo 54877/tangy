@@ -3,7 +3,6 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
   type ChangeEvent,
   type ReactNode,
 } from "react";
@@ -12,9 +11,9 @@ import { DescriptionTitle } from "../dateTime/dateTime.style";
 import { SpanType } from "../../styles/components/span";
 import { Flex } from "../Input/Input.styled";
 import CloseIcon from "@mui/icons-material/Close";
-import { ImageCropDialog } from "./ImageCropDialog";
 import { Preview } from "./FromFileInput.styled";
 import type { FormError } from "../../types/errorType";
+import { selectAndCropImage } from "../../utils/file/selectAndCropImage";
 
 type PreviewType = "image" | "video";
 
@@ -37,6 +36,8 @@ type Props<T> = {
   readonly allowedTypes: readonly string[];
   readonly allowedExtensions: readonly string[];
   readonly preview: PreviewType;
+  readonly cropAspectRatio?: number;
+  readonly cropRadius?: number | string;
 };
 
 export function FromFileInput<T>({
@@ -45,19 +46,20 @@ export function FromFileInput<T>({
   disabled,
   required = false,
   content,
+  accept,
   err,
   fieldKey,
   information,
   extra,
   onChange,
-  accept,
   allowedTypes,
   allowedExtensions,
   preview,
+  cropAspectRatio = 16 / 9,
+  cropRadius = 0,
 }: Props<T>) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { openDialog } = useDialog();
-  const [pendingImage, setPendingImage] = useState<File | null>(null);
 
   const file = information[fieldKey];
 
@@ -75,43 +77,22 @@ export function FromFileInput<T>({
     };
   }, [previewUrl]);
 
-  const showFileError = (message: string) => {
-    openDialog(
-      {
-        title: "檔案讀取異常",
-        type: "MessageDialog",
-        fileErrorMessage: message,
-      },
-      1,
-    );
-  };
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-
     // 清空值，讓使用者再次選擇同一個檔案時也會觸發 onChange。
     event.target.value = "";
-
     if (!selectedFile) return;
 
-    const extension = selectedFile.name.split(".").pop()?.toLowerCase();
-
-    const isAllowedType = allowedTypes.includes(selectedFile.type);
-
-    const isAllowedExtension =
-      !!extension && allowedExtensions.includes(extension);
-
-    if (!isAllowedType && !isAllowedExtension) {
-      showFileError(
-        `不允許的檔案格式，僅允許 ${allowedExtensions.join(
-          "、",
-        )}，請重新選擇檔案。`,
-      );
-      return;
-    }
-
     if (preview === "image") {
-      setPendingImage(selectedFile);
+      selectAndCropImage({
+        file: selectedFile,
+        openDialog,
+        allowedTypes,
+        allowedExtensions,
+        cropAspectRatio,
+        cropRadius,
+        onComplete: (selected) => onChange(selected, fieldKey, extra),
+      });
       return;
     }
 
@@ -204,17 +185,6 @@ export function FromFileInput<T>({
             />
           </video>
         </Preview>
-      )}
-
-      {pendingImage && (
-        <ImageCropDialog
-          file={pendingImage}
-          onCancel={() => setPendingImage(null)}
-          onComplete={(croppedImage) => {
-            onChange(croppedImage, fieldKey, extra);
-            setPendingImage(null);
-          }}
-        />
       )}
     </>
   );

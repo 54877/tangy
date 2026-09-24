@@ -1,7 +1,8 @@
 import { FlexType } from "../styles/components/flex";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Container,
   ContainerPrimary,
@@ -14,6 +15,7 @@ import {
   MacItemFlex,
   ProfileImg,
   SideBarContainer,
+  UserImgButton,
 } from "./profile.styled";
 import image from "../assets/profile_image.png";
 import image2 from "../assets/profile_image2.png";
@@ -34,10 +36,16 @@ import "swiper/css/navigation";
 import type { UseUserProps } from "../types/authType";
 import type { DeviceProps } from "../types/profile";
 import { profileDetailInit } from "../constants/profile";
+import { useDialog } from "../context/dialog/useDialog";
+import { selectAndCropImage } from "../utils/file/selectAndCropImage";
 
 export const Profile = () => {
   const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
   const [device, setDevice] = useState<DeviceProps[]>();
+  const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
+    null,
+  );
+  const { openDialog } = useDialog();
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,6 +60,29 @@ export const Profile = () => {
   useEffect(() => {
     getMe();
   }, []);
+
+  const profileImageUrl = useMemo(
+    () =>
+      selectedProfileImage ? URL.createObjectURL(selectedProfileImage) : "",
+    [selectedProfileImage],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (profileImageUrl) URL.revokeObjectURL(profileImageUrl);
+    };
+  }, [profileImageUrl]);
+
+  const editImgOnClick = () => {
+    selectAndCropImage({
+      openDialog,
+      allowedTypes: ["image/jpeg", "image/png", "image/webp"],
+      allowedExtensions: ["jpg", "jpeg", "png", "webp"],
+      cropAspectRatio: 1,
+      cropRadius: "50%",
+      onComplete: setSelectedProfileImage,
+    });
+  };
 
   return (
     <>
@@ -125,7 +156,7 @@ export const Profile = () => {
             <FlexRelative $direction={"column"} $gap={"none"}>
               <ProfileImg
                 style={{
-                  height: isTablet ? "30vh" : "40vh",
+                  height: "40vh",
                 }}
                 src={image}
               />
@@ -135,7 +166,21 @@ export const Profile = () => {
                   $direction={"column"}
                   $align={"flex-start"}
                 >
-                  <UserImg width="60px" height="60px" />
+                  <UserImgButton
+                    onClick={editImgOnClick}
+                    text={
+                      <>
+                        <UserImg
+                          imageUrl={profileImageUrl || user.imageUrl}
+                          width="clamp(120px, 12vw, 140px)"
+                          height="clamp(120px, 12vw, 140px)"
+                        />
+
+                        <EditOutlinedIcon className="edit-icon" />
+                      </>
+                    }
+                  />
+
                   <FlexType>
                     <SpanType $type={"label"}>Hi, </SpanType>
                     <SpanType $type={"label"}>

@@ -1,6 +1,6 @@
 export interface CourseType {
   id: string;
-  image: string;
+  imageUrl: string;
   originalPrice: string;
   price: string;
   rating: string;

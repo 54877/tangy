@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Flex } from "../components/Input/Input.styled";
 import { media } from "../styles/helper/media";
 import { SpanType } from "../styles/components/span";
+import { Button } from "../components/Button/Button";
 
 export const ProfileImg = styled.img`
   width: 100%;
@@ -89,5 +90,44 @@ export const ItemContainer = styled(ContainerPrimary)<{
   }
   &:hover ${ItemSpan} {
     color: white;
+  }
+`;
+
+export const UserImgButton = styled(Button)`
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.2s ease;
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  &:hover .edit-icon {
+    opacity: 1;
+  }
+
+  .edit-icon {
+    position: absolute;
+    z-index: 2;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    pointer-events: none;
   }
 `;

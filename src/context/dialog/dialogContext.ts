@@ -9,7 +9,8 @@ export type DialogType =
   | "DeviceDialog"
   | "UpdatePasswordDialog"
   | "SVDialog"
-  | "MessageDialog";
+  | "MessageDialog"
+  | "ImageCropDialog";
 
 //共用props類型
 export interface BaseDialogData {
@@ -21,6 +22,12 @@ export interface BaseDialogData {
   deviceData?: DeviceProps;
   editProfileOnclick?: () => Promise<void>;
   fileErrorMessage?: string;
+  cropFile?: File;
+  cropImageUrl?: string;
+  onCropComplete?: (file: File) => void;
+  cropAspectRatio?: number;
+  cropRadius?: number | string;
+  cropTitle?: string;
 }
 
 //層數props類型

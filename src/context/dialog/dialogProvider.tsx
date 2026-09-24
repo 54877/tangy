@@ -9,6 +9,7 @@ import {
 import { UpdatePasswordDialog } from "../../profile/individual/dialog/updatePassword/updatePassword";
 import { SVDialog } from "../../profile/individual/dialog/sv/sv";
 import { MessageDialog } from "../../components/dialog/MessageDialog";
+import { ImageCropDialog } from "../../components/FileInput/ImageCropDialog";
 
 //context參數
 interface Props {
@@ -111,6 +112,7 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "DeviceDialog" && <DeviceDialog />}
       {dialogState.first?.type === "SVDialog" && <SVDialog />}
       {dialogState.first?.type === "MessageDialog" && <MessageDialog />}
+      {dialogState.first?.type === "ImageCropDialog" && <ImageCropDialog />}
 
       {dialogState.first?.type === "UpdatePasswordDialog" && (
         <UpdatePasswordDialog />
