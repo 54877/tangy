@@ -1,1 +1,0 @@
-import{in as e}from"./index-U_-5Tdsc.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`收藏`});export{n as Collect};
