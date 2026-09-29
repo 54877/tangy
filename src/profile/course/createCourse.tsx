@@ -16,7 +16,7 @@ import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
 import type { CoursePayload } from "../../types/createType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
 import { createCourse, createCourseVideo } from "../../api/profile.api";
@@ -45,7 +45,7 @@ export function CreateCourse() {
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
-
+  const isLoading = useLoadingState(3);
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -59,7 +59,6 @@ export function CreateCourse() {
       fields: [
         "title",
         "teacher",
-        "duration",
         "content",
         "price",
         "originalPrice",
@@ -73,7 +72,7 @@ export function CreateCourse() {
 
   //影片API
   const createCourseVideoApi = async (payload: CoursePayload) => {
-    loading(1).start();
+    loading(3).start();
     try {
       const res = await createCourseVideo(payload);
       const data = res.data.dataSet;
@@ -85,7 +84,7 @@ export function CreateCourse() {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(1).stop();
+      loading(3).stop();
     }
   };
 
@@ -96,16 +95,9 @@ export function CreateCourse() {
       setInformation(initialCourse);
     } catch (err) {
       handleApiError(err, setErr);
-      loading(1).stop();
+      loading(3).stop();
     }
   };
-
-  useEffect(() => {
-    console.log(information.content);
-
-    console.log(information.video);
-    console.log(information.image);
-  }, [information]);
 
   return (
     <Container>
@@ -235,9 +227,7 @@ export function CreateCourse() {
         </Section>
 
         <Actions>
-          <Button
-            text={useLoadingState(1) ? <LoadingUi type="button" /> : "儲存課程"}
-          />
+          <Button text={isLoading ? <LoadingUi type="button" /> : "儲存課程"} />
         </Actions>
       </Form>
     </Container>

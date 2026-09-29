@@ -31,6 +31,7 @@ import { useLoadingState } from "../../utils/loading/loading.state";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import type { ProfileContext } from "../../types/profile";
+import { useUser } from "../../context/user/useUser";
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
@@ -42,6 +43,7 @@ export const Personal = () => {
   const { loading } = useLoading();
   const { openDialog } = useDialog();
   const navigate = useNavigate();
+  const { user, setUser } = useUser();
 
   //查詢個人資料API
   const fetchUser = async () => {
@@ -49,6 +51,7 @@ export const Personal = () => {
     try {
       const res = await personal();
       const data = res.data;
+      setUser({ ...user, userName: data.userDate.userName });
       setUserList(data.userDate);
       setDevice(data.deviceDate);
     } catch (err) {

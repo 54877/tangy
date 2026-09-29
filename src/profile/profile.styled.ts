@@ -99,6 +99,7 @@ export const UserImgButton = styled(Button)`
   padding: 0;
   border-radius: 50%;
   background: none;
+
   &::after {
     content: "";
     position: absolute;
@@ -129,5 +130,18 @@ export const UserImgButton = styled(Button)`
     transition: opacity 0.2s ease;
 
     pointer-events: none;
+  }
+
+  &:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+
+  &:disabled:hover::after {
+    background: rgba(0, 0, 0, 0);
+  }
+
+  &:disabled:hover .edit-icon {
+    opacity: 0;
   }
 `;

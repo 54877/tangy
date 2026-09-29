@@ -1,23 +1,5 @@
 import styled from "styled-components";
 
-export const Overlay = styled.div`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.64);
-`;
-
-export const Dialog = styled.div`
-  width: min(720px, 100%);
-  padding: 24px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
-`;
-
 export const CropStage = styled.div`
   position: relative;
   display: grid;

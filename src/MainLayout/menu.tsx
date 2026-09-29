@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useAuth } from "../context/auth/useAuth";
 import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
+import { useUser } from "../context/user/useUser";
 
 type UiType = {
   logout: () => void;
@@ -25,7 +26,8 @@ type CartType = {
 };
 
 export const UserMenu = ({ logout, loading, close }: UiType) => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
+  const { user } = useUser();
   const { getMe } = useMe();
 
   useEffect(() => {

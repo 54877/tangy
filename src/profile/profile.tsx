@@ -1,5 +1,5 @@
 import { FlexType } from "../styles/components/flex";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -22,7 +22,6 @@ import image2 from "../assets/profile_image2.png";
 import image3 from "../assets/icon_tangy/tangy_Icon.png";
 import { UserImg } from "../components/UserImg/userImg";
 import { useMe } from "../api/common/nav.common";
-import { useAuth } from "../context/auth/useAuth";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { Button } from "../components/Button/Button";
@@ -38,15 +37,21 @@ import type { DeviceProps } from "../types/profile";
 import { profileDetailInit } from "../constants/profile";
 import { useDialog } from "../context/dialog/useDialog";
 import { selectAndCropImage } from "../utils/file/selectAndCropImage";
+import { updateUserImage } from "../api/profile.api";
+import { useLoading } from "../context/loading/useLoading";
+import { useUser } from "../context/user/useUser";
 
 export const Profile = () => {
   const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
   const [device, setDevice] = useState<DeviceProps[]>();
-  const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
-    null,
-  );
   const { openDialog } = useDialog();
-  const { user } = useAuth();
+  const { loading } = useLoading();
+  const {
+    user,
+    setSelectedProfileImage,
+    selectedProfileImage,
+    profileImageUrl,
+  } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const isTablet = useMediaQuery(`${media.xsLg}`);
@@ -61,18 +66,6 @@ export const Profile = () => {
     getMe();
   }, []);
 
-  const profileImageUrl = useMemo(
-    () =>
-      selectedProfileImage ? URL.createObjectURL(selectedProfileImage) : "",
-    [selectedProfileImage],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (profileImageUrl) URL.revokeObjectURL(profileImageUrl);
-    };
-  }, [profileImageUrl]);
-
   const editImgOnClick = () => {
     selectAndCropImage({
       openDialog,
@@ -83,6 +76,39 @@ export const Profile = () => {
       onComplete: setSelectedProfileImage,
     });
   };
+
+  useEffect(() => {
+    if (!selectedProfileImage) {
+      return;
+    }
+    const updateUserImageApi = async () => {
+      loading(1).start();
+      try {
+        if (!selectedProfileImage) {
+          return;
+        }
+        await updateUserImage(selectedProfileImage);
+
+        await getMe(true);
+      } catch (err) {
+        setSelectedProfileImage(null);
+        await getMe(true);
+        openDialog(
+          {
+            type: "MessageDialog",
+            title: "系統訊息",
+            fileErrorMessage: "系統異常請稍後嘗試",
+          },
+          1,
+        );
+        console.log(err);
+      } finally {
+        loading(1).stop();
+      }
+    };
+
+    updateUserImageApi();
+  }, [selectedProfileImage]);
 
   return (
     <>
@@ -167,11 +193,16 @@ export const Profile = () => {
                   $align={"flex-start"}
                 >
                   <UserImgButton
+                    disabled={useLoadingState(1)}
                     onClick={editImgOnClick}
                     text={
                       <>
                         <UserImg
-                          imageUrl={profileImageUrl || user.imageUrl}
+                          imageUrl={
+                            profileImageUrl.length > 0
+                              ? profileImageUrl
+                              : user.imageUrl
+                          }
                           width="clamp(120px, 12vw, 140px)"
                           height="clamp(120px, 12vw, 140px)"
                         />

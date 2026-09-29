@@ -18,6 +18,8 @@ import { useLoading } from "../context/loading/useLoading";
 import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { Flex } from "../components/Input/Input.styled";
+import { useUser } from "../context/user/useUser";
+import { useMe } from "../api/common/nav.common";
 
 export function LoginPage() {
   const { information, handleOnChange } = useInformation<UserProps>(userInit);
@@ -25,7 +27,9 @@ export function LoginPage() {
   const [state, setState] = useState<boolean>(false);
   const { loading } = useLoading();
   const navigate = useNavigate();
-  const { setAuthToken, setUser } = useAuth();
+  const { setAuthToken } = useAuth();
+  const { setUser } = useUser();
+  const { getMe } = useMe();
 
   //登入API
   const loginApi = async () => {
@@ -48,6 +52,7 @@ export function LoginPage() {
         return;
       }
       setAuthToken(token);
+      await getMe();
       navigate("/");
     } catch (err) {
       handleApiError(err, setErr);

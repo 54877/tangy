@@ -42,6 +42,8 @@ import { useUserInit } from "../constants/user";
 import { useMe } from "../api/common/nav.common";
 import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
+import { useUser } from "../context/user/useUser";
+import { useLoading } from "../context/loading/useLoading";
 
 type NavProps = {
   isMobile: boolean;
@@ -50,13 +52,14 @@ type NavProps = {
 export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
   const [borderState, setBorderState] = useState(false);
-  const { isAuthenticated, clearAuthToken, setUser } = useAuth();
+  const { isAuthenticated, clearAuthToken, token } = useAuth();
   const navigate = useNavigate();
   const menu = useMenu();
-  const { user, token } = useAuth();
+  const { user, setUser, profileImageUrl } = useUser();
   const { getMe } = useMe();
-  const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
   const userIsLoading = useLoadingState(0);
+  const logoutLoading = useLoadingState(5);
+  const { loading } = useLoading();
 
   useEffect(() => {
     if (token) {
@@ -77,7 +80,7 @@ export const Nav = ({ isMobile }: NavProps) => {
 
   //登出
   const logoutButton = async () => {
-    setLogoutLoading(true);
+    loading(5).start();
     try {
       await logout();
       setUser(useUserInit);
@@ -88,7 +91,7 @@ export const Nav = ({ isMobile }: NavProps) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setLogoutLoading(false);
+      loading(5).stop();
     }
   };
 
@@ -107,7 +110,13 @@ export const Nav = ({ isMobile }: NavProps) => {
       <ButtonOutlined
         onClick={menu.openClick("user")}
         style={{ padding: "0", border: "0" }}
-        text={<UserImg imageUrl={user?.imageUrl} />}
+        text={
+          <UserImg
+            imageUrl={
+              profileImageUrl.length > 0 ? profileImageUrl : user.imageUrl
+            }
+          />
+        }
       />
     ) : (
       <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
@@ -204,7 +213,11 @@ export const Nav = ({ isMobile }: NavProps) => {
               text={
                 <FlexType>
                   <UserImg
-                    imageUrl={user?.imageUrl}
+                    imageUrl={
+                      profileImageUrl.length > 0
+                        ? profileImageUrl
+                        : user.imageUrl
+                    }
                     width={"48px"}
                     height={"48px"}
                   />
@@ -230,7 +243,7 @@ export const Nav = ({ isMobile }: NavProps) => {
               onClick={logoutButton}
               as={"div"}
               icon={<LogoutOutlinedIcon />}
-              text={"登出"}
+              text={logoutLoading ? <LoadingUi type="button" /> : "登出"}
             />
           </UserContainer>
         ) : (

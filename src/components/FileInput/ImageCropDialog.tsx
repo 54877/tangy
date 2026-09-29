@@ -10,8 +10,6 @@ import {
   Actions,
   CropImage,
   CropStage,
-  Dialog,
-  Overlay,
   ResizeHandle,
   RotationControls,
   Selection,
@@ -19,6 +17,7 @@ import {
 import { useActiveDialog } from "../../utils/dialogLayer";
 import { useDialog } from "../../context/dialog/useDialog";
 import { Flex } from "../Input/Input.styled";
+import { DialogBase } from "../dialog/dialogBase";
 
 type Point = { x: number; y: number };
 type Rect = { x: number; y: number; width: number; height: number };
@@ -306,11 +305,13 @@ export function ImageCropDialog() {
   };
 
   return (
-    <Overlay role="presentation">
-      <Dialog role="dialog" aria-modal="true" aria-labelledby="crop-title">
-        <h2 id="crop-title">
-          {activeDialog.cropTitle ?? activeDialog.title ?? "裁切圖片"}
-        </h2>
+    <DialogBase
+      type={activeDialog.type}
+      title={activeDialog.cropTitle ?? activeDialog.title ?? "裁切圖片"}
+      onClose={cancel}
+      width="min(720px, 100%)"
+      context={
+        <>
         <Flex $justify={"space-between"}>
           <p>拖曳裁切框移動位置，拖曳右下角調整大小。</p>
           {/* 以 90 度為單位旋轉照片。 */}
@@ -387,7 +388,8 @@ export function ImageCropDialog() {
             套用裁切
           </Button>
         </Actions>
-      </Dialog>
-    </Overlay>
+        </>
+      }
+    />
   );
 }

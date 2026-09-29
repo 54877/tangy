@@ -1,6 +1,5 @@
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { useMediaQuery } from "@mui/material";
@@ -11,7 +10,7 @@ import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
 import { profileDetailInit } from "../../../../constants/profile";
 import { useDialog } from "../../../../context/dialog/useDialog";
-import { Heading, SpanType } from "../../../../styles/components/span";
+import { SpanType } from "../../../../styles/components/span";
 import { type ProfileDetailProps } from "../../../../types/profile";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
@@ -48,11 +47,7 @@ export const EditDialog = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(information);
-  }, [information]);
-
-  //更新api
+  //更新個人資料api
   const updatePersonalApi = async () => {
     loading(2).start();
     try {
@@ -60,6 +55,7 @@ export const EditDialog = () => {
       if (editProfileOnclick) {
         await editProfileOnclick();
       }
+
       await loading(2).stop();
       closeDialog(activeLayer);
     } catch (err) {
@@ -87,10 +83,6 @@ export const EditDialog = () => {
 
   const content = (
     <Flex $direction={"column"}>
-      <Flex style={{ paddingBottom: "24px" }} $justify={"space-between"}>
-        <Heading>{title}</Heading>
-        <CloseIcon onClick={() => closeDialog(activeLayer)} />
-      </Flex>
       <Flex $direction={"column"}>
         <FromInput
           err={err}
@@ -176,6 +168,8 @@ export const EditDialog = () => {
   return (
     <DialogBase
       type={type ?? null}
+      title={title}
+      onClose={() => closeDialog(activeLayer)}
       context={content}
       width={isSmall ? "90%" : "500px"}
     />

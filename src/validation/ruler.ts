@@ -34,7 +34,6 @@ const LENGTH_RULES: Partial<Record<string, number>> = {
   code: 10,
   title: 30,
   teacher: 20,
-  duration: 10,
   price: 10,
   originalPrice: 10,
   videoKey: 47,
@@ -84,8 +83,6 @@ export function getCommonValidators<T>(
     title: () => [requiredString<T>("請輸入課程標題")],
 
     teacher: () => [requiredString<T>("請輸入講師名稱")],
-
-    duration: () => [requiredString<T>("請輸入課程時長")],
 
     price: () => [requiredString<T>("請輸入課程售價")],
 

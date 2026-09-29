@@ -2,14 +2,13 @@ import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
 import { ProfileButton } from "../edit/editDialog.styled";
-import CloseIcon from "@mui/icons-material/Close";
 import { useDialog } from "../../../../context/dialog/useDialog";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { useMediaQuery } from "@mui/material";
 import type { UpdatePasswordProps } from "../../../../types/profile";
 import { updatePasswordInit } from "../../../../constants/profile";
-import { Heading, SpanType } from "../../../../styles/components/span";
+import { SpanType } from "../../../../styles/components/span";
 import { updatePassword } from "../../../../api/profile.api";
 import { handleApiError } from "../../../../utils/apiError";
 import { useState } from "react";
@@ -22,6 +21,7 @@ import { useLoading } from "../../../../context/loading/useLoading";
 import { useLoadingState } from "../../../../utils/loading/loading.state";
 import { LoadingUi } from "../../../../components/loading/loading";
 import { formValidate } from "../../../../utils/formValidate";
+import { useUser } from "../../../../context/user/useUser";
 
 export const UpdatePasswordDialog = () => {
   const { closeDialog } = useDialog();
@@ -30,12 +30,12 @@ export const UpdatePasswordDialog = () => {
   const { information, handleOnChange } =
     useInformation<UpdatePasswordProps>(updatePasswordInit);
   const { type, title } = activeDialog || {};
-  const { setUser, clearAuthToken } = useAuth();
+  const { clearAuthToken } = useAuth();
+  const { setUser } = useUser();
   const isSmall = useMediaQuery("(max-width:500px)");
   const navigate = useNavigate();
   const { loading } = useLoading();
 
-  //TODO 更新密碼後 登入裝置問題
   //更新密碼API
   const updatePasswordApi = async () => {
     loading(3).start();
@@ -88,10 +88,6 @@ export const UpdatePasswordDialog = () => {
 
   const content = (
     <Flex $direction={"column"}>
-      <Flex style={{ paddingBottom: "24px" }} $justify={"space-between"}>
-        <Heading>{title}</Heading>
-        <CloseIcon onClick={() => closeDialog(activeLayer)} />
-      </Flex>
       <Flex $direction={"column"}>
         <FromInput
           err={err}
@@ -131,6 +127,8 @@ export const UpdatePasswordDialog = () => {
   return (
     <DialogBase
       type={type ?? null}
+      title={title}
+      onClose={() => closeDialog(activeLayer)}
       context={content}
       width={isSmall ? "90%" : "500px"}
     />

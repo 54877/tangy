@@ -1,9 +1,7 @@
-import CloseIcon from "@mui/icons-material/Close";
 import { useMediaQuery } from "@mui/material";
 import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { Flex } from "../../../../components/Input/Input.styled";
 import { useDialog } from "../../../../context/dialog/useDialog";
-import { Heading } from "../../../../styles/components/span";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { ProfileButton } from "../edit/editDialog.styled";
 import { DeviceItem } from "./item";
@@ -53,10 +51,6 @@ export const DeviceDialog = () => {
 
   const content = (
     <Flex $direction={"column"}>
-      <Flex style={{ paddingBottom: "24px" }} $justify={"space-between"}>
-        <Heading>{title}</Heading>
-        <CloseIcon onClick={() => closeDialog(activeLayer)} />
-      </Flex>
       <Flex $direction={"column"}>
         <DeviceItem
           title={"裝置名稱"}
@@ -99,6 +93,8 @@ export const DeviceDialog = () => {
   return (
     <DialogBase
       type={type ?? null}
+      title={title}
+      onClose={() => closeDialog(activeLayer)}
       context={content}
       width={isSmall ? "90%" : "500px"}
     />

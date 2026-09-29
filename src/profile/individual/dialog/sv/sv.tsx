@@ -3,10 +3,9 @@ import { DialogBase } from "../../../../components/dialog/dialogBase";
 import { FromInput } from "../../../../components/Input/Input";
 import { Flex } from "../../../../components/Input/Input.styled";
 import { useDialog } from "../../../../context/dialog/useDialog";
-import { Heading, SpanType } from "../../../../styles/components/span";
+import { SpanType } from "../../../../styles/components/span";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { ProfileButton } from "../edit/editDialog.styled";
-import CloseIcon from "@mui/icons-material/Close";
 import type { SVProps } from "../../../../types/profile";
 import { SVInit } from "../../../../constants/profile";
 import { useInformation } from "../../../../utils/information";
@@ -184,10 +183,6 @@ export const SVDialog = () => {
 
   const content = (
     <Flex $direction={"column"}>
-      <Flex style={{ paddingBottom: "24px" }} $justify={"space-between"}>
-        <Heading>{title}</Heading>
-        <CloseIcon onClick={() => closeDialog(activeLayer)} />
-      </Flex>
       {user.svType ? contentClose : contentOpen}
     </Flex>
   );
@@ -195,6 +190,8 @@ export const SVDialog = () => {
   return (
     <DialogBase
       type={type ?? null}
+      title={title}
+      onClose={() => closeDialog(activeLayer)}
       context={content}
       width={isSmall ? "90%" : "500px"}
     />

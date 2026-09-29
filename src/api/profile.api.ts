@@ -16,6 +16,7 @@ const _DeviceCloseById = createTokenApi("DeviceCloseById");
 const _DeviceCloseByUserId = createTokenApi("DeviceCloseByUserId");
 const _createCourseVideo = createTokenApi("createCourseVideo");
 const _createCourse = createTokenApi("createCourse");
+const _updateUserImage = createTokenApi("updateUserImage");
 
 export const personal = async () => {
   return await _personal.get("/");
@@ -94,4 +95,14 @@ export const createCourse = async (information: CoursePayload) => {
     formData.append("image", information.image);
   }
   return await _createCourse.post("/", formData);
+};
+
+export const updateUserImage = async (image: File) => {
+  const formData = new FormData();
+
+  // File
+  if (image) {
+    formData.append("image", image);
+  }
+  return await _updateUserImage.put("/", formData);
 };
