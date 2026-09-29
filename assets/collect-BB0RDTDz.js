@@ -1,0 +1,1 @@
+import{an as e}from"./index-CTyMEhVn.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`收藏`});export{n as Collect};
