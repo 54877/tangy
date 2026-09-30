@@ -57,7 +57,7 @@ export const Personal = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      loading(1).stop();
+      void loading(1).stop();
     }
   };
 
@@ -67,10 +67,10 @@ export const Personal = () => {
     try {
       await DeviceCloseByUserId(userList.id);
       clearAuthToken();
-      navigate("/login");
+      void navigate("/login");
       await loading(3).stop();
     } catch (err) {
-      await loading(3).stop();
+      void loading(3).stop();
       console.log(err);
     }
   };
@@ -91,11 +91,11 @@ export const Personal = () => {
       } catch (err) {
         console.log(err);
       } finally {
-        loading(1).stop();
+        await loading(1).stop();
       }
     };
 
-    fetchUser();
+    void fetchUser();
 
     return () => {
       cancelled = true;
@@ -249,7 +249,7 @@ export const Personal = () => {
             <TitleButton
               disabled={!userList.userName}
               onClick={() => {
-                DeviceCloseByUserIdApi();
+                void DeviceCloseByUserIdApi();
               }}
               style={{ color: "red" }}
               text={

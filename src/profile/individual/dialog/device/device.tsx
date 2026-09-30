@@ -31,9 +31,9 @@ export const DeviceDialog = () => {
       await DeviceCloseById(id);
       if (deviceData?.isCurrent) {
         clearAuthToken();
-        loading(2).stop();
+        void loading(2).stop();
         closeDialog(activeLayer);
-        navigate("/login");
+        void navigate("/login");
         return;
       }
 
@@ -82,7 +82,7 @@ export const DeviceDialog = () => {
       <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
         <ProfileButton
           onClick={() => {
-            DeviceCloseByIdApi(deviceData?.id);
+            void DeviceCloseByIdApi(deviceData?.id);
           }}
           text={useLoadingState(2) ? <LoadingUi type={"button"} /> : "登出裝置"}
         />

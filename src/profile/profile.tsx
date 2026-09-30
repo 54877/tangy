@@ -63,7 +63,7 @@ export const Profile = () => {
   );
   const { getMe } = useMe();
   useEffect(() => {
-    getMe();
+    void getMe();
   }, []);
 
   const editImgOnClick = () => {
@@ -103,11 +103,11 @@ export const Profile = () => {
         );
         console.log(err);
       } finally {
-        loading(1).stop();
+        void loading(1).stop();
       }
     };
 
-    updateUserImageApi();
+    void updateUserImageApi();
   }, [selectedProfileImage]);
 
   return (
@@ -160,7 +160,7 @@ export const Profile = () => {
                         fontSize: "12px",
                       }}
                       onClick={() => {
-                        navigate("/course");
+                        void navigate("/course");
                       }}
                       icon_right={
                         <ArrowForwardIcon
@@ -267,7 +267,7 @@ export const Profile = () => {
                             $activeIndex={isActive}
                             $justify="center"
                             onClick={() => {
-                              navigate(url[index]);
+                              void navigate(url[index]);
                             }}
                           >
                             <ItemSpan
@@ -326,7 +326,7 @@ export const Profile = () => {
                 </Flex>
                 <Button
                   onClick={() => {
-                    navigate("/course");
+                    void navigate("/course");
                   }}
                   icon_right={<ArrowForwardIcon />}
                   text={"探索學習路徑"}

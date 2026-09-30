@@ -45,7 +45,7 @@ export const UpdatePasswordDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(3).stop();
+      void loading(3).stop();
     }
   };
 
@@ -78,11 +78,11 @@ export const UpdatePasswordDialog = () => {
       closeDialog(activeLayer);
       clearAuthToken();
       setUser(useUserInit);
-      navigate("/login/forgot");
+      void navigate("/login/forgot");
     } catch (err) {
       console.log(err);
     } finally {
-      loading(2).stop();
+      void loading(2).stop();
     }
   };
 

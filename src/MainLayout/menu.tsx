@@ -32,7 +32,7 @@ export const UserMenu = ({ logout, loading, close }: UiType) => {
 
   useEffect(() => {
     if (token) {
-      getMe();
+      void getMe();
     }
   }, []);
 
@@ -68,7 +68,7 @@ export const ChartMenu = ({ close }: CartType) => {
 
   const onclick = () => {
     close();
-    navigate("/course");
+    void navigate("/course");
   };
   return (
     <UserListMenu

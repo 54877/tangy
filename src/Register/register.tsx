@@ -30,7 +30,7 @@ export function Register() {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(0).stop();
+      void loading(0).stop();
     }
   };
 

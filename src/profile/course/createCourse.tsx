@@ -25,6 +25,22 @@ import type { FormError } from "../../types/errorType";
 import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { formValidate } from "../../utils/formValidate";
+import MultiSelectDropdown from "../../components/TagSelector/MultiSelectDropdown";
+
+const COURSE_TAGS = [
+  { key: "finance-management", label: "財務管理" },
+  { key: "investment", label: "投資理財" },
+  { key: "beginner", label: "新手入門" },
+  { key: "career-skills", label: "職場技能" },
+  { key: "personal-finance", label: "生活理財" },
+  { key: "digital-tools", label: "數位工具" },
+  { key: "marketing", label: "行銷企劃" },
+  { key: "self-growth", label: "自我成長" },
+  { key: "python", label: "Python" },
+  { key: "javascript", label: "JavaScript" },
+  { key: "react", label: "React" },
+  { key: "data-analysis", label: "資料分析" },
+];
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -35,6 +51,7 @@ const initialCourse: CoursePayload = {
   content: "",
   price: "",
   originalPrice: "",
+  tags: [],
   image: null,
   video: null,
   videoKey: "",
@@ -46,7 +63,8 @@ export function CreateCourse() {
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
   const isLoading = useLoadingState(3);
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const payload = {
@@ -62,6 +80,7 @@ export function CreateCourse() {
         "content",
         "price",
         "originalPrice",
+        "tags",
         "image",
         "video",
       ],
@@ -84,7 +103,7 @@ export function CreateCourse() {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(3).stop();
+      await loading(3).stop();
     }
   };
 
@@ -95,7 +114,7 @@ export function CreateCourse() {
       setInformation(initialCourse);
     } catch (err) {
       handleApiError(err, setErr);
-      loading(3).stop();
+      await loading(3).stop();
     }
   };
 
@@ -154,6 +173,19 @@ export function CreateCourse() {
               onChange={handleOnChange}
               inputMode="numeric"
               placeholder="例如：5800"
+            />
+
+            <MultiSelectDropdown
+              title="課程標籤"
+              required
+              fieldKey="tags"
+              information={information}
+              onChange={handleOnChange}
+              options={COURSE_TAGS}
+              labelKey="label"
+              valueKey="key"
+              err={err}
+              maxSelected={3}
             />
           </Fields>
         </Section>

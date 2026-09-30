@@ -59,7 +59,7 @@ export const EditDialog = () => {
       await loading(2).stop();
       closeDialog(activeLayer);
     } catch (err) {
-      loading(2).stop();
+      void loading(2).stop();
       handleApiError(err, setErr);
     }
   };

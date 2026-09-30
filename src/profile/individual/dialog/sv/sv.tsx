@@ -42,7 +42,7 @@ export const SVDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(2).stop();
+      void loading(2).stop();
     }
   };
 
@@ -70,7 +70,7 @@ export const SVDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(3).stop();
+      void loading(3).stop();
     }
   };
 
@@ -97,7 +97,7 @@ export const SVDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(3).stop();
+      void loading(3).stop();
     }
   };
 

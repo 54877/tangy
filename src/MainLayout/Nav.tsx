@@ -63,13 +63,13 @@ export const Nav = ({ isMobile }: NavProps) => {
 
   useEffect(() => {
     if (token) {
-      getMe();
+      void getMe();
     }
   }, []);
 
   //登入跳轉手頁
   const loginRouterOnclick = () => {
-    navigate("/login");
+    void navigate("/login");
   };
 
   //關閉menu
@@ -84,14 +84,14 @@ export const Nav = ({ isMobile }: NavProps) => {
     try {
       await logout();
       setUser(useUserInit);
-      navigate("/");
+      void navigate("/");
       clearAuthToken();
       closeClick();
       menu.closeClick();
     } catch (err) {
       console.log(err);
     } finally {
-      loading(5).stop();
+      void loading(5).stop();
     }
   };
 

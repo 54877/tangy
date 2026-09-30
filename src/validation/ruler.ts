@@ -10,6 +10,11 @@ function requiredString<T>(messageKey: string): ValidatorFn<T> {
   };
 }
 
+function requiredArray<T>(messageKey: string): ValidatorFn<T> {
+  return (value) =>
+    Array.isArray(value) && value.length > 0 ? "" : messageKey;
+}
+
 //長度工廠
 function lengthString<T>(
   maxLength: number,
@@ -87,6 +92,8 @@ export function getCommonValidators<T>(
     price: () => [requiredString<T>("請輸入課程售價")],
 
     originalPrice: () => [requiredString<T>("請輸入課程原價")],
+
+    tags: () => [requiredArray<T>("請至少選擇一個課程標籤")],
 
     image: () => [
       (v) => {
