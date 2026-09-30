@@ -1,1 +1,0 @@
-import{an as e}from"./index-CTyMEhVn.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`學習`});export{n as Learn};

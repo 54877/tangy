@@ -1,1 +1,0 @@
-import{an as e}from"./index-CTyMEhVn.js";var t=e(),n=({imageUrl:e,style:n,width:r=`40px`,height:i=`40px`})=>(0,t.jsx)(`img`,{style:{...n,backgroundColor:`white`,width:r,height:i,borderRadius:`100px`,objectFit:`contain`},src:e||`/tangy/assets/userImgDefault-D2-MS4aw.png`,alt:`使用者照片`});export{n as t};

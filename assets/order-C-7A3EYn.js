@@ -1,1 +1,0 @@
-import{an as e}from"./index-CTyMEhVn.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`訂單`});export{n as Order};
