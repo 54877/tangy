@@ -53,15 +53,28 @@ export function LoginPage() {
       }
       setAuthToken(token);
       await getMe();
-      navigate("/");
+      void navigate("/");
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(0).stop();
+      void loading(0).stop();
     }
   };
 
-  const sendEmail = () => {
+  //寄信API
+  const sendEmailApi = async () => {
+    loading(0).start();
+    try {
+      await login(information);
+      setState(true);
+    } catch (err) {
+      handleApiError(err, setErr);
+    } finally {
+      void loading(0).stop();
+    }
+  };
+
+  const LoginEmail = () => {
     formValidate<UserProps>({
       information,
       fields: ["email", "password"],
@@ -81,7 +94,7 @@ export function LoginPage() {
       });
       return;
     }
-    sendEmail();
+    LoginEmail();
   };
 
   return (
@@ -119,7 +132,7 @@ export function LoginPage() {
                 title={"驗證碼"}
               />
               <button
-                onClick={sendEmail}
+                onClick={sendEmailApi}
                 disabled={loading(0).isLoading()}
                 type="button"
                 style={{ flex: "1" }}

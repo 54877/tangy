@@ -41,7 +41,7 @@ export function ForgotPassword() {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      loading(1).stop();
+      void loading(1).stop();
     }
   };
 
@@ -51,7 +51,7 @@ export function ForgotPassword() {
     try {
       await resetPassword(information);
       setInformation(userForgotPasswordInit);
-      navigate("/login");
+      void navigate("/login");
     } catch (err) {
       const { status } = handleAxiosError(err);
       if (status === 429) {
@@ -61,7 +61,7 @@ export function ForgotPassword() {
       }
       handleApiError(err, setErr);
     } finally {
-      loading(0).stop();
+      void loading(0).stop();
     }
   };
 
@@ -153,12 +153,27 @@ export function ForgotPassword() {
           )}
           {verify ? (
             <ButtonAuth
-              disabled={isLoading}
+              disabled={isLoading || emailLoading}
               onClick={handleResetPasswordOnclick}
-              text={isLoading ? <LoadingUi type={"button"} /> : "更新密碼"}
+              text={
+                isLoading || emailLoading ? (
+                  <LoadingUi type={"button"} />
+                ) : (
+                  "更新密碼"
+                )
+              }
             />
           ) : (
-            <ButtonAuth onClick={handleOnclick} text={"發送密碼重置郵件"} />
+            <ButtonAuth
+              onClick={handleOnclick}
+              text={
+                emailLoading ? (
+                  <LoadingUi type={"button"} />
+                ) : (
+                  "發送密碼重置郵件"
+                )
+              }
+            />
           )}
         </FlexType>
       </form>

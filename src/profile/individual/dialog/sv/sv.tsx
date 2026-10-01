@@ -28,7 +28,7 @@ export const SVDialog = () => {
   const isSmall = useMediaQuery("(max-width:500px)");
   const { loading } = useLoading();
   const sendLoading = useLoadingState(2);
-  const faLoading = useLoadingState(3);
+  const faLoading = useLoadingState(4);
   if (!user || !setUser) {
     return null;
   }
@@ -58,7 +58,7 @@ export const SVDialog = () => {
 
   //開啟2FA
   const faApi = async () => {
-    loading(3).start();
+    loading(4).start();
     try {
       await FA(information);
       setUser({
@@ -70,7 +70,7 @@ export const SVDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      void loading(3).stop();
+      void loading(4).stop();
     }
   };
 
@@ -86,7 +86,7 @@ export const SVDialog = () => {
 
   //關閉2FA
   const faCloseApi = async () => {
-    loading(3).start();
+    loading(4).start();
     try {
       await FAClose();
       setUser({
@@ -97,7 +97,7 @@ export const SVDialog = () => {
     } catch (err) {
       handleApiError(err, setErr);
     } finally {
-      void loading(3).stop();
+      void loading(4).stop();
     }
   };
 
@@ -135,11 +135,7 @@ export const SVDialog = () => {
                 $shade={900}
                 style={{ textDecoration: "underline" }}
               >
-                {sendLoading ? (
-                  <LoadingUi type={"spinner"} />
-                ) : (
-                  "請點此重新傳⁠送。"
-                )}
+                {"請點此重新傳⁠送。"}
               </SpanType>
             </button>
           </Flex>
@@ -160,7 +156,9 @@ export const SVDialog = () => {
         <Flex $justify={"flex-end"} style={{ paddingTop: "24px" }}>
           <ProfileButton
             onClick={openFAHandleOnclick}
-            text={faLoading ? <LoadingUi type={"button"} /> : "確認"}
+            text={
+              faLoading || sendLoading ? <LoadingUi type={"button"} /> : "確認"
+            }
           />
         </Flex>
       )}

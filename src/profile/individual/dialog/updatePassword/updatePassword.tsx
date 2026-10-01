@@ -71,7 +71,7 @@ export const UpdatePasswordDialog = () => {
 
   //忘記密碼
   const onclick = async () => {
-    loading(2).start();
+    loading(3).start();
     try {
       //登出
       await logout();
@@ -82,7 +82,7 @@ export const UpdatePasswordDialog = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      void loading(2).stop();
+      void loading(3).stop();
     }
   };
 
@@ -110,7 +110,7 @@ export const UpdatePasswordDialog = () => {
             onChange={handleOnChange}
           />
           <SpanType as={"button"} onClick={onclick}>
-            {useLoadingState(2) ? <LoadingUi type={"button"} /> : "忘記密碼"}
+            {"忘記密碼"}
           </SpanType>
         </Flex>
       </Flex>
