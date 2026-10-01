@@ -1,4 +1,4 @@
-import{At as e,Cn as t,Sn as n,Tn as r,_n as i,wn as a,yn as o}from"./index-CgDT69qg.js";var s=`/tangy/assets/logo2-C32vIXhK.png`,c=a.img`
+import{At as e,Cn as t,Sn as n,Tn as r,_n as i,wn as a,yn as o}from"./index-C9nGSwhb.js";var s=`/tangy/assets/logo2-C32vIXhK.png`,c=a.img`
   width: 80px;
   height: 80px;
   position: absolute;

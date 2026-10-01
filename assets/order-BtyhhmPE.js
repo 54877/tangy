@@ -1,1 +1,0 @@
-import{_n as e}from"./index-CgDT69qg.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`訂單`});export{n as Order};

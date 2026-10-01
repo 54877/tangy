@@ -1,4 +1,4 @@
-import{Cn as e,En as t,Sn as n,_n as r,wn as i}from"./index-CgDT69qg.js";import{t as a}from"./LogoTangy-Bxyb3yST.js";var o=`/tangy/assets/loginBgi-DtjVt9SS.png`,s=`/tangy/assets/loginBgiSm-6S_joEMi.png`,c=i.img`
+import{Cn as e,En as t,Sn as n,_n as r,wn as i}from"./index-C9nGSwhb.js";import{t as a}from"./LogoTangy-CGQPuGgy.js";var o=`/tangy/assets/loginBgi-DtjVt9SS.png`,s=`/tangy/assets/loginBgiSm-6S_joEMi.png`,c=i.img`
   position: fixed;
   top: 0;
   left: 0;

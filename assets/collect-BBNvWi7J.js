@@ -1,0 +1,1 @@
+import{_n as e}from"./index-C9nGSwhb.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`收藏`});export{n as Collect};
