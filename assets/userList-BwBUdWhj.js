@@ -1,0 +1,1 @@
+import{_n as e}from"./index-x6-_Lobt.js";var t=e(),n=()=>(0,t.jsx)(`div`,{children:`UserList`});export{n as UserList};
