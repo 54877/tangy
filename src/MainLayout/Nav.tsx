@@ -44,6 +44,7 @@ import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { useUser } from "../context/user/useUser";
 import { useLoading } from "../context/loading/useLoading";
+import { LayoutDashboard } from "lucide-react";
 
 type NavProps = {
   isMobile: boolean;
@@ -121,6 +122,12 @@ export const Nav = ({ isMobile }: NavProps) => {
     ) : (
       <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
     );
+  };
+
+  //前往後台button
+  const backStageButton = () => {
+    closeClick();
+    void navigate("/backStage/tags");
   };
 
   return (
@@ -239,6 +246,14 @@ export const Nav = ({ isMobile }: NavProps) => {
                 }}
               />
             </UserListMenu>
+            {user.role === "admin" && (
+              <UserListButton
+                onClick={backStageButton}
+                as={"div"}
+                icon={<LayoutDashboard />}
+                text={"後台管理"}
+              />
+            )}
             <UserListButton
               onClick={logoutButton}
               as={"div"}

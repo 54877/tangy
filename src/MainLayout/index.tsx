@@ -1,5 +1,5 @@
 import course from "../course";
-
+import backStage from "../backStage";
 import { Index } from "../index/indexPage";
 import profile from "../profile";
 
@@ -18,5 +18,6 @@ export default {
     },
     course,
     profile,
+    backStage,
   ],
 };

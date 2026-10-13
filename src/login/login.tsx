@@ -105,6 +105,7 @@ export function LoginPage() {
             <>
               <FromInput
                 err={err}
+                autoComplete={"username"}
                 information={information}
                 fieldKey={"email"}
                 onChange={handleOnChange}
@@ -112,6 +113,7 @@ export function LoginPage() {
               />
               <FromInput
                 err={err}
+                autoComplete={"current-password"}
                 type={"password"}
                 information={information}
                 fieldKey={"password"}

@@ -18,7 +18,7 @@ export const UserList = ({ close }: Props) => {
     if (close) {
       close();
     }
-    navigate(`./${url}`);
+    void navigate(`./${url}`);
   };
 
   return (

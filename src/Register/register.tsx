@@ -15,18 +15,21 @@ import { useLoading } from "../context/loading/useLoading";
 import { LoadingUi } from "../components/loading/loading";
 import { Flex } from "../components/Input/Input.styled";
 import { useLoadingState } from "../utils/loading/loading.state";
+import { useNavigate } from "react-router-dom";
 
 export function Register() {
   const { information, setInformation, handleOnChange } =
     useInformation<UserProps>(userInit);
   const [err, setErr] = useState<UserErrorProps>({});
   const { loading } = useLoading();
+  const navigate = useNavigate();
   //註冊API
   const registerApi = async () => {
     loading(0).start();
     try {
       await register(information);
       setInformation(userInit);
+      void navigate("/login");
     } catch (err) {
       handleApiError(err, setErr);
     } finally {

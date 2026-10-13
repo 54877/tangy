@@ -67,31 +67,36 @@ const setupInterceptors = (instance: AxiosInstance) => {
   instance.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
-      const originalRequest = error.config as RetryRequestConfig;
+      const originalRequest = error.config as RetryRequestConfig | undefined;
+
       if (
         error.response?.status === 401 &&
-        !isRedirecting &&
+        originalRequest &&
         !originalRequest._retry
       ) {
-        isRedirecting = true; // 避免重複觸發API
         originalRequest._retry = true;
-        try {
-          const data = await refreshAccessToken();
-          originalRequest.headers = originalRequest.headers || {};
-          originalRequest.headers.Authorization = `Bearer ${data}`; // 在Header寫入新accessToken
 
-          return instance(originalRequest); //重新執行API
+        try {
+          const token = await refreshAccessToken();
+          originalRequest.headers = originalRequest.headers || {};
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+
+          return instance(originalRequest);
         } catch {
           sessionStorage.removeItem(TOKEN_KEY);
 
-          if (globalThis.location.pathname !== "/tangy/login") {
+          if (
+            !isRedirecting &&
+            globalThis.location.pathname !== "/tangy/login"
+          ) {
+            isRedirecting = true;
             globalThis.location.href = "/tangy/login";
           }
+
           throw error;
-        } finally {
-          isRedirecting = false;
         }
       }
+
       throw error;
     },
   );

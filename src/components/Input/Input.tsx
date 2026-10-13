@@ -16,6 +16,7 @@ type Props<T> = {
     fieldKey: keyof T,
     extra?: Partial<T>,
   ) => void;
+  readonly autoComplete?: string;
   readonly err?: FormError<T>;
   readonly to?: string;
   readonly disabled?: boolean;
@@ -33,6 +34,7 @@ export function FromInput<T>({
   to = "",
   direction = "column",
   type,
+  autoComplete,
   placeholder,
   inputMode,
   disabled,
@@ -85,6 +87,7 @@ export function FromInput<T>({
         style={{
           width: "100%",
         }}
+        autoComplete={autoComplete}
         value={information[fieldKey] ?? ""}
         onChange={(e) => onChange(e.target.value, fieldKey, extra)}
         disabled={disabled}

@@ -99,7 +99,6 @@ export const createCourse = async (information: CoursePayload) => {
 
 export const updateUserImage = async (image: File) => {
   const formData = new FormData();
-
   // File
   if (image) {
     formData.append("image", image);

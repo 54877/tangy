@@ -18,5 +18,11 @@ export const useUserInit = {
   email: "",
   userName: "",
   svType: false,
+  image: null,
+  imageUrl: "",
+  birthday: "",
+  introduction: "",
+  gender: "",
+  createdAt: "",
   role: "user",
 } as UseUserProps;

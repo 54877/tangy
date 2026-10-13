@@ -24,7 +24,7 @@ export const useMe = () => {
         console.log(err);
       } finally {
         setState(false);
-        loading(0).stop();
+        void loading(0).stop();
       }
       return;
     }
@@ -37,6 +37,7 @@ export const useMe = () => {
         console.log(err);
       } finally {
         setState(false);
+        void loading(0).stop();
       }
     }
   };
