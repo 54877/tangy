@@ -84,8 +84,8 @@ export const Nav = ({ isMobile }: NavProps) => {
     loading(5).start();
     try {
       await logout();
+      await navigate("/");
       setUser(useUserInit);
-      void navigate("/");
       clearAuthToken();
       closeClick();
       menu.closeClick();

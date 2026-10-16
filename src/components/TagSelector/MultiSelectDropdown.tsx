@@ -4,7 +4,7 @@ import type { FormError } from "../../types/errorType";
 import { DescriptionTitle } from "../dateTime/dateTime.style";
 import { Flex, Input } from "../Input/Input.styled";
 import { SpanType } from "../../styles/components/span";
-import type { OptionItem } from "../../types/select";
+import type { OptionItem } from "../../types/selectType";
 
 type StringArrayKeys<T> = {
   [K in keyof T]: T[K] extends string[] ? K : never;

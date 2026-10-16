@@ -29,8 +29,9 @@ const setupInterceptors = (instance: AxiosInstance) => {
     refreshPromise ??= refreshApi
       .post("/refresh")
       .then(({ data }) => {
-        sessionStorage.setItem(TOKEN_KEY, data.accessToken);
-        return data.accessToken;
+        const accessToken = data.dataSet.accessToken;
+        sessionStorage.setItem(TOKEN_KEY, accessToken);
+        return accessToken;
       })
       .finally(() => {
         refreshPromise = null;

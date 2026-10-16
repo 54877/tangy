@@ -15,7 +15,18 @@ import { useLoading } from "../context/loading/useLoading";
 import { getCourse } from "../api/course.api";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
-import type { CourseType } from "../types/courseType";
+
+interface CourseType {
+  id: string;
+  imageUrl: string;
+  originalPrice: string;
+  price: string;
+  rating: string;
+  studentCount: string;
+  teacher: string;
+  title: string;
+  duration: string;
+}
 
 export const Course = () => {
   const swiperRef = useRef<SwiperType | null>(null);

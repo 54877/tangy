@@ -42,12 +42,13 @@ export function LoginPage() {
         res = await login(information);
       }
 
-      if (res.data.svType) {
+      const data = res.data.dataSet;
+      if (data?.svType) {
         setState(true);
         return;
       }
-      setUser(res.data.userDate);
-      const token = res.data.accessToken;
+      setUser(data?.userDate);
+      const token = data?.accessToken;
       if (!token) {
         return;
       }

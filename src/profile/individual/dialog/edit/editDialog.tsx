@@ -11,7 +11,7 @@ import { Flex } from "../../../../components/Input/Input.styled";
 import { profileDetailInit } from "../../../../constants/profile";
 import { useDialog } from "../../../../context/dialog/useDialog";
 import { SpanType } from "../../../../styles/components/span";
-import { type ProfileDetailProps } from "../../../../types/profile";
+import { type ProfileDetailProps } from "../../../../types/profileType";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { ProfileButton } from "./editDialog.styled";

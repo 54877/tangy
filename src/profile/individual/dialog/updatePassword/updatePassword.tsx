@@ -6,7 +6,7 @@ import { useDialog } from "../../../../context/dialog/useDialog";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { useInformation } from "../../../../utils/information";
 import { useMediaQuery } from "@mui/material";
-import type { UpdatePasswordProps } from "../../../../types/profile";
+import type { UpdatePasswordProps } from "../../../../types/profileType";
 import { updatePasswordInit } from "../../../../constants/profile";
 import { SpanType } from "../../../../styles/components/span";
 import { updatePassword } from "../../../../api/profile.api";
@@ -76,9 +76,9 @@ export const UpdatePasswordDialog = () => {
       //登出
       await logout();
       closeDialog(activeLayer);
+      await navigate("/login/forgot");
       clearAuthToken();
       setUser(useUserInit);
-      void navigate("/login/forgot");
     } catch (err) {
       console.log(err);
     } finally {

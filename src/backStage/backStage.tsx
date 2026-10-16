@@ -20,16 +20,88 @@ import { SpanType } from "../styles/components/span";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { BackCard } from "../components/backCard/backCard";
+import { useEffect, useState } from "react";
+import { useLoading } from "../context/loading/useLoading";
+import { getAllTags, getAllUsers } from "../api/backStage";
+import { DialogApiError } from "../utils/apiError";
+import { useDialog } from "../context/dialog/useDialog";
+import type { UseUserProps } from "../types/userType";
+import type { TagsListType } from "../types/backStageType";
 
 export const BackStage = () => {
   const item = ["標籤管理", "課程審核", "使用者"];
   const url = ["tags", "backStageCourse", "userList"];
+  const icons = [Tags, ClipboardCheck, Users];
   const initialSlide = url.findIndex((item) =>
     location.pathname.endsWith(`/${item}`),
   );
+  const { openDialog } = useDialog();
   const isBannerMac = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
   const navigate = useNavigate();
+  const [tagList, setTagList] = useState<TagsListType[]>();
+  const [userList, setUserList] = useState<UseUserProps[]>();
+  const { loading } = useLoading();
+
+  //取得tagsList
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchTags = async () => {
+      loading(1).start();
+
+      try {
+        const res = await getAllTags();
+        const data = res.data.dataSet;
+        console.log(data);
+        if (!cancelled) {
+          setTagList(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          DialogApiError(err, openDialog, 1);
+        }
+      } finally {
+        await loading(1).stop();
+      }
+    };
+
+    void fetchTags();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  //取得userList
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchUserList = async () => {
+      loading(1).start();
+
+      try {
+        const result = await getAllUsers();
+        const userData = result.data.dataSet;
+        console.log(userData);
+        if (!cancelled) {
+          setUserList(userData);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          DialogApiError(err, openDialog, 1);
+        }
+      } finally {
+        await loading(1).stop();
+      }
+    };
+
+    void fetchUserList();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <MacContainer $direction={"column"}>
@@ -60,6 +132,7 @@ export const BackStage = () => {
                 </SpanType>
               </FlexType>
             </Container>
+            {/* 電腦版 item */}
             {isMac && (
               <Flex
                 $justify={"flex-start"}
@@ -68,33 +141,23 @@ export const BackStage = () => {
                   margin: "16px",
                 }}
               >
-                <BackCard
-                  onClick={() => {
-                    void navigate("tags");
-                  }}
-                  img={<Tags size={30} />}
-                  title="標籤管理"
-                  num={"100"}
-                />
-                <BackCard
-                  onClick={() => {
-                    void navigate("backStageCourse");
-                  }}
-                  img={<ClipboardCheck size={30} />}
-                  title="課程審核"
-                  num={"100"}
-                />
-                <BackCard
-                  onClick={() => {
-                    void navigate("userList");
-                  }}
-                  img={<Users size={30} />}
-                  title="使用者"
-                  num={"155"}
-                />
+                {item.map((item, index) => {
+                  const Icon = icons[index];
+                  return (
+                    <BackCard
+                      key={item}
+                      onClick={() => {
+                        void navigate(url[index]);
+                      }}
+                      img={<Icon size={30} />}
+                      title={item}
+                      num={"100"}
+                    />
+                  );
+                })}
               </Flex>
             )}
-            {/* item */}
+            {/* 手機板 item */}
             {!isMac && (
               <Swiper
                 initialSlide={Math.max(initialSlide, 0)}
@@ -140,7 +203,7 @@ export const BackStage = () => {
           </FlexAbs>
         </FlexRelative>
       </Flex>
-      <Outlet />
+      <Outlet context={{ tagList, setTagList, userList, setUserList }} />
     </MacContainer>
   );
 };

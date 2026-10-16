@@ -23,15 +23,23 @@ import dayjs from "dayjs";
 import { DeviceCloseByUserId, personal } from "../../api/profile.api";
 import { useEffect, useState } from "react";
 
-import type { OptionItem } from "../../types/select";
+import type { OptionItem } from "../../types/selectType";
+import type { DeviceProps } from "../../types/profileType";
+import type { UseUserProps } from "../../types/userType";
 import { useLoading } from "../../context/loading/useLoading";
 import { LoadingUi } from "../../components/loading/loading";
 
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import type { ProfileContext } from "../../types/profile";
 import { useUser } from "../../context/user/useUser";
+
+type ProfileContext = {
+  userList: UseUserProps;
+  setUserList: React.Dispatch<React.SetStateAction<UseUserProps>>;
+  device: DeviceProps[] | undefined;
+  setDevice: React.Dispatch<React.SetStateAction<DeviceProps[] | undefined>>;
+};
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
@@ -50,7 +58,7 @@ export const Personal = () => {
     loading(1).start();
     try {
       const res = await personal();
-      const data = res.data;
+      const data = res.data.dataSet;
       setUser({ ...user, userName: data.userDate.userName });
       setUserList(data.userDate);
       setDevice(data.deviceDate);
@@ -82,7 +90,7 @@ export const Personal = () => {
       loading(1).start();
       try {
         const res = await personal();
-        const data = res.data;
+        const data = res.data.dataSet;
         if (!cancelled) {
           setDevice(data.deviceDate);
           setUserList(data.userDate);
@@ -152,7 +160,7 @@ export const Personal = () => {
       1,
     );
   };
-  const time = isTablet ? "YYYY年MM月DD日 hh:mm" : "YYYY年MM月DD日 ";
+  const time = isTablet ? "YYYY年MM月DD日 hh:mm" : "YYYY年MM月DD日";
   const createdAt = userList?.createdAt
     ? dayjs(userList.createdAt).format(time)
     : "未填寫";

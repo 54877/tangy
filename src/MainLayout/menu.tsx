@@ -14,6 +14,7 @@ import { useAuth } from "../context/auth/useAuth";
 import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { useUser } from "../context/user/useUser";
+import { LayoutDashboard } from "lucide-react";
 
 type UiType = {
   logout: () => void;
@@ -29,12 +30,19 @@ export const UserMenu = ({ logout, loading, close }: UiType) => {
   const { token } = useAuth();
   const { user } = useUser();
   const { getMe } = useMe();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       void getMe();
     }
   }, []);
+
+  //前往後台button
+  const backStageButton = () => {
+    close();
+    void navigate("/backStage/tags");
+  };
 
   return (
     <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
@@ -45,12 +53,24 @@ export const UserMenu = ({ logout, loading, close }: UiType) => {
         </SpanType>
       </UserLi>
       <UserList close={close} />
-      <UserListButton
-        onClick={logout}
-        as={"div"}
-        icon={<LogoutOutlinedIcon />}
-        text={loading ? <LoadingUi type={"button"} /> : "登出"}
-      />
+      {user.role === "admin" && (
+        <div style={{ marginTop: "8px" }}>
+          <UserListButton
+            onClick={backStageButton}
+            as={"div"}
+            icon={<LayoutDashboard />}
+            text={"後台管理"}
+          />
+        </div>
+      )}
+      <div style={{ marginTop: "8px" }}>
+        <UserListButton
+          onClick={logout}
+          as={"div"}
+          icon={<LogoutOutlinedIcon />}
+          text={loading ? <LoadingUi type={"button"} /> : "登出"}
+        />
+      </div>
     </UserListMenu>
   );
 };

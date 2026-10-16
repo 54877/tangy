@@ -1,6 +1,6 @@
 // src/context/AuthContext.tsx
 import { useEffect, useMemo, useState } from "react";
-import type { UseUserProps } from "../../types/authType";
+import type { UseUserProps } from "../../types/userType";
 import { useUserInit } from "../../constants/user";
 import { UserContext } from "./UserContext";
 

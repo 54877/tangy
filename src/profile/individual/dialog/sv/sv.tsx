@@ -6,7 +6,7 @@ import { useDialog } from "../../../../context/dialog/useDialog";
 import { SpanType } from "../../../../styles/components/span";
 import { useActiveDialog } from "../../../../utils/dialogLayer";
 import { ProfileButton } from "../edit/editDialog.styled";
-import type { SVProps } from "../../../../types/profile";
+import type { SVProps } from "../../../../types/profileType";
 import { SVInit } from "../../../../constants/profile";
 import { useInformation } from "../../../../utils/information";
 import { useState } from "react";

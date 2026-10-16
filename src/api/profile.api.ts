@@ -1,9 +1,9 @@
-import type { CoursePayload } from "../types/createType";
+import type { CoursePayload } from "../types/createCourseType";
 import type {
   ProfileDetailProps,
   SVProps,
   UpdatePasswordProps,
-} from "../types/profile";
+} from "../types/profileType";
 import { createTokenApi } from "./utils/createApi";
 
 const _personal = createTokenApi("personal");

@@ -1,4 +1,3 @@
-import course_1 from "../assets/icon_tangy/course_1.png";
 import tangyNew from "../assets/icon_tangy/tangyNew.png";
 import tangyMap_2 from "../assets/icon_tangy/tangyMap-2.png";
 import tangyMap_3 from "../assets/icon_tangy/tangyMap-3.png";
@@ -153,30 +152,7 @@ export function Index() {
           title="新手推薦"
           secTitle="打好基礎，啟航財富之旅"
           ImgWidth={"50%"}
-          cardData={[
-            {
-              imgSrc: course_1,
-              title: "理財新手財務啟蒙之旅入門指南",
-              name: "碳吉老師",
-              stars: "4.5",
-              tag: [],
-              people: "8,932",
-              time: "4.6小時",
-              price: "3,600",
-              originalPrice: "5,800",
-            },
-            {
-              imgSrc: course_1,
-              title: "理財新手財務啟蒙之旅入門指南2",
-              name: "碳吉老師2",
-              stars: "4.52",
-              tag: [],
-              people: "8,9322",
-              time: "4.62小時",
-              price: "3,6002",
-              originalPrice: "5,8002",
-            },
-          ]}
+          cardData={[]}
         />
         <CourseMap
           imgSrc={tangyMap_2}
@@ -184,61 +160,14 @@ export function Index() {
           reverse={true}
           secTitle="建立家庭儲蓄，提升投資能力"
           ImgWidth={"50%"}
-          cardData={[
-            {
-              imgSrc: course_1,
-              title: "理財新手財務啟蒙之旅入門指南",
-              name: "碳吉老師",
-              stars: "4.5",
-              people: "8,932",
-              time: "4.6小時",
-              tag: [],
-              price: "3,600",
-              originalPrice: "5,800",
-            },
-            {
-              imgSrc: course_1,
-              title:
-                "之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南之旅入門指南 之旅入門指南 之旅入門指南 之旅入門指南",
-              name: "碳吉老師2",
-              stars: "4.52",
-              people: "8,9322",
-              tag: [],
-              time: "4.62小時",
-              price: "3,6002",
-              originalPrice: "5,8002",
-            },
-          ]}
+          cardData={[]}
         />
         <CourseMap
           imgSrc={tangyMap_3}
           title="退休推薦"
           secTitle="財富自由，掌握未來！"
           ImgWidth={"50%"}
-          cardData={[
-            {
-              imgSrc: course_1,
-              title: "理財新手財務啟蒙之旅入門指南",
-              name: "碳吉老師",
-              tag: [],
-              stars: "4.5",
-              people: "8,932",
-              time: "4.6小時",
-              price: "3,600",
-              originalPrice: "5,800",
-            },
-            {
-              imgSrc: course_1,
-              title: "理財新手財務啟蒙之旅入門指南2",
-              name: "碳吉老師2",
-              stars: "4.52",
-              tag: [],
-              people: "8,9322",
-              time: "4.62小時",
-              price: "3,6002",
-              originalPrice: "5,8002",
-            },
-          ]}
+          cardData={[]}
         />
       </IndexBox>
       {/* 碳吉好學院 */}

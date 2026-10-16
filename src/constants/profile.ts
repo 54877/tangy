@@ -1,4 +1,4 @@
-import type { UseUserProps } from "../types/authType";
+import type { UseUserProps } from "../types/userType";
 
 export const profileDetailInit = {
   id: "",

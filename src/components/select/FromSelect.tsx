@@ -3,7 +3,7 @@ import type { FormError, StringKeys } from "../../types/errorType";
 import { DescriptionTitle } from "../dateTime/dateTime.style";
 import { Flex } from "../Input/Input.styled";
 import { StyledSelect } from "./select.styled";
-import type { OptionItem } from "../../types/select";
+import type { OptionItem } from "../../types/selectType";
 import type { ReactNode } from "react";
 
 interface Props<T, L extends OptionItem> {

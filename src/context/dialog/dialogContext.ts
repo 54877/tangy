@@ -1,7 +1,7 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
-import type { UseUserProps } from "../../types/authType";
-import type { OptionItem } from "../../types/select";
-import type { DeviceProps } from "../../types/profile";
+import type { UseUserProps } from "../../types/userType";
+import type { OptionItem } from "../../types/selectType";
+import type { DeviceProps } from "../../types/profileType";
 
 //dialog類型
 export type DialogType =

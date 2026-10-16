@@ -14,7 +14,7 @@ import { FromInput } from "../../components/Input/Input";
 import { FromFileInput } from "../../components/FileInput/FromFileInput";
 import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
-import type { CoursePayload } from "../../types/createType";
+import type { CoursePayload } from "../../types/createCourseType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
 import { useState } from "react";
 import { Flex } from "../../components/Input/Input.styled";

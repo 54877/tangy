@@ -1,16 +1,41 @@
 import { useMediaQuery } from "@mui/material";
+import type { ReactNode } from "react";
 import { Flex } from "../../components/Input/Input.styled";
 import { Heading, SpanType } from "../../styles/components/span";
-import type {
-  ProfileDeviceInfoItemProps,
-  ProfileInfoItemProps,
-  ProfileInfoItemTitleProps,
-  ProfileSafetyInfoItemProps,
-} from "../../types/profile";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { media } from "../../styles/helper/media";
 import { Content } from "./personal.styled";
+
+interface ProfileInfoItemTitleProps {
+  icon: ReactNode;
+  secContext?: string;
+  context: string;
+  RightButton?: ReactNode;
+}
+
+interface ProfileInfoItemProps {
+  icon: ReactNode;
+  title: string;
+  text: string;
+  type?: boolean;
+}
+
+interface ProfileSafetyInfoItemProps {
+  borderType?: boolean;
+  icon: ReactNode;
+  title: string;
+  secTitle: string;
+  onclick?: () => void;
+}
+
+interface ProfileDeviceInfoItemProps {
+  borderType?: boolean;
+  icon: ReactNode;
+  title: string;
+  isCurrent: boolean;
+  onclick?: () => void;
+}
 
 export const ProfileInfoItemTitle = ({
   icon,
