@@ -27,6 +27,6 @@ export function formValidate<T extends object>({
   console.log("表單驗證", errors);
   if (Object.keys(errors).length === 0) {
     console.log("表單驗證-執行function");
-    fn();
+    void fn();
   }
 }

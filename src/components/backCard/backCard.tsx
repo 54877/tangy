@@ -8,11 +8,18 @@ type BackCardType = {
   num: string;
   img: ReactNode;
   onClick: () => void;
+  isActive: boolean;
 };
 
-export const BackCard = ({ title, num, onClick, img }: BackCardType) => {
+export const BackCard = ({
+  title,
+  num,
+  onClick,
+  img,
+  isActive,
+}: BackCardType) => {
   return (
-    <CardContainer onClick={onClick}>
+    <CardContainer onClick={onClick} $active={isActive}>
       <Flex>{img}</Flex>
       <Flex $direction={"column"}>
         <SpanType

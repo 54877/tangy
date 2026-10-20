@@ -9,6 +9,7 @@ interface DialogBaseProps {
   context: ReactNode;
   title?: ReactNode;
   onClose: () => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 }
 
 export const DialogBase = ({
@@ -16,11 +17,13 @@ export const DialogBase = ({
   context,
   title,
   onClose,
+  onKeyDown,
   width = "90%",
 }: DialogBaseProps) => {
   return (
     <Modal open={!!type}>
       <Container
+        onKeyDown={onKeyDown}
         style={{
           width: width,
         }}

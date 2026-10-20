@@ -2,6 +2,7 @@ import { createContext, type Dispatch, type SetStateAction } from "react";
 import type { UseUserProps } from "../../types/userType";
 import type { OptionItem } from "../../types/selectType";
 import type { DeviceProps } from "../../types/profileType";
+import type { TagsListType } from "../../types/backStageType";
 
 //dialog類型
 export type DialogType =
@@ -10,6 +11,7 @@ export type DialogType =
   | "UpdatePasswordDialog"
   | "SVDialog"
   | "MessageDialog"
+  | "TagsDialog"
   | "ImageCropDialog";
 
 //共用props類型
@@ -28,6 +30,9 @@ export interface BaseDialogData {
   cropAspectRatio?: number;
   cropRadius?: number | string;
   cropTitle?: string;
+  tag?: TagsListType;
+  tagsApi?: (row: TagsListType) => Promise<void>;
+  onConfirm?: () => Promise<void>;
 }
 
 //層數props類型

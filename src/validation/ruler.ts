@@ -42,6 +42,7 @@ const LENGTH_RULES: Partial<Record<string, number>> = {
   price: 10,
   originalPrice: 10,
   videoKey: 47,
+  label: 10,
 };
 
 //必填通用規則表

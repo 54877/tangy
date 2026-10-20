@@ -16,7 +16,7 @@ import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
 import type { CoursePayload } from "../../types/createCourseType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
 import { createCourse, createCourseVideo } from "../../api/profile.api";
@@ -26,21 +26,7 @@ import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { formValidate } from "../../utils/formValidate";
 import MultiSelectDropdown from "../../components/TagSelector/MultiSelectDropdown";
-
-const COURSE_TAGS = [
-  { key: "finance-management", label: "財務管理" },
-  { key: "investment", label: "投資理財" },
-  { key: "beginner", label: "新手入門" },
-  { key: "career-skills", label: "職場技能" },
-  { key: "personal-finance", label: "生活理財" },
-  { key: "digital-tools", label: "數位工具" },
-  { key: "marketing", label: "行銷企劃" },
-  { key: "self-growth", label: "自我成長" },
-  { key: "python", label: "Python" },
-  { key: "javascript", label: "JavaScript" },
-  { key: "react", label: "React" },
-  { key: "data-analysis", label: "資料分析" },
-];
+import { useTags } from "../../context/tags/useTags";
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -58,11 +44,16 @@ const initialCourse: CoursePayload = {
 };
 
 export function CreateCourse() {
+  const { tagList, tagsApi } = useTags();
   const { information, handleOnChange, setInformation } =
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
   const isLoading = useLoadingState(3);
+
+  useEffect(() => {
+    void tagsApi();
+  }, [tagsApi]);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -181,7 +172,7 @@ export function CreateCourse() {
               fieldKey="tags"
               information={information}
               onChange={handleOnChange}
-              options={COURSE_TAGS}
+              options={tagList ?? []}
               labelKey="label"
               valueKey="key"
               err={err}

@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Flex } from "../components/Input/Input.styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -20,15 +20,14 @@ import { SpanType } from "../styles/components/span";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { BackCard } from "../components/backCard/backCard";
-import { useEffect, useState } from "react";
-import { useLoading } from "../context/loading/useLoading";
-import { getAllTags, getAllUsers } from "../api/backStage";
+import { useCallback, useEffect, useState } from "react";
+import { getAllUsers } from "../api/backStage.api";
 import { DialogApiError } from "../utils/apiError";
 import { useDialog } from "../context/dialog/useDialog";
 import type { UseUserProps } from "../types/userType";
-import type { TagsListType } from "../types/backStageType";
 
 export const BackStage = () => {
+  const location = useLocation();
   const item = ["標籤管理", "課程審核", "使用者"];
   const url = ["tags", "backStageCourse", "userList"];
   const icons = [Tags, ClipboardCheck, Users];
@@ -39,68 +38,32 @@ export const BackStage = () => {
   const isBannerMac = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
   const navigate = useNavigate();
-  const [tagList, setTagList] = useState<TagsListType[]>();
   const [userList, setUserList] = useState<UseUserProps[]>();
-  const { loading } = useLoading();
 
-  //取得tagsList
+  //userList api
+  const loadUserList = useCallback(async () => {
+    try {
+      const res = await getAllUsers();
+      return res.data.dataSet;
+    } catch (err) {
+      DialogApiError(err, openDialog, 1);
+      return undefined;
+    }
+  }, [openDialog]);
+
+  //更新userList State
+  const refreshUserList = useCallback(async () => {
+    const data = await loadUserList();
+    if (data) {
+      setUserList(data);
+    }
+  }, [loadUserList, setUserList]);
+
+  // 初次載入userList
   useEffect(() => {
-    let cancelled = false;
-
-    const fetchTags = async () => {
-      loading(1).start();
-
-      try {
-        const res = await getAllTags();
-        const data = res.data.dataSet;
-        console.log(data);
-        if (!cancelled) {
-          setTagList(data);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          DialogApiError(err, openDialog, 1);
-        }
-      } finally {
-        await loading(1).stop();
-      }
-    };
-
-    void fetchTags();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  //取得userList
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchUserList = async () => {
-      loading(1).start();
-
-      try {
-        const result = await getAllUsers();
-        const userData = result.data.dataSet;
-        console.log(userData);
-        if (!cancelled) {
-          setUserList(userData);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          DialogApiError(err, openDialog, 1);
-        }
-      } finally {
-        await loading(1).stop();
-      }
-    };
-
-    void fetchUserList();
-
-    return () => {
-      cancelled = true;
-    };
+    void loadUserList().then((data) => {
+      if (data) setUserList(data);
+    });
   }, []);
 
   return (
@@ -146,6 +109,7 @@ export const BackStage = () => {
                   return (
                     <BackCard
                       key={item}
+                      isActive={location.pathname.endsWith(`/${url[index]}`)}
                       onClick={() => {
                         void navigate(url[index]);
                       }}
@@ -203,7 +167,13 @@ export const BackStage = () => {
           </FlexAbs>
         </FlexRelative>
       </Flex>
-      <Outlet context={{ tagList, setTagList, userList, setUserList }} />
+      <Outlet
+        context={{
+          userList,
+          setUserList,
+          refreshUserList,
+        }}
+      />
     </MacContainer>
   );
 };
