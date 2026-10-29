@@ -19,14 +19,22 @@ import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
 import { useEffect, useState } from "react";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
-import { createCourse, createCourseVideo } from "../../api/profile.api";
+import {
+  createCourse,
+  createCourseVideo,
+  getCourseFormOptions,
+} from "../../api/profile.api";
 import { handleApiError } from "../../utils/apiError";
 import type { FormError } from "../../types/errorType";
 import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { formValidate } from "../../utils/formValidate";
 import MultiSelectDropdown from "../../components/TagSelector/MultiSelectDropdown";
-import { useTags } from "../../context/tags/useTags";
+import { FormSelect } from "../../components/select/FromSelect";
+import type {
+  CourseCategoryType,
+  TagsListType,
+} from "../../types/backStageType";
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -37,14 +45,16 @@ const initialCourse: CoursePayload = {
   content: "",
   price: "",
   originalPrice: "",
-  tags: [],
+  categoryKey: "",
+  tagsKey: [],
   image: null,
   video: null,
   videoKey: "",
 };
 
 export function CreateCourse() {
-  const { tagList, tagsApi } = useTags();
+  const [tagList, setTagList] = useState<TagsListType[]>([]);
+  const [categoryList, setCategoryList] = useState<CourseCategoryType[]>([]);
   const { information, handleOnChange, setInformation } =
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
@@ -52,8 +62,18 @@ export function CreateCourse() {
   const isLoading = useLoadingState(3);
 
   useEffect(() => {
-    void tagsApi();
-  }, [tagsApi]);
+    const loadFormOptions = async () => {
+      try {
+        const res = await getCourseFormOptions();
+        const options = res.data.dataSet;
+        setTagList(options.tags ?? []);
+        setCategoryList(options.categories ?? []);
+      } catch (err) {
+        handleApiError(err, setErr);
+      }
+    };
+    void loadFormOptions();
+  }, []);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +91,8 @@ export function CreateCourse() {
         "content",
         "price",
         "originalPrice",
-        "tags",
+        "categoryKey",
+        "tagsKey",
         "image",
         "video",
       ],
@@ -166,10 +187,23 @@ export function CreateCourse() {
               placeholder="例如：5800"
             />
 
+            <FormSelect
+              err={err}
+              title="課程分類"
+              required
+              fieldKey="categoryKey"
+              information={information}
+              onChange={handleOnChange}
+              list={categoryList}
+              labelKey="CategoryName"
+              valueKey="categoryKey"
+              defaultName="請選擇課程分類"
+            />
+
             <MultiSelectDropdown
               title="課程標籤"
               required
-              fieldKey="tags"
+              fieldKey="tagsKey"
               information={information}
               onChange={handleOnChange}
               options={tagList ?? []}

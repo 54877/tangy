@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.button<{ $active: boolean }>`
-  max-width: 30%;
   width: 100%;
+  min-width: 0;
+  flex: 1 1 0;
   box-shadow: 0px 7px 29px 0px #64646f33;
   padding: 24px 0;
   background-color: rgba(255, 255, 255, 0.5);

@@ -10,7 +10,7 @@ import { UpdatePasswordDialog } from "../../profile/individual/dialog/updatePass
 import { SVDialog } from "../../profile/individual/dialog/sv/sv";
 import { MessageDialog } from "../../components/dialog/common/MessageDialog";
 import { ImageCropDialog } from "../../components/FileInput/ImageCropDialog";
-import { TagsDialog } from "../../backStage/tags/tagsDialog";
+import { TextInputDialog } from "../../components/dialog/common/TextInputDialog";
 
 //context參數
 interface Props {
@@ -114,9 +114,9 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "SVDialog" && <SVDialog />}
       {dialogState.first?.type === "MessageDialog" && <MessageDialog />}
       {dialogState.first?.type === "ImageCropDialog" && <ImageCropDialog />}
-      {dialogState.first?.type === "TagsDialog" && (
-        <TagsDialog
-          key={`${dialogState.first.tag?.key ?? "new"}-${dialogState.first.title ?? ""}`}
+      {dialogState.first?.type === "TextInputDialog" && (
+        <TextInputDialog
+          key={`${dialogState.first.inputValue ?? "new"}-${dialogState.first.title ?? ""}`}
         />
       )}
       {dialogState.first?.type === "UpdatePasswordDialog" && (

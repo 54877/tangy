@@ -17,6 +17,7 @@ const _DeviceCloseByUserId = createTokenApi("DeviceCloseByUserId");
 const _createCourseVideo = createTokenApi("createCourseVideo");
 const _createCourse = createTokenApi("createCourse");
 const _updateUserImage = createTokenApi("updateUserImage");
+export const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
 
 export const personal = async () => {
   return await _personal.get("/");
@@ -81,18 +82,23 @@ export const createCourseVideo = async (information: CoursePayload) => {
 
 export const createCourse = async (information: CoursePayload) => {
   const formData = new FormData();
-
+  console.log(information);
   formData.append("title", information.title);
   formData.append("teacher", information.teacher);
   formData.append("price", information.price);
   formData.append("originalPrice", information.originalPrice);
   formData.append("content", information.content);
   formData.append("duration", information.duration);
+  formData.append("categoryKey", information.categoryKey);
   formData.append("videoKey", information.videoKey);
+  formData.append("tagsKey", JSON.stringify(information.tagsKey));
 
   // File
   if (information.image) {
     formData.append("image", information.image);
+  }
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
   }
   return await _createCourse.post("/", formData);
 };
@@ -104,4 +110,9 @@ export const updateUserImage = async (image: File) => {
     formData.append("image", image);
   }
   return await _updateUserImage.put("/", formData);
+};
+
+//課程建立表單選項（標籤、課程分類等）
+export const getCourseFormOptions = async () => {
+  return await _getCourseFormOptions.get("/");
 };

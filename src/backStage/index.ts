@@ -1,6 +1,7 @@
 import backStageCourse from "./backStageCourse";
 import userList from "./userList";
 import tags from "./tags";
+import category from "./category";
 
 export default {
   path: "backStage",
@@ -10,5 +11,5 @@ export default {
     return { Component: BackStage };
   },
 
-  children: [tags, backStageCourse, userList],
+  children: [tags, backStageCourse, userList, category],
 };

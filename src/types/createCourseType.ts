@@ -7,7 +7,8 @@ export type CoursePayload = {
   content: string;
   price: string;
   originalPrice: string;
-  tags: string[];
+  categoryKey: string;
+  tagsKey: string[];
   image: File | null;
   video: File | null;
   videoKey: string;

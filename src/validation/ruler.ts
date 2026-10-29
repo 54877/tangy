@@ -43,6 +43,7 @@ const LENGTH_RULES: Partial<Record<string, number>> = {
   originalPrice: 10,
   videoKey: 47,
   label: 10,
+  name: 10,
 };
 
 //必填通用規則表
@@ -84,17 +85,44 @@ export function getCommonValidators<T>(
     ],
     oldPassword: () => [requiredString<T>("請輸入舊密碼")],
     userName: () => [requiredString<T>("請輸入使用者名稱")],
+    name: () => [requiredString<T>("請輸入名稱")],
     code: () => [requiredString<T>("請輸入驗證碼")],
 
     title: () => [requiredString<T>("請輸入課程標題")],
 
     teacher: () => [requiredString<T>("請輸入講師名稱")],
 
-    price: () => [requiredString<T>("請輸入課程售價")],
+    price: () => [
+      requiredString<T>("請輸入課程售價"),
+      (v) => {
+        if (typeof v !== "string") {
+          return "請輸入字串";
+        }
 
-    originalPrice: () => [requiredString<T>("請輸入課程原價")],
+        if (!/^(0|[1-9]\d*)$/.test(v)) {
+          return "只能輸入 0~9 的數字，且不可輸入 0 開頭的數字";
+        }
+        return "";
+      },
+    ],
 
+    originalPrice: () => [
+      requiredString<T>("請輸入課程原價"),
+      (v) => {
+        if (typeof v !== "string") {
+          return "請輸入字串";
+        }
+
+        if (!/^(0|[1-9]\d*)$/.test(v)) {
+          return "只能輸入 0~9 的數字，且不可輸入 0 開頭的數字";
+        }
+        return "";
+      },
+    ],
+
+    categoryKey: () => [requiredString<T>("請選擇課程分類")],
     tags: () => [requiredArray<T>("請至少選擇一個課程標籤")],
+    tagsKey: () => [requiredArray<T>("請至少選擇一個課程標籤")],
 
     image: () => [
       (v) => {

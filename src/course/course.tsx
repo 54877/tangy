@@ -12,21 +12,9 @@ import { FlexType } from "../styles/components/flex";
 import { Box, useMediaQuery } from "@mui/material";
 import { media } from "../styles/helper/media";
 import { useLoading } from "../context/loading/useLoading";
-import { getCourse } from "../api/course.api";
+import { getCourse, type CourseType } from "../api/course.api";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
-
-interface CourseType {
-  id: string;
-  imageUrl: string;
-  originalPrice: string;
-  price: string;
-  rating: string;
-  studentCount: string;
-  teacher: string;
-  title: string;
-  duration: string;
-}
 
 export const Course = () => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -35,7 +23,6 @@ export const Course = () => {
   const { loading } = useLoading();
   const isTablet = useMediaQuery(`${media.md}`);
   const [cardData, setCardData] = useState<CourseType[]>([]);
-  const tag = ["新手入門", "2024推薦", "新手入門"];
   const item = [
     "所有領域",
     "個人理財",
@@ -51,12 +38,15 @@ export const Course = () => {
     loading(1).start();
     try {
       const res = await getCourse();
-      const data = res.data.dataSet;
+      const data = res.data.dataSet.map((course) => ({
+        ...course,
+        tags: course.tags?.length ? course.tags : ["14"],
+      }));
       setCardData(data);
     } catch (err) {
       console.error(err);
     } finally {
-      loading(1).stop();
+      void loading(1).stop();
     }
   };
 
@@ -222,7 +212,7 @@ export const Course = () => {
             cardData.map((item, index) => (
               <Card
                 key={`${item.title}-${index}`}
-                tag={tag}
+                tag={item.tags}
                 {...item}
                 macType={true}
                 lgWidth={"32.12%"}

@@ -5,7 +5,6 @@ import { AuthProvider } from "./auth/AuthProvider";
 import { Outlet } from "react-router-dom";
 import { LoadingProvider } from "./loading/loadingProvider";
 import { UserProvider } from "./user/UserProvider";
-import { TagsProvider } from "./tags/TagsProvider";
 
 export const AppProviders = () => {
   return (
@@ -15,9 +14,7 @@ export const AppProviders = () => {
         <UserProvider>
           <AuthProvider>
             <FormDialogProvider>
-              <TagsProvider>
-                <Outlet />
-              </TagsProvider>
+              <Outlet />
             </FormDialogProvider>
           </AuthProvider>
         </UserProvider>

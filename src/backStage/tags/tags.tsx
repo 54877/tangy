@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { type TableColumn } from "react-data-table-component";
 import { IconButton } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -10,11 +10,15 @@ import { Heading } from "../../styles/components/span";
 import { Button } from "../../components/Button/Button";
 import dayjs from "dayjs";
 import { LoadingUi } from "../../components/loading/loading";
-import { createTag as createTagRequest, deleteTag as deleteTagRequest, editTag as editTagRequest } from "../../api/backStage.api";
+import {
+  createTag as createTagRequest,
+  deleteTag as deleteTagRequest,
+  editTag as editTagRequest,
+} from "../../api/backStage.api";
 import { useDialog } from "../../context/dialog/useDialog";
 import { useLoading } from "../../context/loading/useLoading";
 import { DialogApiError } from "../../utils/apiError";
-import { useTags } from "../../context/tags/useTags";
+import type { BackStageContext } from "../../types/backStageType";
 
 interface TagActionsProps {
   row: TagsListType;
@@ -45,19 +49,15 @@ const TagActions = ({ row, onEdit, onDelete }: TagActionsProps) => (
 );
 
 export const Tags = () => {
-  const { tagList, tagsApi } = useTags();
+  const { tagList, refreshTagList } = useOutletContext<BackStageContext>();
   const { openDialog } = useDialog();
   const { loading } = useLoading();
 
-  useEffect(() => {
-    void tagsApi();
-  }, [tagsApi]);
-
-  const createTag = async (row: TagsListType) => {
+  const createTag = async (label: string) => {
     loading(2).start();
     try {
-      await createTagRequest(row.label);
-      await tagsApi();
+      await createTagRequest(label);
+      await refreshTagList();
     } catch (err) {
       DialogApiError(err, openDialog, 1);
     } finally {
@@ -65,11 +65,11 @@ export const Tags = () => {
     }
   };
 
-  const editTag = async (row: TagsListType) => {
+  const editTag = async (row: TagsListType, label: string) => {
     loading(2).start();
     try {
-      await editTagRequest(row.key, row.label);
-      await tagsApi();
+      await editTagRequest(row.key, label);
+      await refreshTagList();
     } catch (err) {
       DialogApiError(err, openDialog, 1);
     } finally {
@@ -81,7 +81,7 @@ export const Tags = () => {
     loading(2).start();
     try {
       await deleteTagRequest(row.key);
-      await tagsApi();
+      await refreshTagList();
     } catch (err) {
       DialogApiError(err, openDialog, 1);
     } finally {
@@ -92,10 +92,11 @@ export const Tags = () => {
   const handleEditClick = (row: TagsListType) => {
     openDialog(
       {
-        type: "TagsDialog",
+        type: "TextInputDialog",
         title: "編輯標籤",
-        tag: row,
-        tagsApi: editTag,
+        inputTitle: "標籤名稱",
+        inputValue: row.label,
+        onInputSubmit: (label) => editTag(row, label),
       },
       1,
     );
@@ -156,9 +157,10 @@ export const Tags = () => {
           onClick={() =>
             openDialog(
               {
-                type: "TagsDialog",
+                type: "TextInputDialog",
                 title: "新增標籤",
-                tagsApi: createTag,
+                inputTitle: "標籤名稱",
+                onInputSubmit: createTag,
               },
               1,
             )

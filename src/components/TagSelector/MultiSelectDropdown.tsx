@@ -48,7 +48,14 @@ export default function MultiSelectDropdown<
 
   return (
     <Flex $direction="column" $gap="sm" $justify="center" $align="flex-start">
-      <DescriptionTitle required={required}>{title}</DescriptionTitle>
+      <Flex $align="center" $justify="flex-start" $gap="sm">
+        <DescriptionTitle required={required}>{title}</DescriptionTitle>
+        {maxSelected !== undefined && (
+          <SpanType $size="xs" $shade={600}>
+            已選 {value.length}/{maxSelected} 個標籤
+          </SpanType>
+        )}
+      </Flex>
       <Autocomplete<L, true, false, false>
         multiple
         disableCloseOnSelect
@@ -78,11 +85,6 @@ export default function MultiSelectDropdown<
           />
         )}
       />
-      {maxSelected !== undefined && (
-        <SpanType $size="xs" $shade={600}>
-          已選 {value.length}/{maxSelected} 個標籤
-        </SpanType>
-      )}
     </Flex>
   );
 }

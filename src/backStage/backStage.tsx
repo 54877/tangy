@@ -20,17 +20,25 @@ import { SpanType } from "../styles/components/span";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { BackCard } from "../components/backCard/backCard";
-import { useCallback, useEffect, useState } from "react";
-import { getAllUsers } from "../api/backStage.api";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  getAllCourseCategories,
+  getAllTags,
+  getAllUsers,
+} from "../api/backStage.api";
 import { DialogApiError } from "../utils/apiError";
 import { useDialog } from "../context/dialog/useDialog";
+import type {
+  CourseCategoryType,
+  TagsListType,
+} from "../types/backStageType";
 import type { UseUserProps } from "../types/userType";
 
 export const BackStage = () => {
   const location = useLocation();
-  const item = ["標籤管理", "課程審核", "使用者"];
-  const url = ["tags", "backStageCourse", "userList"];
-  const icons = [Tags, ClipboardCheck, Users];
+  const item = ["標籤管理", "使用者", "課程管理", "課程分類"];
+  const url = ["tags", "userList", "backStageCourse", "category"];
+  const icons = [Tags, Users, ClipboardCheck, ClipboardCheck];
   const initialSlide = url.findIndex((item) =>
     location.pathname.endsWith(`/${item}`),
   );
@@ -39,6 +47,10 @@ export const BackStage = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const navigate = useNavigate();
   const [userList, setUserList] = useState<UseUserProps[]>();
+  const [tagList, setTagList] = useState<TagsListType[]>();
+  const [categoryList, setCategoryList] = useState<CourseCategoryType[]>();
+  const tagListRequestStarted = useRef(false);
+  const categoryListRequestStarted = useRef(false);
 
   //userList api
   const loadUserList = useCallback(async () => {
@@ -59,12 +71,58 @@ export const BackStage = () => {
     }
   }, [loadUserList, setUserList]);
 
+  const loadTagList = useCallback(async () => {
+    try {
+      const res = await getAllTags();
+      return res.data.dataSet as TagsListType[];
+    } catch (err) {
+      DialogApiError(err, openDialog, 1);
+      return [];
+    }
+  }, [openDialog]);
+
+  const refreshTagList = useCallback(async () => {
+    const data = await loadTagList();
+    setTagList(data ?? []);
+  }, [loadTagList]);
+
+  const loadCategoryList = useCallback(async () => {
+    try {
+      const res = await getAllCourseCategories();
+      return res.data.dataSet as CourseCategoryType[];
+    } catch (err) {
+      DialogApiError(err, openDialog, 1);
+      return [];
+    }
+  }, [openDialog]);
+
+  const refreshCategoryList = useCallback(async () => {
+    const data = await loadCategoryList();
+    setCategoryList(data ?? []);
+  }, [loadCategoryList]);
+
   // 初次載入userList
   useEffect(() => {
     void loadUserList().then((data) => {
       if (data) setUserList(data);
     });
-  }, []);
+  }, [loadUserList]);
+
+  // Lists live in this parent so switching child routes keeps their loaded state.
+  useEffect(() => {
+    if (tagList === undefined && !tagListRequestStarted.current) {
+      tagListRequestStarted.current = true;
+      void loadTagList().then((data) => {
+        setTagList(data ?? []);
+      });
+    }
+    if (categoryList === undefined && !categoryListRequestStarted.current) {
+      categoryListRequestStarted.current = true;
+      void loadCategoryList().then((data) => {
+        setCategoryList(data ?? []);
+      });
+    }
+  }, [tagList, categoryList, loadTagList, loadCategoryList]);
 
   return (
     <MacContainer $direction={"column"}>
@@ -100,8 +158,12 @@ export const BackStage = () => {
               <Flex
                 $justify={"flex-start"}
                 style={{
-                  maxWidth: "65%",
-                  margin: "16px",
+                  width: "100%",
+                  maxWidth: "100%",
+                  boxSizing: "border-box",
+                  gap: "16px",
+                  margin: "16px 0",
+                  padding: "0 16px",
                 }}
               >
                 {item.map((item, index) => {
@@ -125,7 +187,7 @@ export const BackStage = () => {
             {!isMac && (
               <Swiper
                 initialSlide={Math.max(initialSlide, 0)}
-                slidesPerView={3}
+                slidesPerView={4}
                 style={{
                   width: "100%",
                   minWidth: 0,
@@ -135,7 +197,7 @@ export const BackStage = () => {
                   borderBottom: "1px solid #ccd1d5",
                 }}
                 breakpoints={{
-                  0: {
+                  480: {
                     slidesPerView: 3,
                   },
                 }}
@@ -172,6 +234,10 @@ export const BackStage = () => {
           userList,
           setUserList,
           refreshUserList,
+          tagList,
+          refreshTagList,
+          categoryList,
+          refreshCategoryList,
         }}
       />
     </MacContainer>

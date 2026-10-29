@@ -29,6 +29,6 @@ export function DialogApiError(
       title: "系統異常",
       fileErrorMessage: data.errors.message,
     },
-    layer,
+    layer ?? 1,
   );
 }
