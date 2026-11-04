@@ -15,8 +15,12 @@ export function MessageDialog() {
   const close = () => closeDialog(activeLayer);
   const handleConfirm = async () => {
     if (isLoadingApi) return;
-    await onConfirm?.();
-    close();
+    try {
+      await onConfirm?.();
+      close();
+    } catch {
+      return;
+    }
   };
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key !== "Enter" || event.repeat || isLoadingApi) return;

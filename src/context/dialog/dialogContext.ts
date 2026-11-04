@@ -11,7 +11,8 @@ export type DialogType =
   | "SVDialog"
   | "MessageDialog"
   | "TextInputDialog"
-  | "ImageCropDialog";
+  | "ImageCropDialog"
+  | "CourseDetailDialog";
 
 //共用props類型
 export interface BaseDialogData {
@@ -33,6 +34,8 @@ export interface BaseDialogData {
   inputValue?: string;
   onInputSubmit?: (value: string) => Promise<void>;
   onConfirm?: () => Promise<void>;
+  courseId?: string;
+  onCourseReviewed?: () => Promise<void>;
 }
 
 //層數props類型

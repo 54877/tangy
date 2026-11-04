@@ -16,12 +16,38 @@ export type CourseCategoryType = {
   useCount: string;
 };
 
+export type CourseReviewStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export type AdminCourseType = {
+  id: string;
+  title: string;
+  teacher: string;
+  rating: string;
+  studentCount: string;
+  duration: string;
+  content: string;
+  price: string;
+  originalPrice: string;
+  imageUrl: string;
+  userId: string;
+  categoryKey: string;
+  reviewStatus: CourseReviewStatus;
+  tags: string[];
+  category: string;
+  userName: string;
+  email: string;
+  imageFileName: string;
+  videoUrl: string;
+};
+
 export interface BackStageContext {
-  userList: UseUserProps[] | undefined;
-  setUserList: React.Dispatch<React.SetStateAction<UseUserProps[] | undefined>>;
+  courseList: AdminCourseType[];
+  refreshCourseList: () => Promise<void>;
+  userList: UseUserProps[];
+  setUserList: React.Dispatch<React.SetStateAction<UseUserProps[]>>;
   refreshUserList: () => Promise<void>;
-  tagList: TagsListType[] | undefined;
+  tagList: TagsListType[];
   refreshTagList: () => Promise<void>;
-  categoryList: CourseCategoryType[] | undefined;
+  categoryList: CourseCategoryType[];
   refreshCategoryList: () => Promise<void>;
 }

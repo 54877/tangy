@@ -3,7 +3,7 @@ import { type TableColumn } from "react-data-table-component";
 import { IconButton } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import type { TagsListType } from "../../types/backStageType";
+import type { TagsListType, BackStageContext } from "../../types/backStageType";
 import { ReusableDataTable } from "../../components/DataTable/dataTable";
 import { Flex } from "../../components/Input/Input.styled";
 import { Heading } from "../../styles/components/span";
@@ -18,7 +18,6 @@ import {
 import { useDialog } from "../../context/dialog/useDialog";
 import { useLoading } from "../../context/loading/useLoading";
 import { DialogApiError } from "../../utils/apiError";
-import type { BackStageContext } from "../../types/backStageType";
 
 interface TagActionsProps {
   row: TagsListType;
@@ -49,7 +48,8 @@ const TagActions = ({ row, onEdit, onDelete }: TagActionsProps) => (
 );
 
 export const Tags = () => {
-  const { tagList, refreshTagList } = useOutletContext<BackStageContext>();
+  const { tagList, refreshTagList, refreshCourseList } =
+    useOutletContext<BackStageContext>();
   const { openDialog } = useDialog();
   const { loading } = useLoading();
 
@@ -70,6 +70,7 @@ export const Tags = () => {
     try {
       await editTagRequest(row.key, label);
       await refreshTagList();
+      await refreshCourseList();
     } catch (err) {
       DialogApiError(err, openDialog, 1);
     } finally {

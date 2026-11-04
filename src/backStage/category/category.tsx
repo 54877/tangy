@@ -23,7 +23,7 @@ import type {
 import { Heading } from "../../styles/components/span";
 
 export const Category = () => {
-  const { categoryList, refreshCategoryList } =
+  const { categoryList, refreshCategoryList, refreshCourseList } =
     useOutletContext<BackStageContext>();
   const { openDialog } = useDialog();
   const { loading } = useLoading();
@@ -35,6 +35,7 @@ export const Category = () => {
       await refreshCategoryList();
     } catch (err) {
       DialogApiError(err, openDialog, 1);
+      throw err;
     } finally {
       void loading(2).stop();
     }
@@ -45,6 +46,7 @@ export const Category = () => {
     try {
       if (row) {
         await editCourseCategory(row.categoryKey, name);
+        await refreshCourseList();
       } else {
         await createCourseCategory(name);
       }
@@ -143,7 +145,7 @@ export const Category = () => {
   ) : (
     <section style={{ width: "100%", padding: 16 }}>
       <Flex style={{ marginBottom: "16px" }} $justify="space-between">
-        <Heading>課程分類管理</Heading>
+        <Heading>課程分類</Heading>
         <Button text="新增課程分類" onClick={handleCreateClick} />
       </Flex>
       <ReusableDataTable columns={columns} data={categoryList} />

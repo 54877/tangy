@@ -1,8 +1,13 @@
 import { createTokenApi } from "./utils/createApi";
+import type { CourseReviewStatus } from "../types/backStageType";
 
 export const _getAllTags = createTokenApi("getAllTags");
 export const _getAllUsers = createTokenApi("getAllUsers");
 export const _getAllCourseCategories = createTokenApi("getAllCourseCategories");
+export const _getCourseAdmin = createTokenApi("getCourseAdmin");
+export const _getCourseById = createTokenApi("getCourseById");
+export const _deleteCourse = createTokenApi("deleteCourse");
+export const _reviewCourse = createTokenApi("reviewCourse");
 
 export const _createTag = createTokenApi("createTag");
 export const _deleteTag = createTokenApi("deleteTag");
@@ -27,6 +32,29 @@ export const getAllUsers = async () => {
 //課程分類列表
 export const getAllCourseCategories = async () => {
   return await _getAllCourseCategories.get("/");
+};
+
+//後台課程列表
+export const getCourseAdmin = async () => {
+  return await _getCourseAdmin.get("/");
+};
+
+//單筆課程資料
+export const getCourseById = async (id: string) => {
+  return await _getCourseById.post("/", { id });
+};
+
+//刪除課程
+export const deleteCourse = async (id: string) => {
+  return await _deleteCourse.delete("/", { data: { id } });
+};
+
+//審核課程
+export const reviewCourse = async (
+  id: string,
+  reviewStatus: CourseReviewStatus,
+) => {
+  return await _reviewCourse.put("/", { id, reviewStatus });
 };
 
 //建立標籤

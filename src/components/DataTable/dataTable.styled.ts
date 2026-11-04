@@ -38,19 +38,27 @@ export const DataTableCard = styled.div`
     -webkit-overflow-scrolling: touch;
   }
 
-  @media (max-width: 600px) {
+  /* 窄螢幕保留單行文字，欄寬由 dataTable.tsx 依內容同步計算。 */
+  @media (max-width: 860px) {
     .rdt_Table {
-      width: 100%;
-      min-width: 0;
+      width: max-content !important;
+      min-width: 100% !important;
     }
 
+    .rdt_TableCell,
+    .rdt_TableCell > div,
+    .rdt_TableCell > div > * {
+      overflow: visible !important;
+      text-overflow: clip !important;
+      white-space: nowrap !important;
+    }
+  }
+
+  @media (max-width: 600px) {
     .rdt_TableWrapper {
       max-height: 60vh;
     }
 
-    .rdt_TableCell {
-      overflow-wrap: anywhere;
-    }
   }
 `;
 

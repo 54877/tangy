@@ -11,6 +11,7 @@ import { SVDialog } from "../../profile/individual/dialog/sv/sv";
 import { MessageDialog } from "../../components/dialog/common/MessageDialog";
 import { ImageCropDialog } from "../../components/FileInput/ImageCropDialog";
 import { TextInputDialog } from "../../components/dialog/common/TextInputDialog";
+import { CourseDetailDialog } from "../../backStage/backStageCourse/courseDetailDialog";
 
 //context參數
 interface Props {
@@ -122,9 +123,13 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "UpdatePasswordDialog" && (
         <UpdatePasswordDialog />
       )}
+      {dialogState.first?.type === "CourseDetailDialog" && (
+        <CourseDetailDialog />
+      )}
       {/* --- 第二層 Dialogs --- */}
-
+      {dialogState.second?.type === "MessageDialog" && <MessageDialog />}
       {/* --- 第三層 Dialogs --- */}
+      {dialogState.third?.type === "MessageDialog" && <MessageDialog />}
     </FormDialogContext.Provider>
   );
 }

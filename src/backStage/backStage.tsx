@@ -20,15 +20,17 @@ import { SpanType } from "../styles/components/span";
 import { media } from "../styles/helper/media";
 import { useMediaQuery } from "@mui/material";
 import { BackCard } from "../components/backCard/backCard";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   getAllCourseCategories,
   getAllTags,
   getAllUsers,
+  getCourseAdmin,
 } from "../api/backStage.api";
 import { DialogApiError } from "../utils/apiError";
 import { useDialog } from "../context/dialog/useDialog";
 import type {
+  AdminCourseType,
   CourseCategoryType,
   TagsListType,
 } from "../types/backStageType";
@@ -46,11 +48,10 @@ export const BackStage = () => {
   const isBannerMac = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
   const navigate = useNavigate();
+  const [courseList, setCourseList] = useState<AdminCourseType[]>();
   const [userList, setUserList] = useState<UseUserProps[]>();
   const [tagList, setTagList] = useState<TagsListType[]>();
   const [categoryList, setCategoryList] = useState<CourseCategoryType[]>();
-  const tagListRequestStarted = useRef(false);
-  const categoryListRequestStarted = useRef(false);
 
   //userList api
   const loadUserList = useCallback(async () => {
@@ -71,58 +72,74 @@ export const BackStage = () => {
     }
   }, [loadUserList, setUserList]);
 
+  //tagList api
   const loadTagList = useCallback(async () => {
     try {
       const res = await getAllTags();
-      return res.data.dataSet as TagsListType[];
+      return res.data.dataSet;
     } catch (err) {
       DialogApiError(err, openDialog, 1);
       return [];
     }
   }, [openDialog]);
 
+  //更新tagList State
   const refreshTagList = useCallback(async () => {
     const data = await loadTagList();
     setTagList(data ?? []);
   }, [loadTagList]);
 
+  //Category api
   const loadCategoryList = useCallback(async () => {
     try {
       const res = await getAllCourseCategories();
-      return res.data.dataSet as CourseCategoryType[];
+      return res.data.dataSet;
     } catch (err) {
       DialogApiError(err, openDialog, 1);
       return [];
     }
   }, [openDialog]);
 
+  //更新Category State
   const refreshCategoryList = useCallback(async () => {
     const data = await loadCategoryList();
     setCategoryList(data ?? []);
   }, [loadCategoryList]);
 
-  // 初次載入userList
-  useEffect(() => {
-    void loadUserList().then((data) => {
-      if (data) setUserList(data);
-    });
-  }, [loadUserList]);
+  //course api
+  const loadCourseList = useCallback(async () => {
+    try {
+      const res = await getCourseAdmin();
+      const data = res.data.dataSet;
+      return data;
+    } catch (err) {
+      DialogApiError(err, openDialog, 1);
+      return [];
+    }
+  }, [openDialog]);
 
-  // Lists live in this parent so switching child routes keeps their loaded state.
+  //更新Course State
+  const refreshCourseList = useCallback(async () => {
+    const data = await loadCourseList();
+    setCourseList(data ?? []);
+  }, [loadCourseList]);
+
+  // 初次載入各項列表
   useEffect(() => {
-    if (tagList === undefined && !tagListRequestStarted.current) {
-      tagListRequestStarted.current = true;
-      void loadTagList().then((data) => {
-        setTagList(data ?? []);
-      });
-    }
-    if (categoryList === undefined && !categoryListRequestStarted.current) {
-      categoryListRequestStarted.current = true;
-      void loadCategoryList().then((data) => {
-        setCategoryList(data ?? []);
-      });
-    }
-  }, [tagList, categoryList, loadTagList, loadCategoryList]);
+    void (async () => {
+      const users = await loadUserList();
+      setUserList(users ?? []);
+
+      const tags = await loadTagList();
+      setTagList(tags ?? []);
+
+      const categories = await loadCategoryList();
+      setCategoryList(categories ?? []);
+
+      const courses = await loadCourseList();
+      setCourseList(courses ?? []);
+    })();
+  }, [loadUserList, loadTagList, loadCategoryList, loadCourseList]);
 
   return (
     <MacContainer $direction={"column"}>
@@ -197,8 +214,11 @@ export const BackStage = () => {
                   borderBottom: "1px solid #ccd1d5",
                 }}
                 breakpoints={{
-                  480: {
+                  0: {
                     slidesPerView: 3,
+                  },
+                  600: {
+                    slidesPerView: 4,
                   },
                 }}
               >
@@ -231,6 +251,8 @@ export const BackStage = () => {
       </Flex>
       <Outlet
         context={{
+          courseList,
+          refreshCourseList,
           userList,
           setUserList,
           refreshUserList,

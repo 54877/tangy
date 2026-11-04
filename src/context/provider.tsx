@@ -10,7 +10,7 @@ export const AppProviders = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <LoadingProvider count={6} minDuration={0}>
+      <LoadingProvider count={7} minDuration={0}>
         <UserProvider>
           <AuthProvider>
             <FormDialogProvider>
