@@ -153,6 +153,14 @@ export const BackStageCourse = () => {
     });
   }
 
+  if (selectedStatus === "REJECTED") {
+    columns.push({
+      name: "審核失敗原因",
+      selector: (row) => row.reviewContext || "",
+      maxWidth: "150px",
+    });
+  }
+
   return courseList === undefined ? (
     <section style={{ margin: "36px" }}>
       <LoadingUi type="spinner" />

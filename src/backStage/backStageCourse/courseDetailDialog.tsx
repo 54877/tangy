@@ -51,10 +51,6 @@ export function CourseDetailDialog() {
   const courseId = activeDialog.courseId;
   const [courseDetail, setCourseDetail] = useState<AdminCourseType>();
   const isCourseLoading = useLoadingState(6);
-  const [reviewingStatus, setReviewingStatus] = useState<Extract<
-    CourseReviewStatus,
-    "APPROVED" | "REJECTED"
-  > | null>(null);
   const close = () => closeDialog(activeLayer);
 
   useEffect(() => {
@@ -89,8 +85,7 @@ export function CourseDetailDialog() {
     reviewStatus: Extract<CourseReviewStatus, "APPROVED" | "REJECTED">,
     reviewContext?: string,
   ) => {
-    if (!courseDetail?.id || reviewingStatus) return;
-    setReviewingStatus(reviewStatus);
+    if (!courseDetail?.id || isCourseLoading) return;
     loading(6).start();
     try {
       if (reviewStatus === "REJECTED") {
@@ -98,11 +93,11 @@ export function CourseDetailDialog() {
       } else {
         await reviewCourse(courseDetail.id, reviewStatus);
       }
+      await activeDialog.onCourseReviewed?.();
       close();
     } catch (err) {
       DialogApiError(err, openDialog, 2);
     } finally {
-      setReviewingStatus(null);
       await loading(6).stop();
     }
   };
@@ -298,14 +293,8 @@ export function CourseDetailDialog() {
           $gap="sm"
         >
           <RejectButton
-            text={
-              reviewingStatus === "REJECTED" ? (
-                <LoadingUi type="button" />
-              ) : (
-                "拒絕課程"
-              )
-            }
-            disabled={reviewingStatus !== null || isCourseLoading}
+            text="拒絕課程"
+            disabled={isCourseLoading}
             onClick={() =>
               openDialog(
                 {
@@ -321,13 +310,13 @@ export function CourseDetailDialog() {
           />
           <Button
             text={
-              reviewingStatus === "APPROVED" ? (
+              isCourseLoading ? (
                 <LoadingUi type="button" />
               ) : (
                 "核准課程"
               )
             }
-            disabled={reviewingStatus !== null || isCourseLoading}
+            disabled={isCourseLoading}
             onClick={() => void handleReview("APPROVED")}
           />
         </FooterActions>

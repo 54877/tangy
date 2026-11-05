@@ -5,6 +5,7 @@ import { FromInput } from "../../Input/Input";
 import { Flex } from "../../Input/Input.styled";
 import { LoadingUi } from "../../loading/loading";
 import { useDialog } from "../../../context/dialog/useDialog";
+import { useLoading } from "../../../context/loading/useLoading";
 import { useActiveDialog } from "../../../utils/dialogLayer";
 import { formValidate } from "../../../utils/formValidate";
 import { useInformation } from "../../../utils/information";
@@ -27,7 +28,8 @@ export function TextInputDialog() {
   if (!fieldKey) {
     throw new Error("TextInputDialog requires a fieldKey");
   }
-  const isLoadingApi = useLoadingState(2);
+  const { loading } = useLoading();
+  const isSubmitting = useLoadingState(2);
   const { information, handleOnChange } = useInformation<TextInputDialogForm>({
     [fieldKey]: inputValue ?? "",
   });
@@ -43,11 +45,14 @@ export function TextInputDialog() {
       fields: [fieldKey],
       setErr,
       fn: async () => {
+        loading(2).start();
         try {
           await onInputSubmit(information[fieldKey]);
           close();
         } catch {
           // Keep the dialog open when submission fails.
+        } finally {
+          await loading(2).stop();
         }
       },
     });
@@ -66,8 +71,8 @@ export function TextInputDialog() {
         />
         <Flex $justify="flex-end">
           <Button
-            text={isLoadingApi ? <LoadingUi type="button" /> : "確認"}
-            disabled={isLoadingApi}
+            text={isSubmitting ? <LoadingUi type="button" /> : "確認"}
+            disabled={isSubmitting}
           />
         </Flex>
       </Flex>
