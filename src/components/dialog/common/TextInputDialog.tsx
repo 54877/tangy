@@ -11,16 +11,25 @@ import { useInformation } from "../../../utils/information";
 import type { FormError } from "../../../types/errorType";
 import { useLoadingState } from "../../../utils/loading/loading.state";
 
-type TextInputDialogForm = { name: string };
+type TextInputDialogForm = Record<string, string>;
 
 export function TextInputDialog() {
   const { closeDialog } = useDialog();
   const { activeDialog, activeLayer } = useActiveDialog("TextInputDialog");
-  const { type, title, inputTitle, inputValue, onInputSubmit } =
-    activeDialog;
+  const {
+    type,
+    title,
+    inputTitle,
+    inputValue,
+    fieldKey,
+    onInputSubmit,
+  } = activeDialog;
+  if (!fieldKey) {
+    throw new Error("TextInputDialog requires a fieldKey");
+  }
   const isLoadingApi = useLoadingState(2);
   const { information, handleOnChange } = useInformation<TextInputDialogForm>({
-    name: inputValue ?? "",
+    [fieldKey]: inputValue ?? "",
   });
   const [err, setErr] = useState<FormError<TextInputDialogForm>>({});
   const close = () => closeDialog(activeLayer);
@@ -31,11 +40,15 @@ export function TextInputDialog() {
 
     formValidate<TextInputDialogForm>({
       information,
-      fields: ["name"],
+      fields: [fieldKey],
       setErr,
       fn: async () => {
-        await onInputSubmit(information.name);
-        close();
+        try {
+          await onInputSubmit(information[fieldKey]);
+          close();
+        } catch {
+          // Keep the dialog open when submission fails.
+        }
       },
     });
   };
@@ -46,7 +59,7 @@ export function TextInputDialog() {
         <FromInput
           title={inputTitle ?? "名稱"}
           err={err}
-          fieldKey="name"
+          fieldKey={fieldKey}
           information={information}
           onChange={handleOnChange}
           required

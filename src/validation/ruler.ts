@@ -35,6 +35,7 @@ const LENGTH_RULES: Partial<Record<string, number>> = {
   newPassword: 40,
   oldPassword: 40,
   userName: 20,
+  categoryName: 10,
   introduction: 200,
   code: 10,
   title: 30,
@@ -86,6 +87,9 @@ export function getCommonValidators<T>(
     oldPassword: () => [requiredString<T>("請輸入舊密碼")],
     userName: () => [requiredString<T>("請輸入使用者名稱")],
     name: () => [requiredString<T>("請輸入名稱")],
+    categoryName: () => [requiredString<T>("請輸入課程分類名稱")],
+    label: () => [requiredString<T>("請輸入標籤名稱")],
+    reviewContext: () => [requiredString<T>("請輸入拒絕原因")],
     code: () => [requiredString<T>("請輸入驗證碼")],
 
     title: () => [requiredString<T>("請輸入課程標題")],

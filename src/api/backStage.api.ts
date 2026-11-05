@@ -53,8 +53,9 @@ export const deleteCourse = async (id: string) => {
 export const reviewCourse = async (
   id: string,
   reviewStatus: CourseReviewStatus,
+  reviewContext?: string,
 ) => {
-  return await _reviewCourse.put("/", { id, reviewStatus });
+  return await _reviewCourse.put("/", { id, reviewStatus, reviewContext });
 };
 
 //建立標籤

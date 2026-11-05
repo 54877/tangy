@@ -87,13 +87,17 @@ export function CourseDetailDialog() {
 
   const handleReview = async (
     reviewStatus: Extract<CourseReviewStatus, "APPROVED" | "REJECTED">,
+    reviewContext?: string,
   ) => {
     if (!courseDetail?.id || reviewingStatus) return;
     setReviewingStatus(reviewStatus);
     loading(6).start();
     try {
-      await reviewCourse(courseDetail.id, reviewStatus);
-      await activeDialog.onCourseReviewed?.();
+      if (reviewStatus === "REJECTED") {
+        await reviewCourse(courseDetail.id, reviewStatus, reviewContext);
+      } else {
+        await reviewCourse(courseDetail.id, reviewStatus);
+      }
       close();
     } catch (err) {
       DialogApiError(err, openDialog, 2);
@@ -302,7 +306,18 @@ export function CourseDetailDialog() {
               )
             }
             disabled={reviewingStatus !== null || isCourseLoading}
-            onClick={() => void handleReview("REJECTED")}
+            onClick={() =>
+              openDialog(
+                {
+                  type: "TextInputDialog",
+                  title: "拒絕課程",
+                  inputTitle: "拒絕原因",
+                  fieldKey: "reviewContext",
+                  onInputSubmit: (reason) => handleReview("REJECTED", reason),
+                },
+                2,
+              )
+            }
           />
           <Button
             text={

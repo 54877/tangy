@@ -6,7 +6,7 @@ export function handleApiError<T>(
   setErr: React.Dispatch<React.SetStateAction<Partial<T>>>,
 ) {
   const { status, data } = handleAxiosError(err);
-
+  console.log(data);
   if (status === 400 || status === 429) {
     setErr(data.errors ?? {});
     return;
@@ -15,20 +15,26 @@ export function handleApiError<T>(
   console.error("API Error:", err);
 }
 
-export function DialogApiError(
+export function DialogApiError<T>(
   err: unknown,
   openDialog: ReturnType<typeof useDialog>["openDialog"],
   layer: 1 | 2 | 3,
+  setErr?: React.Dispatch<React.SetStateAction<Partial<T>>>,
 ) {
   const { data } = handleAxiosError(err);
-  console.log(err);
-  console.log(data);
-  openDialog(
-    {
-      type: "MessageDialog",
-      title: "系統異常",
-      fileErrorMessage: data.errors.message,
-    },
-    layer ?? 1,
-  );
+  const errors = data?.errors ?? {};
+  console.log(errors);
+  if (errors.message) {
+    openDialog(
+      {
+        type: "MessageDialog",
+        title: "系統異常",
+        fileErrorMessage: errors.message,
+      },
+      layer,
+    );
+    return;
+  }
+
+  setErr?.(errors);
 }

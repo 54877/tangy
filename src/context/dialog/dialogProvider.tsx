@@ -16,7 +16,6 @@ import { CourseDetailDialog } from "../../backStage/backStageCourse/courseDetail
 //context參數
 interface Props {
   readonly children: ReactNode;
-  // readonly setLoading: (flag: boolean) => Promise<void>;
 }
 
 //Reducer分層
@@ -128,6 +127,11 @@ export function FormDialogProvider({ children }: Props) {
       )}
       {/* --- 第二層 Dialogs --- */}
       {dialogState.second?.type === "MessageDialog" && <MessageDialog />}
+      {dialogState.second?.type === "TextInputDialog" && (
+        <TextInputDialog
+          key={`${dialogState.second.inputValue ?? "new"}-${dialogState.second.title ?? ""}`}
+        />
+      )}
       {/* --- 第三層 Dialogs --- */}
       {dialogState.third?.type === "MessageDialog" && <MessageDialog />}
     </FormDialogContext.Provider>

@@ -32,6 +32,7 @@ export interface BaseDialogData {
   cropTitle?: string;
   inputTitle?: string;
   inputValue?: string;
+  fieldKey?: string;
   onInputSubmit?: (value: string) => Promise<void>;
   onConfirm?: () => Promise<void>;
   courseId?: string;

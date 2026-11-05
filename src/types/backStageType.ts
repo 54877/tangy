@@ -32,6 +32,7 @@ export type AdminCourseType = {
   userId: string;
   categoryKey: string;
   reviewStatus: CourseReviewStatus;
+  reviewContext: string;
   tags: string[];
   category: string;
   userName: string;
