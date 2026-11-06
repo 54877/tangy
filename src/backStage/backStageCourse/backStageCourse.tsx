@@ -16,19 +16,7 @@ import { useLoading } from "../../context/loading/useLoading";
 import { deleteCourse } from "../../api/backStage.api";
 import { DialogApiError } from "../../utils/apiError";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-
-const reviewStatusOptions: { value: CourseReviewStatus; label: string }[] = [
-  { value: "PENDING", label: "待審核" },
-  { value: "APPROVED", label: "已核准" },
-  { value: "REJECTED", label: "已拒絕" },
-];
-
-const formatPrice = (value: string) => {
-  const amount = Number(value);
-  return Number.isFinite(amount)
-    ? `NT$${amount.toLocaleString("zh-TW")}`
-    : value || "—";
-};
+import { reviewStatusOptions } from "../../constants/courseReviewStatus";
 
 export const BackStageCourse = () => {
   const { courseList, refreshCourseList } =
@@ -110,54 +98,76 @@ export const BackStageCourse = () => {
       grow: 1.2,
       minWidth: "130px",
     },
-    {
-      name: "原價",
-      selector: (row) => Number(row.originalPrice) || 0,
-      cell: (row) => formatPrice(row.originalPrice),
-      sortable: true,
-      wrap: false,
-      minWidth: "140px",
-      grow: 1.2,
-    },
-    {
-      name: "價格",
-      selector: (row) => Number(row.price) || 0,
-      cell: (row) => formatPrice(row.price),
-      sortable: true,
-      wrap: false,
-      minWidth: "140px",
-      grow: 1.2,
-    },
-    {
-      name: "評分",
-      selector: (row) => Number(row.rating) || 0,
-      cell: (row) => row.rating || "—",
-      sortable: true,
-      width: "90px",
-    },
-    {
-      name: "學生數",
-      selector: (row) => Number(row.studentCount) || 0,
-      sortable: true,
-      width: "100px",
-    },
   ];
 
+  if (selectedStatus !== "REJECTED") {
+    columns.push(
+      {
+        name: "原價",
+        selector: (row) => Number(row.originalPrice) || 0,
+        cell: (row) => `NT$${row.originalPrice}`,
+        sortable: true,
+        wrap: false,
+        minWidth: "140px",
+        grow: 1.2,
+      },
+      {
+        name: "價格",
+        selector: (row) => Number(row.price) || 0,
+        cell: (row) => `NT$${row.price}`,
+        sortable: true,
+        wrap: false,
+        minWidth: "140px",
+        grow: 1.2,
+      },
+    );
+  }
+
   if (selectedStatus === "APPROVED") {
+    columns.push(
+      {
+        name: "評分",
+        selector: (row) => Number(row.rating) || 0,
+        cell: (row) => row.rating || "—",
+        sortable: true,
+        width: "90px",
+      },
+      {
+        name: "學生數",
+        selector: (row) => Number(row.studentCount) || 0,
+        sortable: true,
+        width: "100px",
+      },
+      {
+        name: "操作",
+        button: true,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        cell: (course) => renderDeleteCourseButton(course),
+      },
+    );
+  }
+
+  if (selectedStatus === "PENDING") {
     columns.push({
-      name: "操作",
-      button: true,
-      ignoreRowClick: true,
-      allowOverflow: true,
-      cell: (course) => renderDeleteCourseButton(course),
+      name: "審核次數",
+      selector: () => 0,
+      width: "110px",
     });
   }
 
   if (selectedStatus === "REJECTED") {
     columns.push({
-      name: "審核失敗原因",
-      selector: (row) => row.reviewContext || "",
-      maxWidth: "150px",
+      name: "拒絕原因",
+      selector: (row) => row.reviewContext || "—",
+      cell: (row) => (
+        <span className="course-rejection-reason">
+          {row.reviewContext || "—"}
+        </span>
+      ),
+      grow: 1.5,
+      maxWidth: "300px",
+      wrap: true,
     });
   }
 

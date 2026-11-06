@@ -3,6 +3,7 @@ import CreateCourse from "./course";
 import personal from "./individual";
 import learn from "./learn";
 import order from "./order";
+import myCourse from "./myCourse";
 
 export default {
   path: "profile",
@@ -12,5 +13,5 @@ export default {
     return { Component: Profile };
   },
 
-  children: [personal, CreateCourse, learn, collect, order],
+  children: [personal, CreateCourse, learn, collect, order, myCourse],
 };

@@ -52,6 +52,14 @@ export const DataTableCard = styled.div`
       text-overflow: clip !important;
       white-space: nowrap !important;
     }
+
+    .rdt_TableCell .course-rejection-reason {
+      display: block;
+      overflow: visible !important;
+      overflow-wrap: anywhere;
+      text-overflow: clip !important;
+      white-space: normal !important;
+    }
   }
 
   @media (max-width: 600px) {

@@ -40,6 +40,7 @@ import { selectAndCropImage } from "../utils/file/selectAndCropImage";
 import { updateUserImage } from "../api/profile.api";
 import { useLoading } from "../context/loading/useLoading";
 import { useUser } from "../context/user/useUser";
+import { profileMenuItems } from "../constants/profileMenu";
 
 export const Profile = () => {
   const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
@@ -56,10 +57,8 @@ export const Profile = () => {
   const location = useLocation();
   const isTablet = useMediaQuery(`${media.xsLg}`);
   const isMac = useMediaQuery(`${media.sm}`);
-  const item = ["個人檔案", "我的學習", "我的收藏", "訂單紀錄", "建立課程"];
-  const url = ["personal", "learn", "collect", "order", "createCourse"];
-  const initialSlide = url.findIndex((item) =>
-    location.pathname.endsWith(`/${item}`),
+  const initialSlide = profileMenuItems.findIndex((item) =>
+    location.pathname.endsWith(`/${item.url}`),
   );
   const { getMe } = useMe();
   useEffect(() => {
@@ -119,22 +118,22 @@ export const Profile = () => {
             <Flex $direction="column" $justify={"flex-start"}>
               {/* item */}
               <MacItemFlex $direction="column">
-                {item.map((item, index) => {
-                  const isActive = location.pathname.endsWith(`/${url[index]}`);
+                {profileMenuItems.map((item) => {
+                  const isActive = location.pathname.endsWith(`/${item.url}`);
 
                   return (
                     <ItemContainer
                       $activeIndex={isActive}
                       $justify="flex-start"
-                      key={`${item}-${index}`}
-                      onClick={() => navigate(url[index])}
+                      key={item.url}
+                      onClick={() => navigate(item.url)}
                     >
                       <ItemSpan
                         $shade={isActive ? 950 : 500}
                         $type="label"
                         $size="md"
                       >
-                        {item}
+                        {item.label}
                       </ItemSpan>
                     </ItemContainer>
                   );
@@ -256,25 +255,25 @@ export const Profile = () => {
                       },
                     }}
                   >
-                    {item.map((item, index) => {
+                    {profileMenuItems.map((item) => {
                       const isActive = location.pathname.endsWith(
-                        `/${url[index]}`,
+                        `/${item.url}`,
                       );
 
                       return (
-                        <SwiperSlide key={`${item}-${index}`}>
+                        <SwiperSlide key={item.url}>
                           <ItemContainer
                             $activeIndex={isActive}
                             $justify="center"
                             onClick={() => {
-                              void navigate(url[index]);
+                              void navigate(item.url);
                             }}
                           >
                             <ItemSpan
                               style={{ padding: "8px 0" }}
                               $shade={isActive ? 950 : 500}
                             >
-                              {item}
+                              {item.label}
                             </ItemSpan>
                           </ItemContainer>
                         </SwiperSlide>
