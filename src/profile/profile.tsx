@@ -1,5 +1,5 @@
 import { FlexType } from "../styles/components/flex";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -37,18 +37,37 @@ import type { DeviceProps } from "../types/profileType";
 import { profileDetailInit } from "../constants/profile";
 import { useDialog } from "../context/dialog/useDialog";
 import { selectAndCropImage } from "../utils/file/selectAndCropImage";
-import { updateUserImage } from "../api/profile.api";
+import {
+  getCourseFormOptions,
+  myCourse,
+  personal,
+  updateUserImage,
+} from "../api/profile.api";
 import { useLoading } from "../context/loading/useLoading";
 import { useUser } from "../context/user/useUser";
 import { profileMenuItems } from "../constants/profileMenu";
+import type {
+  CourseCategoryType,
+  MyCourseType,
+  TagsListType,
+} from "../types/backStageType";
+import type { OptionItem } from "../types/selectType";
+import { DialogApiError } from "../utils/apiError";
 
 export const Profile = () => {
   const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
   const [device, setDevice] = useState<DeviceProps[]>();
+  const [myCourseList, setMyCourseList] = useState<MyCourseType[]>();
+  const [genderOptions, setGenderOptions] = useState<OptionItem[]>();
+  const [courseTags, setCourseTags] = useState<TagsListType[]>([]);
+  const [courseCategories, setCourseCategories] = useState<
+    CourseCategoryType[]
+  >([]);
   const { openDialog } = useDialog();
   const { loading } = useLoading();
   const {
     user,
+    setUser,
     setSelectedProfileImage,
     selectedProfileImage,
     profileImageUrl,
@@ -64,6 +83,68 @@ export const Profile = () => {
   useEffect(() => {
     void getMe();
   }, []);
+
+  //個人資料與登入裝置 API
+  const loadPersonalData = useCallback(async () => {
+    try {
+      const res = await personal();
+      const data = res.data.dataSet;
+      setUser((currentUser) => ({
+        ...currentUser,
+        userName: data.userDate.userName,
+      }));
+      setUserList(data.userDate);
+      setDevice(data.deviceDate);
+      setGenderOptions(data.genderSelect);
+      return data;
+    } catch (error) {
+      DialogApiError(error, openDialog, 1);
+      return undefined;
+    }
+  }, [openDialog, setUser]);
+
+  useEffect(() => {
+    void (async () => {
+      await loadPersonalData();
+    })();
+  }, [loadPersonalData]);
+
+  //我的課程API
+  useEffect(() => {
+    const fetchMyCourses = async () => {
+      try {
+        const response = await myCourse();
+        setMyCourseList(response.data.dataSet ?? []);
+      } catch (error) {
+        DialogApiError(error, openDialog, 1);
+      }
+    };
+
+    void fetchMyCourses();
+  }, []);
+
+  //創建課程section List Api
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchCourseFormOptions = async () => {
+      try {
+        const response = await getCourseFormOptions();
+        if (cancelled) return;
+
+        const options = response.data.dataSet;
+        setCourseTags(options.tags ?? []);
+        setCourseCategories(options.categories ?? []);
+      } catch (error) {
+        if (!cancelled) DialogApiError(error, openDialog, 1);
+      }
+    };
+
+    void fetchCourseFormOptions();
+    return () => {
+      cancelled = true;
+    };
+  }, [openDialog]);
 
   const editImgOnClick = () => {
     selectAndCropImage({
@@ -286,7 +367,19 @@ export const Profile = () => {
           </Container>
 
           <ContainerPrimary>
-            <Outlet context={{ userList, setUserList, device, setDevice }} />
+            <Outlet
+              context={{
+                userList,
+                setUserList,
+                device,
+                setDevice,
+                genderOptions,
+                loadPersonalData,
+                myCourseList,
+                courseTags,
+                courseCategories,
+              }}
+            />
           </ContainerPrimary>
         </Flex>
       </MacContainer>

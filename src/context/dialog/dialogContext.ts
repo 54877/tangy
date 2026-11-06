@@ -2,6 +2,7 @@ import { createContext, type Dispatch, type SetStateAction } from "react";
 import type { UseUserProps } from "../../types/userType";
 import type { OptionItem } from "../../types/selectType";
 import type { DeviceProps } from "../../types/profileType";
+import type { CourseCategoryType, TagsListType } from "../../types/backStageType";
 
 //dialog類型
 export type DialogType =
@@ -12,7 +13,8 @@ export type DialogType =
   | "MessageDialog"
   | "TextInputDialog"
   | "ImageCropDialog"
-  | "CourseDetailDialog";
+  | "CourseDetailDialog"
+  | "CourseDialog";
 
 //共用props類型
 export interface BaseDialogData {
@@ -37,6 +39,8 @@ export interface BaseDialogData {
   onConfirm?: () => Promise<void>;
   courseId?: string;
   onCourseReviewed?: () => Promise<void>;
+  courseTags?: TagsListType[];
+  courseCategories?: CourseCategoryType[];
 }
 
 //層數props類型

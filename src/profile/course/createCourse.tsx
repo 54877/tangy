@@ -16,14 +16,11 @@ import { Button } from "../../components/Button/Button";
 import { FromRichText } from "../../components/RichText/RichText";
 import type { CoursePayload } from "../../types/createCourseType";
 import { sanitizeCourseContent } from "../../utils/sanitizeHtml";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
-import {
-  createCourse,
-  createCourseVideo,
-  getCourseFormOptions,
-} from "../../api/profile.api";
+import { createCourse, createCourseVideo } from "../../api/profile.api";
 import { handleApiError } from "../../utils/apiError";
 import type { FormError } from "../../types/errorType";
 import { LoadingUi } from "../../components/loading/loading";
@@ -35,6 +32,11 @@ import type {
   CourseCategoryType,
   TagsListType,
 } from "../../types/backStageType";
+
+type CourseFormOptionsContext = {
+  courseTags: TagsListType[];
+  courseCategories: CourseCategoryType[];
+};
 
 const initialCourse: CoursePayload = {
   title: "",
@@ -53,27 +55,13 @@ const initialCourse: CoursePayload = {
 };
 
 export function CreateCourse() {
-  const [tagList, setTagList] = useState<TagsListType[]>([]);
-  const [categoryList, setCategoryList] = useState<CourseCategoryType[]>([]);
+  const { courseTags: tagList, courseCategories: categoryList } =
+    useOutletContext<CourseFormOptionsContext>();
   const { information, handleOnChange, setInformation } =
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
   const isLoading = useLoadingState(3);
-
-  useEffect(() => {
-    const loadFormOptions = async () => {
-      try {
-        const res = await getCourseFormOptions();
-        const options = res.data.dataSet;
-        setTagList(options.tags ?? []);
-        setCategoryList(options.categories ?? []);
-      } catch (err) {
-        handleApiError(err, setErr);
-      }
-    };
-    void loadFormOptions();
-  }, []);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -186,7 +174,13 @@ export function CreateCourse() {
               inputMode="numeric"
               placeholder="例如：5800"
             />
+          </Fields>
 
+          <Flex
+            $align="flex-start"
+            $direction={{ xs: "column", sm: "row" }}
+            style={{ marginTop: "20px", gap: "20px" }}
+          >
             <FormSelect
               err={err}
               title="課程分類"
@@ -212,7 +206,7 @@ export function CreateCourse() {
               err={err}
               maxSelected={3}
             />
-          </Fields>
+          </Flex>
         </Section>
 
         <Section>

@@ -12,6 +12,7 @@ import { MessageDialog } from "../../components/dialog/common/MessageDialog";
 import { ImageCropDialog } from "../../components/FileInput/ImageCropDialog";
 import { TextInputDialog } from "../../components/dialog/common/TextInputDialog";
 import { CourseDetailDialog } from "../../backStage/backStageCourse/courseDetailDialog";
+import { CourseDialog } from "../../profile/myCourse/courseDialog";
 
 //context參數
 interface Props {
@@ -125,6 +126,7 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "CourseDetailDialog" && (
         <CourseDetailDialog />
       )}
+      {dialogState.first?.type === "CourseDialog" && <CourseDialog />}
       {/* --- 第二層 Dialogs --- */}
       {dialogState.second?.type === "MessageDialog" && <MessageDialog />}
       {dialogState.second?.type === "TextInputDialog" && (

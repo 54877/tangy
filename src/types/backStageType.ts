@@ -18,6 +18,21 @@ export type CourseCategoryType = {
 
 export type CourseReviewStatus = "PENDING" | "APPROVED" | "REJECTED";
 
+export type MyCourseType = {
+  id: string;
+  title: string;
+  teacher: string;
+  price: number | string;
+  originalPrice: number | string;
+  courseTags: string[];
+  category: string | null;
+  reviewStatus: CourseReviewStatus;
+  reviewContext: string | null;
+  reviewCount: number;
+  studentCount: number;
+  rating: number | string;
+};
+
 export type AdminCourseType = {
   id: string;
   title: string;

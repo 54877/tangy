@@ -17,7 +17,12 @@ const _DeviceCloseByUserId = createTokenApi("DeviceCloseByUserId");
 const _createCourseVideo = createTokenApi("createCourseVideo");
 const _createCourse = createTokenApi("createCourse");
 const _updateUserImage = createTokenApi("updateUserImage");
-export const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
+const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
+const _myCourse = createTokenApi("myCourse");
+
+export const myCourse = async () => {
+  return await _myCourse.get("/");
+};
 
 export const personal = async () => {
   return await _personal.get("/");
@@ -82,7 +87,6 @@ export const createCourseVideo = async (information: CoursePayload) => {
 
 export const createCourse = async (information: CoursePayload) => {
   const formData = new FormData();
-  console.log(information);
   formData.append("title", information.title);
   formData.append("teacher", information.teacher);
   formData.append("price", information.price);

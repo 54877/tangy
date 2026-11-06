@@ -20,8 +20,7 @@ import {
   ProfileSafetyInfoItem,
 } from "./ProfileInfoItem";
 import dayjs from "dayjs";
-import { DeviceCloseByUserId, personal } from "../../api/profile.api";
-import { useEffect, useState } from "react";
+import { DeviceCloseByUserId } from "../../api/profile.api";
 
 import type { OptionItem } from "../../types/selectType";
 import type { DeviceProps } from "../../types/profileType";
@@ -32,36 +31,35 @@ import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { useUser } from "../../context/user/useUser";
 
 type ProfileContext = {
   userList: UseUserProps;
   setUserList: React.Dispatch<React.SetStateAction<UseUserProps>>;
   device: DeviceProps[] | undefined;
-  setDevice: React.Dispatch<React.SetStateAction<DeviceProps[] | undefined>>;
+  genderOptions: OptionItem[] | undefined;
+  loadPersonalData: () => Promise<unknown>;
 };
 
 export const Personal = () => {
   const isMac = useMediaQuery(`${media.sm}`);
   const isTablet = useMediaQuery(`${media.xs}`);
-  const { userList, setUserList, device, setDevice } =
-    useOutletContext<ProfileContext>();
-  const [gender, setGender] = useState<OptionItem[]>();
+  const {
+    userList,
+    setUserList,
+    device,
+    genderOptions: gender,
+    loadPersonalData,
+  } = useOutletContext<ProfileContext>();
   const { clearAuthToken } = useAuth();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
   const navigate = useNavigate();
-  const { user, setUser } = useUser();
 
-  //查詢個人資料API
+  //個人資料
   const fetchUser = async () => {
     loading(1).start();
     try {
-      const res = await personal();
-      const data = res.data.dataSet;
-      setUser({ ...user, userName: data.userDate.userName });
-      setUserList(data.userDate);
-      setDevice(data.deviceDate);
+      await loadPersonalData();
     } catch (err) {
       console.log(err);
     } finally {
@@ -82,33 +80,6 @@ export const Personal = () => {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchUser = async () => {
-      loading(1).start();
-      try {
-        const res = await personal();
-        const data = res.data.dataSet;
-        if (!cancelled) {
-          setDevice(data.deviceDate);
-          setUserList(data.userDate);
-          setGender(data.genderSelect);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        await loading(1).stop();
-      }
-    };
-
-    void fetchUser();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   //編輯個人資料dialog
   const editOnclick = () => {
@@ -160,6 +131,7 @@ export const Personal = () => {
       1,
     );
   };
+
   const time = isTablet ? "YYYY年MM月DD日 hh:mm" : "YYYY年MM月DD日";
   const createdAt = userList?.createdAt
     ? dayjs(userList.createdAt).format(time)
