@@ -152,7 +152,7 @@ export const BackStageCourse = () => {
   if (selectedStatus === "PENDING") {
     columns.push({
       name: "審核次數",
-      selector: () => 0,
+      selector: (row) => Number(row.reviewCount) || 0,
       width: "110px",
     });
   }

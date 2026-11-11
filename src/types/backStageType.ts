@@ -72,6 +72,7 @@ export type AdminCourseType = {
   categoryKey: string;
   reviewStatus: CourseReviewStatus;
   reviewContext: string;
+  reviewCount: number;
   tags: string[];
   category: string;
   userName: string;
