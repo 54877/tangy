@@ -12,4 +12,11 @@ export type CoursePayload = {
   image: File | null;
   video: File | null;
   videoKey: string;
+  videoTicket: string;
+};
+
+export type CourseVideoResponse = {
+  videoKey: string;
+  duration: string;
+  videoTicket: string;
 };

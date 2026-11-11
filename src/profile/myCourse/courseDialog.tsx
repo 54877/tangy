@@ -15,7 +15,11 @@ import { Flex } from "../../components/Input/Input.styled";
 import { LoadingUi } from "../../components/loading/loading";
 import { useLoading } from "../../context/loading/useLoading";
 import { useLoadingState } from "../../utils/loading/loading.state";
-import { getMyCourseById } from "../../api/profile.api";
+import {
+  createCourseVideo,
+  getMyCourseById,
+  reReviewCourse,
+} from "../../api/profile.api";
 import { DialogApiError } from "../../utils/apiError";
 import {
   Actions,
@@ -45,6 +49,7 @@ const emptyCourse: MyCourseDetailType = {
   image: null,
   video: null,
   videoKey: "",
+  videoTicket: "",
 };
 
 export const CourseDialog = () => {
@@ -66,8 +71,10 @@ export const CourseDialog = () => {
     useInformation<MyCourseDetailType>({ ...emptyCourse });
   const hasImageFile = information.image instanceof File;
   const hasVideoFile = information.video instanceof File;
+  const isRejected = information.reviewStatus === "REJECTED";
   const isCourseLoading = useLoadingState(6);
 
+  //單筆我的course ByID Api
   useEffect(() => {
     let isCurrent = true;
 
@@ -105,6 +112,29 @@ export const CourseDialog = () => {
       isCurrent = false;
     };
   }, [courseId, loading, openDialog, setInformation]);
+
+  //再次提交審核api
+  const submitReReview = async () => {
+    if (!courseId) return;
+    loading(6).start();
+    try {
+      let submission = { ...information, videoTicket: "" };
+      if (information.video instanceof File) {
+        const res = await createCourseVideo({
+          ...information,
+          video: information.video,
+          videoTicket: "",
+        });
+        submission = { ...submission, ...res.data.dataSet };
+      }
+      await reReviewCourse({ ...submission, id: courseId });
+      closeDialog(activeLayer);
+    } catch (error) {
+      DialogApiError(error, openDialog, 2);
+    } finally {
+      await loading(6).stop();
+    }
+  };
 
   const content = (
     <div style={{ display: "grid", gap: 20, paddingBottom: 8 }}>
@@ -327,9 +357,10 @@ export const CourseDialog = () => {
       <Actions>
         <Button
           text={confirmButtonText ?? "關閉"}
-          disabled={!onConfirm}
+          disabled={!onConfirm && !isRejected}
           onClick={() => {
-            if (onConfirm) void onConfirm();
+            if (isRejected) void submitReReview();
+            else if (onConfirm) void onConfirm();
           }}
         />
       </Actions>

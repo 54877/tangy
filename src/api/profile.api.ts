@@ -1,4 +1,4 @@
-import type { CoursePayload } from "../types/createCourseType";
+import type { CoursePayload, CourseVideoResponse } from "../types/createCourseType";
 import type {
   ProfileDetailProps,
   SVProps,
@@ -20,6 +20,7 @@ const _updateUserImage = createTokenApi("updateUserImage");
 const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
 const _myCourse = createTokenApi("myCourse");
 const _getMyCourseById = createTokenApi("getMyCourseById");
+const _reReviewCourse = createTokenApi("reReviewCourse");
 
 export const getMyCourseById = async (id: string) => {
   return await _getMyCourseById.post("/", {
@@ -87,8 +88,7 @@ export const createCourseVideo = async (information: CoursePayload) => {
     formData.append("video", information.video);
   }
 
-  const response = await _createCourseVideo.post("/", formData);
-
+  const response = await _createCourseVideo.post<{ dataSet: CourseVideoResponse }>("/", formData);
   return response;
 };
 
@@ -102,16 +102,33 @@ export const createCourse = async (information: CoursePayload) => {
   formData.append("duration", information.duration);
   formData.append("categoryKey", information.categoryKey);
   formData.append("videoKey", information.videoKey);
+  formData.append("videoTicket", information.videoTicket);
   formData.append("tagsKey", JSON.stringify(information.tagsKey));
 
   // File
   if (information.image) {
     formData.append("image", information.image);
   }
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
   return await _createCourse.post("/", formData);
+};
+
+export const reReviewCourse = async (information: CoursePayload & { id: string }) => {
+  const formData = new FormData();
+  formData.append("id", information.id);
+  formData.append("title", information.title);
+  formData.append("teacher", information.teacher);
+  formData.append("price", information.price);
+  formData.append("originalPrice", information.originalPrice);
+  formData.append("content", information.content);
+  formData.append("categoryKey", information.categoryKey);
+  formData.append("tagsKey", JSON.stringify(information.tagsKey));
+  if (information.image) formData.append("image", information.image);
+  if (information.videoKey && information.duration && information.videoTicket) {
+    formData.append("videoKey", information.videoKey);
+    formData.append("duration", information.duration);
+    formData.append("videoTicket", information.videoTicket);
+  }
+  return await _reReviewCourse.put("/", formData);
 };
 
 export const updateUserImage = async (image: File) => {

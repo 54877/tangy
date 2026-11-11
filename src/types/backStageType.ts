@@ -54,6 +54,7 @@ export type MyCourseDetailType = {
   image: File | null;
   video: File | null;
   videoKey: string;
+  videoTicket: string;
 };
 
 export type AdminCourseType = {

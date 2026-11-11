@@ -52,6 +52,7 @@ const initialCourse: CoursePayload = {
   image: null,
   video: null,
   videoKey: "",
+  videoTicket: "",
 };
 
 export function CreateCourse() {
