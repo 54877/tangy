@@ -5,7 +5,7 @@ export const EditorContainer = styled.div`
   width: 100%;
 `;
 
-export const Toolbar = styled.div`
+export const Toolbar = styled.div<{ $disabled?: boolean }>`
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -26,12 +26,25 @@ export const Toolbar = styled.div`
     background: white;
   }
 
+  ${({ $disabled }) =>
+    $disabled &&
+    `
+      button:disabled,
+      select:disabled,
+      input:disabled {
+        color: rgba(0, 0, 0, 0.38);
+        background: white;
+        cursor: default;
+        opacity: 1;
+      }
+    `}
+
   button {
     min-width: 32px;
     padding: 0 8px;
     font-weight: 700;
 
-    &:hover {
+    &:hover:not(:disabled) {
       color: ${({ theme }) => theme.colors.primary[700]};
       background: ${({ theme }) => theme.colors.primary[50]};
     }
@@ -80,18 +93,24 @@ export const ColorPicker = styled.div`
   }
 `;
 
-export const Editor = styled.div<{ $isError?: boolean; $minHeight: number }>`
+export const Editor = styled.div<{
+  $isError?: boolean;
+  $minHeight: number;
+  $disabled?: boolean;
+}>`
   min-height: ${({ $minHeight }) => `${$minHeight}px`};
   padding: 12px;
   border: 1px solid
     ${({ theme, $isError }) =>
       $isError ? theme.colors.danger[600] : theme.colors.gray[200]};
-  color: ${({ theme }) => theme.colors.gray[950]};
+  color: ${({ theme, $disabled }) =>
+    $disabled ? "rgba(0, 0, 0, 0.38)" : theme.colors.gray[950]};
   background: white;
   line-height: 1.6;
   overflow-wrap: anywhere;
   word-break: break-word;
   outline: none;
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "text")};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary[600]};

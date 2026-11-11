@@ -302,7 +302,7 @@ export function FromRichText<T>({
     <Flex $direction="column" $gap="sm" $align="flex-start">
       <DescriptionTitle required={required}>{title}</DescriptionTitle>
       <EditorContainer>
-        <Toolbar>
+        <Toolbar $disabled={disabled}>
           <select
             aria-label="文字大小"
             defaultValue="p"
@@ -423,6 +423,7 @@ export function FromRichText<T>({
           data-placeholder={placeholder}
           $isError={!!err?.[fieldKey]}
           $minHeight={minHeight}
+          $disabled={disabled}
           onInput={syncValue}
           onBlur={syncValue}
           onKeyUp={saveSelection}

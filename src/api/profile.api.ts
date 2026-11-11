@@ -19,6 +19,13 @@ const _createCourse = createTokenApi("createCourse");
 const _updateUserImage = createTokenApi("updateUserImage");
 const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
 const _myCourse = createTokenApi("myCourse");
+const _getMyCourseById = createTokenApi("getMyCourseById");
+
+export const getMyCourseById = async (id: string) => {
+  return await _getMyCourseById.post("/", {
+    id,
+  });
+};
 
 export const myCourse = async () => {
   return await _myCourse.get("/");

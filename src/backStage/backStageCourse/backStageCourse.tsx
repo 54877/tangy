@@ -3,6 +3,7 @@ import { IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { type TableColumn } from "react-data-table-component";
 import { useOutletContext } from "react-router-dom";
 import { ReusableDataTable } from "../../components/DataTable/dataTable";
+import { renderRejectionReasonCell } from "../../components/DataTable/RejectionReasonCell";
 import { Flex } from "../../components/Input/Input.styled";
 import { LoadingUi } from "../../components/loading/loading";
 import { Heading } from "../../styles/components/span";
@@ -160,11 +161,7 @@ export const BackStageCourse = () => {
     columns.push({
       name: "拒絕原因",
       selector: (row) => row.reviewContext || "—",
-      cell: (row) => (
-        <span className="course-rejection-reason">
-          {row.reviewContext || "—"}
-        </span>
-      ),
+      cell: (row) => renderRejectionReasonCell(row.reviewContext),
       grow: 1.5,
       maxWidth: "300px",
       wrap: true,

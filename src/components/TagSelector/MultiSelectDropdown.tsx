@@ -20,6 +20,7 @@ interface MultiSelectDropdownProps<T extends object, L extends OptionItem> {
   readonly valueKey: keyof L;
   readonly err?: FormError<T>;
   readonly required?: boolean;
+  readonly disabled?: boolean;
   readonly maxSelected?: number;
   readonly placeholder?: string;
 }
@@ -37,6 +38,7 @@ export default function MultiSelectDropdown<
   valueKey,
   err,
   required = false,
+  disabled = false,
   maxSelected,
   placeholder = "請選擇標籤",
 }: MultiSelectDropdownProps<T, L>) {
@@ -58,6 +60,7 @@ export default function MultiSelectDropdown<
       </Flex>
       <Autocomplete<L, true, false, false>
         multiple
+        disabled={disabled}
         disableCloseOnSelect
         options={[...options]}
         value={selectedOptions}

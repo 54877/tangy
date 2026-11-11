@@ -10,6 +10,7 @@ type SelectFileOptions = {
   cropAspectRatio?: number;
   cropRadius?: number | string;
   onComplete: (file: File) => void;
+  layer?: 1 | 2 | 3;
 };
 
 /** 驗證選取的檔案；圖片會先經過共用裁切流程，再將結果交給呼叫端。 */
@@ -22,6 +23,7 @@ export function selectAndCropImage(options: SelectFileOptions) {
     cropAspectRatio = 16 / 9,
     cropRadius = 0,
     onComplete,
+    layer,
   } = options;
 
   if (!file) {
@@ -58,7 +60,7 @@ export function selectAndCropImage(options: SelectFileOptions) {
           "、",
         )}，請重新選擇檔案。`,
       },
-      1,
+      layer ?? 1,
     );
     return;
   }
@@ -72,6 +74,6 @@ export function selectAndCropImage(options: SelectFileOptions) {
       cropRadius,
       onCropComplete: onComplete,
     },
-    1,
+    layer ?? 1,
   );
 }

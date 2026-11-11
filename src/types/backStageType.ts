@@ -33,6 +33,29 @@ export type MyCourseType = {
   rating: number | string;
 };
 
+export type MyCourseDetailType = {
+  id: string;
+  title: string;
+  teacher: string;
+  rating: string;
+  studentCount: string;
+  duration: string;
+  content: string;
+  price: string;
+  originalPrice: string;
+  categoryKey: string;
+  reviewStatus: CourseReviewStatus;
+  reviewContext: string | null;
+  reviewCount: number;
+  imageUrl: string;
+  videoUrl: string;
+  tags: string[];
+  tagsKey: string[];
+  image: File | null;
+  video: File | null;
+  videoKey: string;
+};
+
 export type AdminCourseType = {
   id: string;
   title: string;

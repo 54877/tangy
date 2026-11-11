@@ -36,11 +36,14 @@ export interface BaseDialogData {
   inputValue?: string;
   fieldKey?: string;
   onInputSubmit?: (value: string) => Promise<void>;
-  onConfirm?: () => Promise<void>;
+  onConfirm?: () => Promise<void> | void;
   courseId?: string;
   onCourseReviewed?: () => Promise<void>;
   courseTags?: TagsListType[];
   courseCategories?: CourseCategoryType[];
+  courseDialogTitle?: string;
+  confirmButtonText?: string;
+  isReadOnly?: boolean;
 }
 
 //層數props類型

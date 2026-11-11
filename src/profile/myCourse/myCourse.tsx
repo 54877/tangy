@@ -3,19 +3,21 @@ import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { type TableColumn } from "react-data-table-component";
 import { useOutletContext } from "react-router-dom";
 import { ReusableDataTable } from "../../components/DataTable/dataTable";
+import { renderRejectionReasonCell } from "../../components/DataTable/RejectionReasonCell";
 import { Flex } from "../../components/Input/Input.styled";
 import { LoadingUi } from "../../components/loading/loading";
 import { Heading } from "../../styles/components/span";
 import type {
   CourseReviewStatus,
   MyCourseType,
+  CourseCategoryType,
+  TagsListType,
 } from "../../types/backStageType";
 import { reviewStatusOptions } from "../../constants/courseReviewStatus";
 import { useDialog } from "../../context/dialog/useDialog";
-import type { CourseCategoryType, TagsListType } from "../../types/backStageType";
 
 type ProfileOutletContext = {
-  myCourseList: MyCourseType[] | undefined;
+  myCourseList: MyCourseType[];
   courseTags: TagsListType[];
   courseCategories: CourseCategoryType[];
 };
@@ -23,7 +25,7 @@ type ProfileOutletContext = {
 export const MyCourse = () => {
   const { myCourseList, courseTags, courseCategories } =
     useOutletContext<ProfileOutletContext>();
-  const { openDialog } = useDialog();
+  const { openDialog, closeDialog } = useDialog();
   const [selectedStatus, setSelectedStatus] =
     useState<CourseReviewStatus>("PENDING");
 
@@ -35,6 +37,25 @@ export const MyCourse = () => {
     [myCourseList, selectedStatus],
   );
 
+  const openCourseDialog = (course: MyCourseType) => {
+    if (course.reviewStatus === "APPROVED") return;
+
+    const isRejected = course.reviewStatus === "REJECTED";
+    openDialog(
+      {
+        type: "CourseDialog",
+        courseId: course.id,
+        courseDialogTitle: isRejected ? "修改課程" : "待審核課程",
+        confirmButtonText: isRejected ? "重新送審" : "關閉",
+        isReadOnly: !isRejected,
+        courseTags,
+        courseCategories,
+        onConfirm: isRejected ? undefined : () => closeDialog(1),
+      },
+      1,
+    );
+  };
+
   const columns = useMemo<TableColumn<MyCourseType>[]>(() => {
     const baseColumns: TableColumn<MyCourseType>[] = [
       {
@@ -43,11 +64,16 @@ export const MyCourse = () => {
         selector: (row) => row.title || "—",
         sortable: true,
         grow: 1.5,
-        maxWidth: "150px",
+        maxWidth: "200px",
       },
       {
         name: "講師",
         selector: (row) => row.teacher || "—",
+        sortable: true,
+      },
+      {
+        name: "分類",
+        selector: (row) => row.category || "—",
         sortable: true,
       },
     ];
@@ -63,31 +89,14 @@ export const MyCourse = () => {
     }
 
     if (selectedStatus === "APPROVED") {
-      baseColumns.push({
-        name: "原價",
-        selector: (row) => Number(row.originalPrice) || 0,
-        cell: (row) => `NT$${row.originalPrice}`,
-        sortable: true,
-        maxWidth: "120px",
-      });
-    }
-
-    if (selectedStatus === "PENDING") {
-      baseColumns.push({
-        name: "審核次數",
-        selector: (row) => Number(row.reviewCount) || 0,
-        sortable: true,
-      });
-    }
-
-    baseColumns.push({
-      name: "分類",
-      selector: (row) => row.category || "—",
-      sortable: true,
-    });
-
-    if (selectedStatus === "APPROVED") {
       baseColumns.push(
+        {
+          name: "原價",
+          selector: (row) => Number(row.originalPrice) || 0,
+          cell: (row) => `NT$${row.originalPrice}`,
+          sortable: true,
+          maxWidth: "120px",
+        },
         {
           name: "學生數",
           selector: (row) => Number(row.studentCount) || 0,
@@ -104,16 +113,21 @@ export const MyCourse = () => {
       );
     }
 
+    if (selectedStatus === "PENDING") {
+      baseColumns.push({
+        name: "審核次數",
+        selector: (row) => Number(row.reviewCount) || 0,
+        sortable: true,
+        maxWidth: "120px",
+      });
+    }
+
     if (selectedStatus === "REJECTED") {
       baseColumns.push(
         {
           name: "拒絕原因",
           selector: (row) => row.reviewContext || "—",
-          cell: (row) => (
-            <span className="course-rejection-reason">
-              {row.reviewContext || "—"}
-            </span>
-          ),
+          cell: (row) => renderRejectionReasonCell(row.reviewContext),
           grow: 1.5,
           maxWidth: "200px",
           wrap: true,
@@ -130,7 +144,7 @@ export const MyCourse = () => {
     return baseColumns;
   }, [selectedStatus]);
 
-  if (myCourseList === undefined) {
+  if (myCourseList === undefined || courseTags === undefined) {
     return (
       <section style={{ width: "100%", padding: 16 }}>
         <LoadingUi type="spinner" />
@@ -167,20 +181,8 @@ export const MyCourse = () => {
         data={visibleCourses}
         defaultSortFieldId="title"
         pointerOnHover
-        onRowClicked={() => {
-          openDialog(
-            {
-              type: "CourseDialog",
-              title: "課程資料",
-              courseTags,
-              courseCategories,
-            },
-            1,
-          );
-        }}
+        onRowClicked={(course) => openCourseDialog(course)}
       />
     </section>
   );
 };
-
-export default MyCourse;

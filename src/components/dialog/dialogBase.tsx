@@ -8,6 +8,7 @@ interface DialogBaseProps {
   width?: string;
   context: ReactNode;
   title?: ReactNode;
+  headerContent?: ReactNode;
   onClose: () => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 }
@@ -16,6 +17,7 @@ export const DialogBase = ({
   type,
   context,
   title,
+  headerContent,
   onClose,
   onKeyDown,
   width = "90%",
@@ -34,6 +36,7 @@ export const DialogBase = ({
             <CloseIcon />
           </button>
         </Header>
+        {headerContent}
         <Content>{context}</Content>
       </Container>
     </Modal>

@@ -115,11 +115,7 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "SVDialog" && <SVDialog />}
       {dialogState.first?.type === "MessageDialog" && <MessageDialog />}
       {dialogState.first?.type === "ImageCropDialog" && <ImageCropDialog />}
-      {dialogState.first?.type === "TextInputDialog" && (
-        <TextInputDialog
-          key={`${dialogState.first.inputValue ?? "new"}-${dialogState.first.title ?? ""}`}
-        />
-      )}
+      {dialogState.first?.type === "TextInputDialog" && <TextInputDialog />}
       {dialogState.first?.type === "UpdatePasswordDialog" && (
         <UpdatePasswordDialog />
       )}
@@ -129,11 +125,8 @@ export function FormDialogProvider({ children }: Props) {
       {dialogState.first?.type === "CourseDialog" && <CourseDialog />}
       {/* --- 第二層 Dialogs --- */}
       {dialogState.second?.type === "MessageDialog" && <MessageDialog />}
-      {dialogState.second?.type === "TextInputDialog" && (
-        <TextInputDialog
-          key={`${dialogState.second.inputValue ?? "new"}-${dialogState.second.title ?? ""}`}
-        />
-      )}
+      {dialogState.second?.type === "TextInputDialog" && <TextInputDialog />}
+      {dialogState.second?.type === "ImageCropDialog" && <ImageCropDialog />}
       {/* --- 第三層 Dialogs --- */}
       {dialogState.third?.type === "MessageDialog" && <MessageDialog />}
     </FormDialogContext.Provider>

@@ -38,6 +38,7 @@ type Props<T> = {
   readonly preview: PreviewType;
   readonly cropAspectRatio?: number;
   readonly cropRadius?: number | string;
+  readonly layer?: 1 | 2 | 3;
 };
 
 export function FromFileInput<T>({
@@ -57,6 +58,7 @@ export function FromFileInput<T>({
   preview,
   cropAspectRatio = 16 / 9,
   cropRadius = 0,
+  layer,
 }: Props<T>) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { openDialog } = useDialog();
@@ -92,6 +94,7 @@ export function FromFileInput<T>({
         cropAspectRatio,
         cropRadius,
         onComplete: (selected) => onChange(selected, fieldKey, extra),
+        layer,
       });
       return;
     }
@@ -170,7 +173,7 @@ export function FromFileInput<T>({
 
       {previewUrl && preview === "image" && (
         <Preview>
-          <img src={previewUrl} alt={`照片預覽`} />
+          <img src={previewUrl} alt="照片預覽" />
         </Preview>
       )}
 
