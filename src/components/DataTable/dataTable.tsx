@@ -22,7 +22,6 @@ const adjustedCellsByCard = new WeakMap<HTMLDivElement, Set<HTMLElement>>();
 
 /** 窄螢幕時，依每欄最寬的表頭或資料內容設定一致欄寬，避免文字重疊並維持對齊。 */
 const syncResponsiveColumnWidths = (card: HTMLDivElement) => {
-  // 只還原先前被本函式調整的儲存格，桌面模式不必掃描整張表格。
   const previouslyAdjustedCells = adjustedCellsByCard.get(card);
   previouslyAdjustedCells?.forEach((cell) => {
     const styles = originalCellStyles.get(cell);
@@ -39,8 +38,8 @@ const syncResponsiveColumnWidths = (card: HTMLDivElement) => {
   });
   previouslyAdjustedCells?.clear();
 
-  // 桌面版只還原套件樣式；只有窄螢幕需要查詢並計算資料列欄寬。
-  if (!window.matchMedia("(max-width: 860px)").matches) return;
+  // 依表格實際可用寬度判斷
+  if (card.clientWidth > 1024) return;
 
   // 取得表頭和目前顯示的資料列，後續按欄位位置一起計算寬度。
   const headers = Array.from(

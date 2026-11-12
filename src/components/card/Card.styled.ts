@@ -48,7 +48,7 @@ export const FlexEnd = styled(FlexType)`
   }
 `;
 
-export const FavoriteContainer = styled.div`
+export const FavoriteContainer = styled.button`
   position: absolute;
   top: 8px;
   right: 8px;
@@ -58,6 +58,9 @@ export const FavoriteContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
 `;
 
 export const FlexCard = styled(FlexType)`

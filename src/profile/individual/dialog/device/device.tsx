@@ -12,6 +12,7 @@ import { LoadingUi } from "../../../../components/loading/loading";
 import { useLoadingState } from "../../../../utils/loading/loading.state";
 import { useAuth } from "../../../../context/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useFavorite } from "../../../../context/favorite/useFavorite";
 
 export const DeviceDialog = () => {
   const { closeDialog } = useDialog();
@@ -19,6 +20,7 @@ export const DeviceDialog = () => {
   const { type, title, deviceData, editProfileOnclick } = activeDialog || {};
   const { loading } = useLoading();
   const { clearAuthToken } = useAuth();
+  const { clearFavorites } = useFavorite();
   const navigate = useNavigate();
   const isSmall = useMediaQuery("(max-width:500px)");
 
@@ -30,6 +32,7 @@ export const DeviceDialog = () => {
     try {
       await DeviceCloseById(id);
       if (deviceData?.isCurrent) {
+        clearFavorites();
         clearAuthToken();
         void loading(2).stop();
         closeDialog(activeLayer);

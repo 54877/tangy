@@ -8,6 +8,7 @@ import { radius } from "../../styles/tokens/radius";
 export const DataTableCard = styled.div`
   width: 100%;
   min-width: 0;
+  container-type: inline-size;
   overflow: hidden;
   border: 1px solid ${semanticColors.border.base};
   border-radius: ${radius.md};
@@ -38,8 +39,7 @@ export const DataTableCard = styled.div`
     -webkit-overflow-scrolling: touch;
   }
 
-  /* 窄螢幕保留單行文字，欄寬由 dataTable.tsx 依內容同步計算。 */
-  @media (max-width: 860px) {
+  @container (max-width: 1024px) {
     .rdt_Table {
       width: max-content !important;
       min-width: 100% !important;
@@ -66,7 +66,6 @@ export const DataTableCard = styled.div`
     .rdt_TableWrapper {
       max-height: 60vh;
     }
-
   }
 `;
 

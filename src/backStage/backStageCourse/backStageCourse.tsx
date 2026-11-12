@@ -158,14 +158,22 @@ export const BackStageCourse = () => {
   }
 
   if (selectedStatus === "REJECTED") {
-    columns.push({
-      name: "拒絕原因",
-      selector: (row) => row.reviewContext || "—",
-      cell: (row) => renderRejectionReasonCell(row.reviewContext),
-      grow: 1.5,
-      maxWidth: "300px",
-      wrap: true,
-    });
+    columns.push(
+      {
+        name: "拒絕原因",
+        selector: (row) => row.reviewContext || "—",
+        cell: (row) => renderRejectionReasonCell(row.reviewContext),
+        grow: 1.5,
+        maxWidth: "300px",
+        wrap: true,
+      },
+      {
+        name: "審核次數",
+        selector: (row) => Number(row.reviewCount) || 0,
+        sortable: true,
+        width: "110px",
+      },
+    );
   }
 
   return courseList === undefined ? (

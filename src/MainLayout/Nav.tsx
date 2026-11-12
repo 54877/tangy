@@ -45,6 +45,7 @@ import { useLoadingState } from "../utils/loading/loading.state";
 import { useUser } from "../context/user/useUser";
 import { useLoading } from "../context/loading/useLoading";
 import { LayoutDashboard } from "lucide-react";
+import { useFavorite } from "../context/favorite/useFavorite";
 
 type NavProps = {
   isMobile: boolean;
@@ -54,6 +55,7 @@ export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
   const [borderState, setBorderState] = useState(false);
   const { isAuthenticated, clearAuthToken, token } = useAuth();
+  const { clearFavorites } = useFavorite();
   const navigate = useNavigate();
   const menu = useMenu();
   const { user, setUser, profileImageUrl } = useUser();
@@ -86,6 +88,7 @@ export const Nav = ({ isMobile }: NavProps) => {
       await logout();
       await navigate("/");
       setUser(useUserInit);
+      clearFavorites();
       clearAuthToken();
       closeClick();
       menu.closeClick();

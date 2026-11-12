@@ -22,6 +22,7 @@ import { useLoadingState } from "../../../../utils/loading/loading.state";
 import { LoadingUi } from "../../../../components/loading/loading";
 import { formValidate } from "../../../../utils/formValidate";
 import { useUser } from "../../../../context/user/useUser";
+import { useFavorite } from "../../../../context/favorite/useFavorite";
 
 export const UpdatePasswordDialog = () => {
   const { closeDialog } = useDialog();
@@ -31,6 +32,7 @@ export const UpdatePasswordDialog = () => {
     useInformation<UpdatePasswordProps>(updatePasswordInit);
   const { type, title } = activeDialog || {};
   const { clearAuthToken } = useAuth();
+  const { clearFavorites } = useFavorite();
   const { setUser } = useUser();
   const isSmall = useMediaQuery("(max-width:500px)");
   const navigate = useNavigate();
@@ -77,6 +79,7 @@ export const UpdatePasswordDialog = () => {
       await logout();
       closeDialog(activeLayer);
       await navigate("/login/forgot");
+      clearFavorites();
       clearAuthToken();
       setUser(useUserInit);
     } catch (err) {

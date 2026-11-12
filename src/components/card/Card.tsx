@@ -6,18 +6,18 @@ import {
   Start,
   Icon,
   FlexEnd,
-  FavoriteContainer,
   FlexCard,
   TitleHeading,
   FlexTypeCard,
   ImageContainer,
 } from "./Card.styled";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useState } from "react";
 import { breakpoints } from "../../styles/tokens/breakpoints";
+import { FavoriteButton } from "../FavoriteButton/FavoriteButton";
 
 export interface CardProps {
+  readonly id: string;
   readonly imageUrl: string;
   readonly originalPrice: string;
   readonly price: string;
@@ -34,9 +34,8 @@ export interface CardProps {
   readonly ImgWidth?: string;
 }
 
-//TODO 待補上新增置收藏api 與切換收藏狀態的功能
-
 export function Card({
+  id,
   macType,
   lgWidth,
   xslgWidth,
@@ -71,9 +70,7 @@ export function Card({
         }}
       >
         <Img src={imageUrl} alt="img" />
-        <FavoriteContainer>
-          <FavoriteBorderOutlinedIcon />
-        </FavoriteContainer>
+        <FavoriteButton courseId={id} />
       </ImageContainer>
       <FlexCard $direction={"column"} $align={"flex-start"} $gap={"spc"}>
         <Tooltip title={title}>

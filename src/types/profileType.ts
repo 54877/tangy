@@ -28,3 +28,14 @@ export interface DeviceProps {
   createdAt: string;
   isCurrent: boolean;
 }
+
+export interface FavoriteCourseType {
+  id: string;
+  title: string;
+  teacher: string;
+  duration: string;
+  price: string;
+  favoriteAt: string;
+  category: string | null;
+  tags: string[];
+}

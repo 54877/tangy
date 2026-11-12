@@ -31,6 +31,7 @@ import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { useFavorite } from "../../context/favorite/useFavorite";
 
 type ProfileContext = {
   userList: UseUserProps;
@@ -51,6 +52,7 @@ export const Personal = () => {
     loadPersonalData,
   } = useOutletContext<ProfileContext>();
   const { clearAuthToken } = useAuth();
+  const { clearFavorites } = useFavorite();
   const { loading } = useLoading();
   const { openDialog } = useDialog();
   const navigate = useNavigate();
@@ -72,6 +74,7 @@ export const Personal = () => {
     loading(3).start();
     try {
       await DeviceCloseByUserId(userList.id);
+      clearFavorites();
       clearAuthToken();
       void navigate("/login");
       await loading(3).stop();

@@ -1,4 +1,4 @@
-import type { CoursePayload, CourseVideoResponse } from "../types/createCourseType";
+import type { CoursePayload } from "../types/createCourseType";
 import type {
   ProfileDetailProps,
   SVProps,
@@ -21,6 +21,20 @@ const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
 const _myCourse = createTokenApi("myCourse");
 const _getMyCourseById = createTokenApi("getMyCourseById");
 const _reReviewCourse = createTokenApi("reReviewCourse");
+const _myFavoriteCourse = createTokenApi("myFavoriteCourse");
+const _favoriteCourse = createTokenApi("favoriteCourse");
+const _deleteFavoriteCourse = createTokenApi("deleteFavoriteCourse");
+export const myFavoriteCourse = async () => {
+  return await _myFavoriteCourse.get("/");
+};
+
+export const favoriteCourse = async (id: string) => {
+  return await _favoriteCourse.post("/", { id });
+};
+
+export const deleteFavoriteCourse = async (id: string) => {
+  return await _deleteFavoriteCourse.delete("/", { data: { id } });
+};
 
 export const getMyCourseById = async (id: string) => {
   return await _getMyCourseById.post("/", {
@@ -88,8 +102,8 @@ export const createCourseVideo = async (information: CoursePayload) => {
     formData.append("video", information.video);
   }
 
-  const response = await _createCourseVideo.post<{ dataSet: CourseVideoResponse }>("/", formData);
-  return response;
+  const res = await _createCourseVideo.post("/", formData);
+  return res;
 };
 
 export const createCourse = async (information: CoursePayload) => {
@@ -112,7 +126,9 @@ export const createCourse = async (information: CoursePayload) => {
   return await _createCourse.post("/", formData);
 };
 
-export const reReviewCourse = async (information: CoursePayload & { id: string }) => {
+export const reReviewCourse = async (
+  information: CoursePayload & { id: string },
+) => {
   const formData = new FormData();
   formData.append("id", information.id);
   formData.append("title", information.title);
