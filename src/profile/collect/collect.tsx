@@ -5,6 +5,7 @@ import { LoadingUi } from "../../components/loading/loading";
 import { useFavorite } from "../../context/favorite/useFavorite";
 import { useDialog } from "../../context/dialog/useDialog";
 import { DialogApiError } from "../../utils/apiError";
+import { deleteFavoriteCourse } from "../../api/profile.api";
 import type { TableColumn } from "react-data-table-component";
 import { Heading } from "../../styles/components/span";
 import type { FavoriteCourseType } from "../../types/profileType";
@@ -12,7 +13,7 @@ import dayjs from "dayjs";
 import { formatDuration } from "../../utils/Duration";
 
 export const Collect = () => {
-  const { favorites, isLoading, removeFavorite } = useFavorite();
+  const { favorites, isLoading, refreshFavorites } = useFavorite();
   const { openDialog } = useDialog();
   const [removingIds, setRemovingIds] = useState<Set<string>>(() => new Set());
 
@@ -21,12 +22,11 @@ export const Collect = () => {
       if (removingIds.has(courseId)) return;
       setRemovingIds((current) => new Set(current).add(courseId));
       try {
-        await removeFavorite(courseId, {
-          optimistic: false,
-          delayRefresh: false,
-        });
+        await deleteFavoriteCourse(courseId);
+        await refreshFavorites(false);
       } catch (error) {
         DialogApiError(error, openDialog, 1);
+        await refreshFavorites(false);
       } finally {
         setRemovingIds((current) => {
           const next = new Set(current);
@@ -35,7 +35,7 @@ export const Collect = () => {
         });
       }
     },
-    [openDialog, removeFavorite, removingIds],
+    [openDialog, refreshFavorites, removingIds],
   );
 
   const renderActionButton = useCallback(
