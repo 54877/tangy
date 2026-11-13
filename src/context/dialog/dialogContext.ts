@@ -39,6 +39,7 @@ export interface BaseDialogData {
   onConfirm?: () => Promise<void> | void;
   courseId?: string;
   onCourseReviewed?: () => Promise<void>;
+  onCourseResubmitted?: () => Promise<void>;
   courseTags?: TagsListType[];
   courseCategories?: CourseCategoryType[];
   courseDialogTitle?: string;

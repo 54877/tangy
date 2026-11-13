@@ -18,12 +18,13 @@ import { useDialog } from "../../context/dialog/useDialog";
 
 type ProfileOutletContext = {
   myCourseList: MyCourseType[];
+  refreshMyCourseList: () => Promise<void>;
   courseTags: TagsListType[];
   courseCategories: CourseCategoryType[];
 };
 
 export const MyCourse = () => {
-  const { myCourseList, courseTags, courseCategories } =
+  const { myCourseList, refreshMyCourseList, courseTags, courseCategories } =
     useOutletContext<ProfileOutletContext>();
   const { openDialog, closeDialog } = useDialog();
   const [selectedStatus, setSelectedStatus] =
@@ -50,6 +51,7 @@ export const MyCourse = () => {
         isReadOnly: !isRejected,
         courseTags,
         courseCategories,
+        onCourseResubmitted: refreshMyCourseList,
         onConfirm: isRejected ? undefined : () => closeDialog(1),
       },
       1,

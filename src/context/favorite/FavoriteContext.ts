@@ -6,8 +6,12 @@ export interface FavoriteContextValue {
   readonly isLoading: boolean;
   readonly isFavorite: (courseId: string) => boolean;
   readonly addFavorite: (courseId: string) => Promise<void>;
-  readonly removeFavorite: (courseId: string) => Promise<void>;
-  readonly refreshFavorites: () => Promise<void>;
+  readonly removeFavorite: (
+    courseId: string,
+    options?: { optimistic?: boolean; delayRefresh?: boolean },
+  ) => Promise<void>;
+  readonly toggleFavoriteCourse: (courseId: string) => Promise<void>;
+  readonly refreshFavorites: (showLoading?: boolean) => Promise<void>;
   readonly clearFavorites: () => void;
 }
 

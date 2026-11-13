@@ -14,33 +14,41 @@ import { formatDuration } from "../../utils/Duration";
 export const Collect = () => {
   const { favorites, isLoading, removeFavorite } = useFavorite();
   const { openDialog } = useDialog();
-  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [removingIds, setRemovingIds] = useState<Set<string>>(() => new Set());
 
   const handleRemove = useCallback(
     async (courseId: string) => {
-      setRemovingId(courseId);
+      if (removingIds.has(courseId)) return;
+      setRemovingIds((current) => new Set(current).add(courseId));
       try {
-        await removeFavorite(courseId);
+        await removeFavorite(courseId, {
+          optimistic: false,
+          delayRefresh: false,
+        });
       } catch (error) {
         DialogApiError(error, openDialog, 1);
       } finally {
-        setRemovingId(null);
+        setRemovingIds((current) => {
+          const next = new Set(current);
+          next.delete(courseId);
+          return next;
+        });
       }
     },
-    [openDialog, removeFavorite],
+    [openDialog, removeFavorite, removingIds],
   );
 
   const renderActionButton = useCallback(
     (row: FavoriteCourseType) => (
       <Button
         className="course-rejection-reason"
-        text={removingId === row.id ? <LoadingUi type="button" /> : "移除收藏"}
-        disabled={removingId === row.id}
+        text={removingIds.has(row.id) ? <LoadingUi type="button" /> : "移除收藏"}
+        disabled={removingIds.has(row.id)}
         style={{ width: "auto", minWidth: "max-content", margin: "0 8px" }}
         onClick={() => void handleRemove(row.id)}
       />
     ),
-    [handleRemove, removingId],
+    [handleRemove, removingIds],
   );
 
   const columns = useMemo<TableColumn<FavoriteCourseType>[]>(

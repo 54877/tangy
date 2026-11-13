@@ -110,18 +110,34 @@ export const Profile = () => {
   }, [loadPersonalData]);
 
   //我的課程API
-  useEffect(() => {
-    const fetchMyCourses = async () => {
-      try {
-        const response = await myCourse();
-        setMyCourseList(response.data.dataSet ?? []);
-      } catch (error) {
-        DialogApiError(error, openDialog, 1);
-      }
-    };
+  const loadMyCourseList = useCallback(async () => {
+    try {
+      const response = await myCourse();
+      return response.data.dataSet;
+    } catch (error) {
+      DialogApiError(error, openDialog, 1);
+      return [];
+    }
+  }, [openDialog]);
 
-    void fetchMyCourses();
-  }, []);
+  //更新我的課程 State
+  const refreshMyCourseList = useCallback(async () => {
+    const data = await loadMyCourseList();
+    setMyCourseList(data ?? []);
+  }, [loadMyCourseList]);
+
+  useEffect(() => {
+    let active = true;
+
+    void loadMyCourseList().then((data) => {
+      if (!active) return;
+      setMyCourseList(data ?? []);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [loadMyCourseList]);
 
   //創建課程section List Api
   useEffect(() => {
@@ -376,6 +392,7 @@ export const Profile = () => {
                 genderOptions,
                 loadPersonalData,
                 myCourseList,
+                refreshMyCourseList,
                 courseTags,
                 courseCategories,
               }}

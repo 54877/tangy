@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useInformation } from "../../utils/information";
 import type { MyCourseDetailType } from "../../types/backStageType";
+import type { FormError } from "../../types/errorType";
 import { useActiveDialog } from "../../utils/dialogLayer";
 import { useDialog } from "../../context/dialog/useDialog";
 import { DialogBase } from "../../components/dialog/dialogBase";
@@ -21,6 +22,7 @@ import {
   reReviewCourse,
 } from "../../api/profile.api";
 import { DialogApiError } from "../../utils/apiError";
+import { validateForm } from "../../validation/validateForm";
 import {
   Actions,
   Fields,
@@ -64,11 +66,13 @@ export const CourseDialog = () => {
     courseTags,
     courseCategories,
     isReadOnly = false,
+    onCourseResubmitted,
     onConfirm,
   } = activeDialog || {};
   const isSmall = useMediaQuery("(max-width:700px)");
   const { information, setInformation, handleOnChange } =
     useInformation<MyCourseDetailType>({ ...emptyCourse });
+  const [err, setErr] = useState<FormError<MyCourseDetailType>>({});
   const hasImageFile = information.image instanceof File;
   const hasVideoFile = information.video instanceof File;
   const isRejected = information.reviewStatus === "REJECTED";
@@ -128,6 +132,7 @@ export const CourseDialog = () => {
         submission = { ...submission, ...res.data.dataSet };
       }
       await reReviewCourse({ ...submission, id: courseId });
+      await onCourseResubmitted?.();
       closeDialog(activeLayer);
     } catch (error) {
       DialogApiError(error, openDialog, 2);
@@ -136,11 +141,37 @@ export const CourseDialog = () => {
     }
   };
 
+  const validateAndSubmitReReview = () => {
+    const errors = validateForm<MyCourseDetailType>({
+      values: information,
+      fields: [
+        "title",
+        "teacher",
+        "content",
+        "price",
+        "originalPrice",
+        "categoryKey",
+        "tagsKey",
+      ],
+    });
+
+    if (!information.imageUrl && !(information.image instanceof File)) {
+      errors.image = "請選擇課程封面圖片";
+    }
+    if (!information.videoUrl && !(information.video instanceof File)) {
+      errors.video = "請選擇課程影片";
+    }
+
+    setErr(errors);
+    if (Object.keys(errors).length === 0) void submitReReview();
+  };
+
   const content = (
     <div style={{ display: "grid", gap: 20, paddingBottom: 8 }}>
       <Section>
         <Fields>
           <FromInput
+            err={err}
             title="課程名稱"
             required
             disabled={isReadOnly}
@@ -150,6 +181,7 @@ export const CourseDialog = () => {
             placeholder="請輸入課程名稱"
           />
           <FromInput
+            err={err}
             title="講師名稱"
             required
             disabled={isReadOnly}
@@ -159,6 +191,7 @@ export const CourseDialog = () => {
             placeholder="請輸入講師名稱"
           />
           <FromInput
+            err={err}
             title="售價"
             required
             disabled={isReadOnly}
@@ -169,6 +202,7 @@ export const CourseDialog = () => {
             placeholder="請輸入售價"
           />
           <FromInput
+            err={err}
             title="原價"
             required
             disabled={isReadOnly}
@@ -185,6 +219,7 @@ export const CourseDialog = () => {
           style={{ marginTop: 20, gap: 20 }}
         >
           <FormSelect
+            err={err}
             title="課程分類"
             required
             disable={isReadOnly}
@@ -197,6 +232,7 @@ export const CourseDialog = () => {
             defaultName="請選擇課程分類"
           />
           <MultiSelectDropdown
+            err={err}
             title="課程標籤"
             required
             disabled={isReadOnly}
@@ -213,6 +249,7 @@ export const CourseDialog = () => {
 
       <Section>
         <FromRichText
+          err={err}
           title={
             <SectionHead>
               <h2>
@@ -252,6 +289,7 @@ export const CourseDialog = () => {
             {!isReadOnly && (
               <FromFileInput
                 required
+                err={err}
                 title="封面圖片"
                 fieldKey="image"
                 information={information}
@@ -303,6 +341,7 @@ export const CourseDialog = () => {
             {!isReadOnly && (
               <FromFileInput
                 required
+                err={err}
                 title="課程影片"
                 fieldKey="video"
                 information={information}
@@ -359,7 +398,7 @@ export const CourseDialog = () => {
           text={confirmButtonText ?? "關閉"}
           disabled={!onConfirm && !isRejected}
           onClick={() => {
-            if (isRejected) void submitReReview();
+            if (isRejected) validateAndSubmitReReview();
             else if (onConfirm) void onConfirm();
           }}
         />
