@@ -59,21 +59,47 @@ const syncResponsiveColumnWidths = (
     ),
   ];
 
-  // 每欄只掃描一次表頭與資料列，取最寬的內容。
-  const widths = headers.map((header) => header.offsetWidth);
-  cellRows.slice(1).forEach((cells) => {
+  // 暫時移除欄位分配到的寬度，讓每格依內容的 max-content 寬度排版。
+  // 這樣量到的是內容所需寬度，而不是表格目前分配給該欄的寬度。
+  const measurementStyles = new Map<HTMLElement, SavedCellStyles>();
+  cellRows.flat().forEach((cell) => {
+    measurementStyles.set(cell, {
+      flex: {
+        value: cell.style.getPropertyValue("flex"),
+        priority: cell.style.getPropertyPriority("flex"),
+      },
+      width: {
+        value: cell.style.getPropertyValue("width"),
+        priority: cell.style.getPropertyPriority("width"),
+      },
+      "min-width": {
+        value: cell.style.getPropertyValue("min-width"),
+        priority: cell.style.getPropertyPriority("min-width"),
+      },
+    });
+    cell.style.setProperty("flex", "0 0 max-content", "important");
+    cell.style.setProperty("width", "max-content", "important");
+    cell.style.setProperty("min-width", "max-content", "important");
+  });
+
+  const widths = headers.map(() => 0);
+  cellRows.forEach((cells) => {
     cells.forEach((cell, index) => {
       const currentWidth = widths[index];
       if (currentWidth === undefined) return;
-      const firstChild = cell.firstElementChild;
-      const contentWidth =
-        firstChild instanceof HTMLElement ? firstChild.scrollWidth : 0;
-      widths[index] = Math.max(
-        currentWidth,
-        cell.offsetWidth,
-        cell.scrollWidth,
-        contentWidth,
-      );
+      widths[index] = Math.max(currentWidth, cell.getBoundingClientRect().width);
+    });
+  });
+
+  // 還原量測用樣式，再套用依內容實際量出的欄寬，沒有預設固定欄寬。
+  measurementStyles.forEach((styles, cell) => {
+    measuredProperties.forEach((property) => {
+      const original = styles[property];
+      if (original.value) {
+        cell.style.setProperty(property, original.value, original.priority);
+      } else {
+        cell.style.removeProperty(property);
+      }
     });
   });
 

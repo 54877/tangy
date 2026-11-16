@@ -80,23 +80,24 @@ export const BackStageCourse = () => {
       id: "title",
       selector: (row) => row.title || "—",
       sortable: true,
-      maxWidth: "15%",
+      ...(selectedStatus !== "REJECTED" ? { maxWidth: "15%" } : {}),
     },
     {
       name: "建立者",
       selector: (row) => row.userName || "—",
       sortable: true,
-      maxWidth: "5%",
+      ...(selectedStatus !== "REJECTED" ? { maxWidth: "5%" } : {}),
     },
     {
       name: "分類",
       selector: (row) => row.category || "—",
       sortable: true,
-      maxWidth: "15%",
+      ...(selectedStatus !== "REJECTED" ? { maxWidth: "15%" } : {}),
     },
     {
       name: "標籤",
       selector: (row) => row.tags?.join(", ") || "—",
+      ...(selectedStatus === "PENDING" ? { maxWidth: "30%" } : {}),
     },
   ];
 
@@ -150,7 +151,7 @@ export const BackStageCourse = () => {
     columns.push({
       name: "審核次數",
       selector: (row) => Number(row.reviewCount) || 0,
-      width: "110px",
+      width: "10%",
     });
   }
 
@@ -166,7 +167,6 @@ export const BackStageCourse = () => {
         name: "審核次數",
         selector: (row) => Number(row.reviewCount) || 0,
         sortable: true,
-        maxWidth: "10%",
       },
     );
   }

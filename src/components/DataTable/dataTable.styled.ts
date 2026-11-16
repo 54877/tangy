@@ -79,6 +79,7 @@ export const DataTableCard = styled.div<{ $responsiveBreakpoint: number }>`
 
     .rdt_TableCell .course-rejection-reason {
       display: block;
+      max-width: 40vw;
       overflow: visible !important;
       overflow-wrap: anywhere;
       text-overflow: clip !important;
