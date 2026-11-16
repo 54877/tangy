@@ -23,6 +23,17 @@ export const DataTableCard = styled.div<{ $responsiveBreakpoint: number }>`
     background: ${semanticColors.background.elevated};
   }
 
+  .rdt_wrapper {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .rdt_TableHeadRow .rdt_TableCol,
+  .rdt_TableRow .rdt_TableCell {
+    flex-shrink: 1 !important;
+  }
+
   .rdt_TableHeadRow .rdt_TableCol,
   .rdt_TableCol_Sortable,
   .rdt_TableCol_Sortable > div:first-child,

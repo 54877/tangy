@@ -80,19 +80,16 @@ export const BackStageCourse = () => {
       id: "title",
       selector: (row) => row.title || "—",
       sortable: true,
-      ...(selectedStatus !== "REJECTED" ? { maxWidth: "15%" } : {}),
     },
     {
       name: "建立者",
       selector: (row) => row.userName || "—",
       sortable: true,
-      ...(selectedStatus !== "REJECTED" ? { maxWidth: "5%" } : {}),
     },
     {
       name: "分類",
       selector: (row) => row.category || "—",
       sortable: true,
-      ...(selectedStatus !== "REJECTED" ? { maxWidth: "15%" } : {}),
     },
     {
       name: "標籤",
@@ -108,7 +105,7 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.originalPrice}`,
         sortable: true,
         wrap: false,
-        maxWidth: "12%",
+        maxWidth: "15%",
       },
       {
         name: "價格",
@@ -116,7 +113,7 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.price}`,
         sortable: true,
         wrap: false,
-        maxWidth: "12%",
+        maxWidth: "15%",
       },
     );
   }
