@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export function handleAxiosError(err: unknown) {
+  console.log("err", err);
+  console.log("axiosErr", !axios.isAxiosError(err));
   if (!axios.isAxiosError(err)) {
     return {
       status: undefined,

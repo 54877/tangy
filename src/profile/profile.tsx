@@ -272,7 +272,12 @@ export const Profile = () => {
           </SideBarContainer>
         )}
 
-        <Flex $direction={"column"} $gap={"none"} $justify={"flex-start"}>
+        <Flex
+          style={{ flex: 1, minWidth: 0 }}
+          $direction={"column"}
+          $gap={"none"}
+          $justify={"flex-start"}
+        >
           <Container>
             {/* userBanner */}
             <FlexRelative $direction={"column"} $gap={"none"}>

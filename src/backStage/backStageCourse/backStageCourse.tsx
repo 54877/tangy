@@ -80,24 +80,23 @@ export const BackStageCourse = () => {
       id: "title",
       selector: (row) => row.title || "—",
       sortable: true,
-      grow: 1.5,
-      minWidth: "200px",
+      maxWidth: "15%",
     },
     {
       name: "建立者",
       selector: (row) => row.userName || "—",
       sortable: true,
+      maxWidth: "5%",
     },
     {
       name: "分類",
       selector: (row) => row.category || "—",
       sortable: true,
+      maxWidth: "15%",
     },
     {
       name: "標籤",
       selector: (row) => row.tags?.join(", ") || "—",
-      grow: 1.2,
-      minWidth: "130px",
     },
   ];
 
@@ -109,8 +108,7 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.originalPrice}`,
         sortable: true,
         wrap: false,
-        minWidth: "140px",
-        grow: 1.2,
+        maxWidth: "10%",
       },
       {
         name: "價格",
@@ -118,8 +116,7 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.price}`,
         sortable: true,
         wrap: false,
-        minWidth: "140px",
-        grow: 1.2,
+        maxWidth: "10%",
       },
     );
   }
@@ -163,15 +160,13 @@ export const BackStageCourse = () => {
         name: "拒絕原因",
         selector: (row) => row.reviewContext || "—",
         cell: (row) => renderRejectionReasonCell(row.reviewContext),
-        grow: 1.5,
-        maxWidth: "300px",
         wrap: true,
       },
       {
         name: "審核次數",
         selector: (row) => Number(row.reviewCount) || 0,
         sortable: true,
-        width: "110px",
+        maxWidth: "10%",
       },
     );
   }
@@ -205,6 +200,7 @@ export const BackStageCourse = () => {
         </ToggleButtonGroup>
       </Flex>
       <ReusableDataTable
+        responsiveBreakpoint={1024}
         columns={columns}
         data={visibleCourses}
         defaultSortFieldId="title"

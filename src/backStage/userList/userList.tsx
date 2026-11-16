@@ -50,7 +50,6 @@ export const UserList = () => {
       await editUserRole(row.id);
       await refreshUserList();
     } catch (err) {
-      console.log(err);
       setUserList((users) =>
         users?.map((user) =>
           user.id === row.id ? { ...user, role: previousRole } : user,

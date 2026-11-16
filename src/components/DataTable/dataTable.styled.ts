@@ -5,7 +5,7 @@ import { semanticColors } from "../../styles/tokens/semanticColors";
 import { radius } from "../../styles/tokens/radius";
 
 /** 後台列表共用容器，讓表格在窄螢幕中可水平捲動。 */
-export const DataTableCard = styled.div`
+export const DataTableCard = styled.div<{ $responsiveBreakpoint: number }>`
   width: 100%;
   min-width: 0;
   container-type: inline-size;
@@ -16,16 +16,21 @@ export const DataTableCard = styled.div`
   box-shadow: 0 2px 8px rgb(35 37 41 / 8%);
 
   .rdt_Table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     color: ${semanticColors.text.primary};
     background: ${semanticColors.background.elevated};
   }
 
+  .rdt_TableHeadRow .rdt_TableCol,
   .rdt_TableCol_Sortable,
   .rdt_TableCol_Sortable > div:first-child,
   .rdt_TableCol_Sortable > span:first-child {
-    overflow: visible;
+    min-width: 0;
+    overflow: hidden;
     white-space: nowrap;
-    text-overflow: clip;
+    text-overflow: ellipsis;
     line-height: 1.25;
   }
 
@@ -33,16 +38,35 @@ export const DataTableCard = styled.div`
     gap: 6px;
   }
 
-  .rdt_TableWrapper {
-    overflow-x: auto;
+  .rdt_ResponsiveWrapper,
+  .rdt_responsiveWrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  @container (max-width: 1024px) {
+  .rdt_TableCell,
+  .rdt_TableCell > div,
+  .rdt_TableCell > div > * {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @container (max-width: ${({ $responsiveBreakpoint }) =>
+    $responsiveBreakpoint}px) {
+    .rdt_ResponsiveWrapper,
+    .rdt_responsiveWrapper {
+      overflow-x: auto !important;
+    }
+
     .rdt_Table {
       width: max-content !important;
       min-width: 100% !important;
+      max-width: none !important;
     }
 
     .rdt_TableCell,
@@ -60,10 +84,19 @@ export const DataTableCard = styled.div`
       text-overflow: clip !important;
       white-space: normal !important;
     }
+
+    .rdt_TableHeadRow .rdt_TableCol,
+    .rdt_TableCol_Sortable,
+    .rdt_TableCol_Sortable > div:first-child,
+    .rdt_TableCol_Sortable > span:first-child {
+      overflow: visible;
+      text-overflow: clip;
+    }
   }
 
   @media (max-width: 600px) {
-    .rdt_TableWrapper {
+    .rdt_ResponsiveWrapper,
+    .rdt_responsiveWrapper {
       max-height: 60vh;
     }
   }

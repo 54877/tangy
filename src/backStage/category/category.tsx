@@ -51,8 +51,6 @@ export const Category = () => {
         await createCourseCategory(name);
       }
       await refreshCategoryList();
-    } catch (err) {
-      DialogApiError(err, openDialog, 1);
     } finally {
       void loading(2).stop();
     }
@@ -64,7 +62,7 @@ export const Category = () => {
         type: "TextInputDialog",
         title: "新增課程分類",
         inputTitle: "課程分類名稱",
-        fieldKey: "categoryName",
+        fieldKey: "CategoryName",
         onInputSubmit: (name) => saveCategory(name),
       },
       1,
@@ -77,7 +75,7 @@ export const Category = () => {
         type: "TextInputDialog",
         title: "編輯課程分類",
         inputTitle: "課程分類名稱",
-        fieldKey: "categoryName",
+        fieldKey: "CategoryName",
         inputValue: row.CategoryName,
         onInputSubmit: (name) => saveCategory(name, row),
       },

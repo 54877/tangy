@@ -9,6 +9,8 @@ export type ReusableDataTableProps<T> = Omit<
 > & {
   columns: TableProps<T>["columns"];
   data: T[];
+  /** 在此容器寬度以下套用窄螢幕表格行為，單位為 px。 */
+  responsiveBreakpoint?: number;
 };
 
 type MeasuredProperty = "flex" | "width" | "min-width";
@@ -21,7 +23,10 @@ const originalCellStyles = new WeakMap<HTMLElement, SavedCellStyles>();
 const adjustedCellsByCard = new WeakMap<HTMLDivElement, Set<HTMLElement>>();
 
 /** 窄螢幕時，依每欄最寬的表頭或資料內容設定一致欄寬，避免文字重疊並維持對齊。 */
-const syncResponsiveColumnWidths = (card: HTMLDivElement) => {
+const syncResponsiveColumnWidths = (
+  card: HTMLDivElement,
+  responsiveBreakpoint: number,
+) => {
   const previouslyAdjustedCells = adjustedCellsByCard.get(card);
   previouslyAdjustedCells?.forEach((cell) => {
     const styles = originalCellStyles.get(cell);
@@ -39,7 +44,7 @@ const syncResponsiveColumnWidths = (card: HTMLDivElement) => {
   previouslyAdjustedCells?.clear();
 
   // 依表格實際可用寬度判斷
-  if (card.clientWidth > 1024) return;
+  if (card.clientWidth > responsiveBreakpoint) return;
 
   // 取得表頭和目前顯示的資料列，後續按欄位位置一起計算寬度。
   const headers = Array.from(
@@ -105,6 +110,7 @@ const syncResponsiveColumnWidths = (card: HTMLDivElement) => {
 export const ReusableDataTable = <T,>({
   columns,
   data,
+  responsiveBreakpoint = 900,
   pagination = true,
   paginationPerPage = 20,
   paginationRowsPerPageOptions = [5, 10, 20, 50],
@@ -125,7 +131,9 @@ export const ReusableDataTable = <T,>({
     let frame = 0;
     const syncWidths = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => syncResponsiveColumnWidths(card));
+      frame = requestAnimationFrame(() =>
+        syncResponsiveColumnWidths(card, responsiveBreakpoint),
+      );
     };
     syncWidths();
 
@@ -146,10 +154,13 @@ export const ReusableDataTable = <T,>({
       resizeObserver.disconnect();
       window.removeEventListener("resize", syncWidths);
     };
-  }, []);
+  }, [responsiveBreakpoint]);
 
   return (
-    <DataTableCard ref={tableCardRef}>
+    <DataTableCard
+      ref={tableCardRef}
+      $responsiveBreakpoint={responsiveBreakpoint}
+    >
       <DataTable
         {...tableProps}
         columns={columns}

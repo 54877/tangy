@@ -5,14 +5,10 @@ export function handleApiError<T>(
   err: unknown,
   setErr: React.Dispatch<React.SetStateAction<Partial<T>>>,
 ) {
-  const { status, data } = handleAxiosError(err);
+  const { data } = handleAxiosError(err);
   console.log(data);
-  if (status === 400 || status === 429) {
-    setErr(data.errors ?? {});
-    return;
-  }
 
-  console.error("API Error:", err);
+  setErr(data.errors ?? {});
 }
 
 export function DialogApiError<T>(
@@ -23,7 +19,7 @@ export function DialogApiError<T>(
 ) {
   const { data } = handleAxiosError(err);
   const errors = data?.errors ?? {};
-  console.log(errors);
+  console.log(data);
   if (errors.message) {
     openDialog(
       {
@@ -31,10 +27,11 @@ export function DialogApiError<T>(
         title: "系統異常",
         fileErrorMessage: errors.message,
       },
-      layer,
+      layer ?? 1,
     );
     return;
   }
-
-  setErr?.(errors);
+  if (setErr) {
+    setErr(errors);
+  }
 }

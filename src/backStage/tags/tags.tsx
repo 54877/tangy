@@ -58,8 +58,6 @@ export const Tags = () => {
     try {
       await createTagRequest(label);
       await refreshTagList();
-    } catch (err) {
-      DialogApiError(err, openDialog, 1);
     } finally {
       void loading(2).stop();
     }
@@ -71,8 +69,6 @@ export const Tags = () => {
       await editTagRequest(row.key, label);
       await refreshTagList();
       await refreshCourseList();
-    } catch (err) {
-      DialogApiError(err, openDialog, 1);
     } finally {
       void loading(2).stop();
     }

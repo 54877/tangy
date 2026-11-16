@@ -65,8 +65,6 @@ export const MyCourse = () => {
         id: "title",
         selector: (row) => row.title || "—",
         sortable: true,
-        grow: 1.5,
-        maxWidth: "200px",
       },
       {
         name: "講師",
@@ -86,7 +84,6 @@ export const MyCourse = () => {
         selector: (row) => Number(row.price) || 0,
         cell: (row) => `NT$${row.price}`,
         sortable: true,
-        maxWidth: "120px",
       });
     }
 
@@ -97,20 +94,17 @@ export const MyCourse = () => {
           selector: (row) => Number(row.originalPrice) || 0,
           cell: (row) => `NT$${row.originalPrice}`,
           sortable: true,
-          maxWidth: "120px",
         },
         {
           name: "學生數",
           selector: (row) => Number(row.studentCount) || 0,
           sortable: true,
-          maxWidth: "110px",
         },
         {
           name: "評分",
           selector: (row) => Number(row.rating) || 0,
           cell: (row) => row.rating || "—",
           sortable: true,
-          maxWidth: "90px",
         },
       );
     }
@@ -120,7 +114,6 @@ export const MyCourse = () => {
         name: "審核次數",
         selector: (row) => Number(row.reviewCount) || 0,
         sortable: true,
-        maxWidth: "120px",
       });
     }
 
@@ -130,15 +123,12 @@ export const MyCourse = () => {
           name: "拒絕原因",
           selector: (row) => row.reviewContext || "—",
           cell: (row) => renderRejectionReasonCell(row.reviewContext),
-          grow: 1.5,
-          maxWidth: "200px",
           wrap: true,
         },
         {
           name: "審核次數",
           selector: (row) => Number(row.reviewCount) || 0,
           sortable: true,
-          maxWidth: "110px",
         },
       );
     }
@@ -179,6 +169,7 @@ export const MyCourse = () => {
         </ToggleButtonGroup>
       </Flex>
       <ReusableDataTable
+        responsiveBreakpoint={800}
         columns={columns}
         data={visibleCourses}
         defaultSortFieldId="title"
