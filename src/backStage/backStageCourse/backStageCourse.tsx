@@ -97,7 +97,6 @@ export const BackStageCourse = () => {
     {
       name: "標籤",
       selector: (row) => row.tags?.join(", ") || "—",
-      ...(selectedStatus === "PENDING" ? { maxWidth: "30%" } : {}),
     },
   ];
 
@@ -109,7 +108,7 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.originalPrice}`,
         sortable: true,
         wrap: false,
-        maxWidth: "10%",
+        maxWidth: "12%",
       },
       {
         name: "價格",
@@ -117,12 +116,20 @@ export const BackStageCourse = () => {
         cell: (row) => `NT$${row.price}`,
         sortable: true,
         wrap: false,
-        maxWidth: "10%",
+        maxWidth: "12%",
       },
     );
   }
 
   if (selectedStatus === "APPROVED") {
+    columns.unshift({
+      name: "操作",
+      button: true,
+      ignoreRowClick: true,
+      allowOverflow: true,
+      cell: (course) => renderDeleteCourseButton(course),
+      width: "90px",
+    });
     columns.push(
       {
         name: "評分",
@@ -137,13 +144,6 @@ export const BackStageCourse = () => {
         sortable: true,
         width: "100px",
       },
-      {
-        name: "操作",
-        button: true,
-        ignoreRowClick: true,
-        allowOverflow: true,
-        cell: (course) => renderDeleteCourseButton(course),
-      },
     );
   }
 
@@ -151,7 +151,7 @@ export const BackStageCourse = () => {
     columns.push({
       name: "審核次數",
       selector: (row) => Number(row.reviewCount) || 0,
-      width: "10%",
+      width: "15%",
     });
   }
 
@@ -167,6 +167,7 @@ export const BackStageCourse = () => {
         name: "審核次數",
         selector: (row) => Number(row.reviewCount) || 0,
         sortable: true,
+        width: "15%",
       },
     );
   }

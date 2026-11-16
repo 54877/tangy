@@ -1,5 +1,5 @@
 import DataTable, { type TableProps } from "react-data-table-component";
-import { useLayoutEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { NoDataComponent } from "./NoData";
 import { customStyles, DataTableCard } from "./dataTable.styled";
 
@@ -59,49 +59,24 @@ const syncResponsiveColumnWidths = (
     ),
   ];
 
-  // 暫時移除欄位分配到的寬度，讓每格依內容的 max-content 寬度排版。
-  // 這樣量到的是內容所需寬度，而不是表格目前分配給該欄的寬度。
-  const measurementStyles = new Map<HTMLElement, SavedCellStyles>();
-  cellRows.flat().forEach((cell) => {
-    measurementStyles.set(cell, {
-      flex: {
-        value: cell.style.getPropertyValue("flex"),
-        priority: cell.style.getPropertyPriority("flex"),
-      },
-      width: {
-        value: cell.style.getPropertyValue("width"),
-        priority: cell.style.getPropertyPriority("width"),
-      },
-      "min-width": {
-        value: cell.style.getPropertyValue("min-width"),
-        priority: cell.style.getPropertyPriority("min-width"),
-      },
-    });
-    cell.style.setProperty("flex", "0 0 max-content", "important");
-    cell.style.setProperty("width", "max-content", "important");
-    cell.style.setProperty("min-width", "max-content", "important");
-  });
-
+  // 用單一 class 暫時切換量測樣式，避免逐格寫入及還原 inline styles。
   const widths = headers.map(() => 0);
-  cellRows.forEach((cells) => {
-    cells.forEach((cell, index) => {
-      const currentWidth = widths[index];
-      if (currentWidth === undefined) return;
-      widths[index] = Math.max(currentWidth, cell.getBoundingClientRect().width);
+  card.classList.add("rdt-measuring-content");
+  try {
+    // 先集中套用樣式，再逐格讀取一次尺寸，避免讀寫交錯造成重複 layout。
+    cellRows.forEach((cells) => {
+      cells.forEach((cell, index) => {
+        const currentWidth = widths[index];
+        if (currentWidth === undefined) return;
+        widths[index] = Math.max(
+          currentWidth,
+          cell.getBoundingClientRect().width,
+        );
+      });
     });
-  });
-
-  // 還原量測用樣式，再套用依內容實際量出的欄寬，沒有預設固定欄寬。
-  measurementStyles.forEach((styles, cell) => {
-    measuredProperties.forEach((property) => {
-      const original = styles[property];
-      if (original.value) {
-        cell.style.setProperty(property, original.value, original.priority);
-      } else {
-        cell.style.removeProperty(property);
-      }
-    });
-  });
+  } finally {
+    card.classList.remove("rdt-measuring-content");
+  }
 
   // 將同一欄的寬度同步套用到表頭和各資料列，確保欄位對齊。
   const adjustedCells = adjustedCellsByCard.get(card) ?? new Set<HTMLElement>();
@@ -145,43 +120,122 @@ export const ReusableDataTable = <T,>({
   defaultSortAsc = true,
   customStyles: customStylesProp = customStyles,
   noDataComponent = <NoDataComponent />,
+  onChangePage,
+  onChangeRowsPerPage,
+  onSort,
+  onRowExpandToggled,
+  onFilterChange,
+  onColumnOrderChange,
+  onColumnGroupOrderChange,
   ...tableProps
 }: ReusableDataTableProps<T>) => {
   const tableCardRef = useRef<HTMLDivElement>(null);
+  const measurementFrameRef = useRef(0);
+
+  const scheduleResponsiveWidths = useCallback(() => {
+    const card = tableCardRef.current;
+    if (!card) return;
+    cancelAnimationFrame(measurementFrameRef.current);
+    measurementFrameRef.current = requestAnimationFrame(() =>
+      syncResponsiveColumnWidths(card, responsiveBreakpoint),
+    );
+  }, [responsiveBreakpoint]);
 
   useLayoutEffect(() => {
     const card = tableCardRef.current;
     if (!card) return;
 
-    // 等瀏覽器完成版面更新後再量測，避免取得前一個視窗寬度下的欄寬。
-    let frame = 0;
-    const syncWidths = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() =>
-        syncResponsiveColumnWidths(card, responsiveBreakpoint),
-      );
-    };
-    syncWidths();
+    scheduleResponsiveWidths();
 
-    // 觀察分頁或資料更新造成的 DOM 變化，以及容器寬度變化。
-    const observer = new MutationObserver(syncWidths);
-    observer.observe(card, {
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-    const resizeObserver = new ResizeObserver(syncWidths);
-    resizeObserver.observe(card);
-    window.addEventListener("resize", syncWidths);
+    // 欄位 props 變更後，DataTable 會在自己的 effect 更新內部欄位狀態；
+    // 監聽表格本體可在實際 DOM 更新後補做量測，避免只量到前一個狀態。
+    const table = card.querySelector<HTMLElement>(".rdt_Table");
+    const tableMutationObserver = new MutationObserver(
+      scheduleResponsiveWidths,
+    );
+    if (table) {
+      tableMutationObserver.observe(table, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+    }
+
+    // 容器高度也會因資料列換行改變；只有可用寬度變動時才需要重算欄寬。
+    let observedWidth = card.clientWidth;
+    const syncOnWidthChange = () => {
+      const nextWidth = card.clientWidth;
+      if (nextWidth === observedWidth) return;
+      observedWidth = nextWidth;
+      scheduleResponsiveWidths();
+    };
+    const widthObserver = new ResizeObserver(syncOnWidthChange);
+    widthObserver.observe(card);
 
     return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", syncWidths);
+      cancelAnimationFrame(measurementFrameRef.current);
+      tableMutationObserver.disconnect();
+      widthObserver.disconnect();
     };
-  }, [responsiveBreakpoint]);
+  }, [scheduleResponsiveWidths]);
 
+  // 資料、欄位或受控表格狀態改變時，直接排程量測。
+  useLayoutEffect(() => {
+    scheduleResponsiveWidths();
+  }, [
+    columns,
+    data,
+    pagination,
+    paginationPerPage,
+    tableProps.paginationPage,
+    tableProps.paginationResetDefaultPage,
+    tableProps.filterValues,
+    tableProps.expandableRows,
+    tableProps.progressPending,
+    scheduleResponsiveWidths,
+  ]);
+
+  const handleChangePage: NonNullable<TableProps<T>["onChangePage"]> = (
+    page,
+    totalRows,
+  ) => {
+    onChangePage?.(page, totalRows);
+    scheduleResponsiveWidths();
+  };
+  const handleChangeRowsPerPage: NonNullable<
+    TableProps<T>["onChangeRowsPerPage"]
+  > = (currentRowsPerPage, currentPage) => {
+    onChangeRowsPerPage?.(currentRowsPerPage, currentPage);
+    scheduleResponsiveWidths();
+  };
+  const handleSort: NonNullable<TableProps<T>["onSort"]> = (...args) => {
+    onSort?.(...args);
+    scheduleResponsiveWidths();
+  };
+  const handleRowExpandToggled: NonNullable<
+    TableProps<T>["onRowExpandToggled"]
+  > = (expanded, row) => {
+    onRowExpandToggled?.(expanded, row);
+    scheduleResponsiveWidths();
+  };
+  const handleFilterChange: NonNullable<
+    TableProps<T>["onFilterChange"]
+  > = (columnId, filter) => {
+    onFilterChange?.(columnId, filter);
+    scheduleResponsiveWidths();
+  };
+  const handleColumnOrderChange: NonNullable<
+    TableProps<T>["onColumnOrderChange"]
+  > = (nextOrder) => {
+    onColumnOrderChange?.(nextOrder);
+    scheduleResponsiveWidths();
+  };
+  const handleColumnGroupOrderChange: NonNullable<
+    TableProps<T>["onColumnGroupOrderChange"]
+  > = (nextGroups, nextColumns) => {
+    onColumnGroupOrderChange?.(nextGroups, nextColumns);
+    scheduleResponsiveWidths();
+  };
   return (
     <DataTableCard
       ref={tableCardRef}
@@ -199,6 +253,13 @@ export const ReusableDataTable = <T,>({
         customStyles={customStylesProp}
         defaultSortAsc={defaultSortAsc}
         noDataComponent={noDataComponent}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onSort={handleSort}
+        onRowExpandToggled={handleRowExpandToggled}
+        onFilterChange={handleFilterChange}
+        onColumnOrderChange={handleColumnOrderChange}
+        onColumnGroupOrderChange={handleColumnGroupOrderChange}
       />
     </DataTableCard>
   );

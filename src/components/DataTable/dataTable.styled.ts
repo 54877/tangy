@@ -56,6 +56,15 @@ export const DataTableCard = styled.div<{ $responsiveBreakpoint: number }>`
     white-space: nowrap;
   }
 
+  &.rdt-measuring-content {
+    .rdt_TableHeadRow .rdt_TableCol,
+    .rdt_TableCell {
+      flex: 0 0 max-content !important;
+      width: max-content !important;
+      min-width: max-content !important;
+    }
+  }
+
   @container (max-width: ${({ $responsiveBreakpoint }) =>
     $responsiveBreakpoint}px) {
     .rdt_ResponsiveWrapper,
