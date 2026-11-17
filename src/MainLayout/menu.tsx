@@ -15,6 +15,7 @@ import { LoadingUi } from "../components/loading/loading";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { useUser } from "../context/user/useUser";
 import { LayoutDashboard } from "lucide-react";
+import type { CourseCategoryType } from "../types/backStageType";
 
 type UiType = {
   logout: () => void;
@@ -75,10 +76,10 @@ export const UserMenu = ({ logout, loading, close }: UiType) => {
   );
 };
 
-export const CourseMenu = () => {
+export const CourseMenu = ({ categoryList }: { categoryList: CourseCategoryType[] }) => {
   return (
     <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
-      <CourseList />
+      <CourseList categoryList={categoryList} />
     </UserListMenu>
   );
 };

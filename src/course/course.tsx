@@ -15,6 +15,7 @@ import { useLoading } from "../context/loading/useLoading";
 import { getCourse, type CourseType } from "../api/course.api";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
+import { useUser } from "../context/user/useUser";
 
 export const Course = () => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -23,14 +24,8 @@ export const Course = () => {
   const { loading } = useLoading();
   const isTablet = useMediaQuery(`${media.md}`);
   const [cardData, setCardData] = useState<CourseType[]>([]);
-  const item = [
-    "所有領域",
-    "個人理財",
-    "家族財富",
-    "投資規劃",
-    "財務分析",
-    "風險管理",
-  ];
+  const { categoryList } = useUser();
+  const item = ["所有領域", ...categoryList.map(({ CategoryName }) => CategoryName)];
   const sortArray = ["依時間", "依人數", "依評分", "依價格"];
 
   //所有線上課程api

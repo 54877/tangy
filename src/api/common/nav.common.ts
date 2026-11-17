@@ -4,7 +4,7 @@ import { me } from "../nav.api";
 import { useUser } from "../../context/user/useUser";
 
 export const useMe = () => {
-  const { setUser, user } = useUser();
+  const { setUser, setCategoryList, user } = useUser();
   const { loading } = useLoading();
   const [state, setState] = useState<boolean>(false);
 
@@ -12,6 +12,7 @@ export const useMe = () => {
     const res = await me();
     const data = res.data.dataSet;
     setUser(data);
+    setCategoryList(data.categoryList);
   };
 
   const getMe = async (type = false) => {

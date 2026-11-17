@@ -3,9 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import type { UseUserProps } from "../../types/userType";
 import { useUserInit } from "../../constants/user";
 import { UserContext } from "./UserContext";
+import type { CourseCategoryType } from "../../types/backStageType";
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UseUserProps>(useUserInit);
+  const [categoryList, setCategoryList] = useState<CourseCategoryType[]>([]);
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     null,
   );
@@ -26,11 +28,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     () => ({
       user,
       setUser,
+      categoryList,
+      setCategoryList,
       selectedProfileImage,
       setSelectedProfileImage,
       profileImageUrl,
     }),
-    [user, profileImageUrl, selectedProfileImage],
+    [user, categoryList, profileImageUrl, selectedProfileImage],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

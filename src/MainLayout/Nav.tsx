@@ -54,20 +54,18 @@ type NavProps = {
 export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
   const [borderState, setBorderState] = useState(false);
-  const { isAuthenticated, clearAuthToken, token } = useAuth();
+  const { isAuthenticated, clearAuthToken } = useAuth();
   const { clearFavorites } = useFavorite();
   const navigate = useNavigate();
   const menu = useMenu();
-  const { user, setUser, profileImageUrl } = useUser();
+  const { user, setUser, profileImageUrl, categoryList } = useUser();
   const { getMe } = useMe();
   const userIsLoading = useLoadingState(0);
   const logoutLoading = useLoadingState(5);
   const { loading } = useLoading();
 
   useEffect(() => {
-    if (token) {
-      void getMe();
-    }
+    void getMe();
   }, []);
 
   //登入跳轉手頁
@@ -267,7 +265,7 @@ export const Nav = ({ isMobile }: NavProps) => {
         ) : (
           <ListMenu>
             {/* course List */}
-            <CourseList />
+            <CourseList categoryList={categoryList} />
             {!isAuthenticated && (
               <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
             )}
@@ -291,7 +289,9 @@ export const Nav = ({ isMobile }: NavProps) => {
               />
             )}
             {/* 課程分類menu */}
-            {menu.activeKey === "course" && <CourseMenu />}
+            {menu.activeKey === "course" && (
+              <CourseMenu categoryList={categoryList} />
+            )}
             {/* 購物車menu */}
             {menu.activeKey === "chart" && (
               <ChartMenu close={menu.closeClick} />
