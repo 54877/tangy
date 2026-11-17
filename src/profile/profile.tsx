@@ -1,5 +1,5 @@
 import { FlexType } from "../styles/components/flex";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Heading, SpanType } from "../styles/components/span";
 import { Flex } from "../components/Input/Input.styled";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -58,6 +58,8 @@ export const Profile = () => {
   const [userList, setUserList] = useState<UseUserProps>(profileDetailInit);
   const [device, setDevice] = useState<DeviceProps[]>();
   const [myCourseList, setMyCourseList] = useState<MyCourseType[]>();
+  const myCourseListNeedsRefresh = useRef(true);
+  const myCourseListRequestInFlight = useRef(false);
   const [genderOptions, setGenderOptions] = useState<OptionItem[]>();
   const [courseTags, setCourseTags] = useState<TagsListType[]>([]);
   const [courseCategories, setCourseCategories] = useState<
@@ -116,28 +118,34 @@ export const Profile = () => {
       return response.data.dataSet;
     } catch (error) {
       DialogApiError(error, openDialog, 1);
-      return [];
+      return undefined;
     }
   }, [openDialog]);
 
+  //標記我的課程資料需要在下次進入頁面時更新
+  const invalidateMyCourseList = useCallback(() => {
+    myCourseListNeedsRefresh.current = true;
+    setMyCourseList(undefined);
+  }, []);
+
   //更新我的課程 State
   const refreshMyCourseList = useCallback(async () => {
+    if (myCourseListRequestInFlight.current) return;
+    myCourseListRequestInFlight.current = true;
     const data = await loadMyCourseList();
-    setMyCourseList(data ?? []);
+    if (data !== undefined) {
+      setMyCourseList(data);
+      myCourseListNeedsRefresh.current = false;
+    }
+    myCourseListRequestInFlight.current = false;
   }, [loadMyCourseList]);
 
   useEffect(() => {
-    let active = true;
-
-    void loadMyCourseList().then((data) => {
-      if (!active) return;
-      setMyCourseList(data ?? []);
-    });
-
-    return () => {
-      active = false;
-    };
-  }, [loadMyCourseList]);
+    const isMyCoursePage = location.pathname.endsWith("/myCourses");
+    if (isMyCoursePage && myCourseListNeedsRefresh.current) {
+      void refreshMyCourseList();
+    }
+  }, [location.pathname, refreshMyCourseList]);
 
   //創建課程section List Api
   useEffect(() => {
@@ -398,6 +406,7 @@ export const Profile = () => {
                 loadPersonalData,
                 myCourseList,
                 refreshMyCourseList,
+                invalidateMyCourseList,
                 courseTags,
                 courseCategories,
               }}

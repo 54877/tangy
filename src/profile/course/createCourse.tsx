@@ -36,6 +36,7 @@ import type {
 type CourseFormOptionsContext = {
   courseTags: TagsListType[];
   courseCategories: CourseCategoryType[];
+  invalidateMyCourseList: () => void;
 };
 
 const initialCourse: CoursePayload = {
@@ -56,8 +57,11 @@ const initialCourse: CoursePayload = {
 };
 
 export function CreateCourse() {
-  const { courseTags: tagList, courseCategories: categoryList } =
-    useOutletContext<CourseFormOptionsContext>();
+  const {
+    courseTags: tagList,
+    courseCategories: categoryList,
+    invalidateMyCourseList,
+  } = useOutletContext<CourseFormOptionsContext>();
   const { information, handleOnChange, setInformation } =
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
@@ -112,6 +116,7 @@ export function CreateCourse() {
   const createCourseApi = async (info: CoursePayload) => {
     try {
       await createCourse(info);
+      invalidateMyCourseList();
       setInformation(initialCourse);
     } catch (err) {
       handleApiError(err, setErr);
