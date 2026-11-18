@@ -1,7 +1,6 @@
 import { IndexBox } from "../index/index.styled";
-import { FlexTypeMap } from "../components/CourseMap/CourseMap.styled";
 import { Card } from "../components/card/Card";
-import { HotBox } from "./course.styled";
+import { CourseGrid, HotBox } from "./course.styled";
 import type { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -195,12 +194,8 @@ export const Course = () => {
         </FlexType>
 
         {/* course內容 */}
-        <FlexTypeMap
-          style={{ flexWrap: "wrap", marginBottom: isTablet ? "96px" : "48px" }}
-          $direction={"row"}
-          $justify={{ xsLg: "space-between", lg: "flex-start" }}
-          $align={"flex-start"}
-          $gap="lg"
+        <CourseGrid
+          style={{ marginBottom: isTablet ? "96px" : "48px" }}
         >
           {useLoadingState(1) ? (
             <LoadingUi type="spinner" />
@@ -210,13 +205,11 @@ export const Course = () => {
                 key={`${item.title}-${index}`}
                 tag={item.tags ?? []}
                 {...item}
-                macType={true}
-                lgWidth={"32.12%"}
-                xslgWidth={"47%"}
+                alignRows
               />
             ))
           )}
-        </FlexTypeMap>
+        </CourseGrid>
       </IndexBox>
     </>
   );

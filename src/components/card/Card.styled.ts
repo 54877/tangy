@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import StarIcon from "@mui/icons-material/Star";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { FlexType } from "../../styles/components/flex";
@@ -63,11 +63,23 @@ export const FavoriteContainer = styled.button`
   color: inherit;
 `;
 
-export const FlexCard = styled(FlexType)`
+export const FlexCard = styled(FlexType)<{ $alignRows?: boolean }>`
   width: 100%;
   ${media.md} {
     flex: 1;
   }
+
+  ${({ $alignRows }) =>
+    $alignRows &&
+    css`
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: subgrid;
+      grid-row: span 5;
+      justify-content: stretch;
+      justify-items: stretch;
+      min-height: 0;
+    `}
 `;
 
 export const TitleHeading = styled(Heading)`
@@ -79,17 +91,17 @@ export const TitleHeading = styled(Heading)`
   position: relative;
 `;
 
-export const FlexTypeCard = styled(FlexType)<{
-  $width?: string;
-  $xslgWidth?: string;
-  $lgWidth?: string;
-}>`
-  ${media.xsLg} {
-    max-width: ${({ $xslgWidth }) => $xslgWidth};
-  }
-  ${media.lg} {
-    max-width: ${({ $lgWidth }) => $lgWidth};
-  }
+export const FlexTypeCard = styled(FlexType)<{ $alignRows?: boolean }>`
   width: 100%;
-  max-width: ${({ $width }) => $width ?? "100%"};
+
+  ${({ $alignRows }) =>
+    $alignRows &&
+    css`
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: subgrid;
+      grid-row: span 6;
+      justify-content: stretch;
+      justify-items: stretch;
+    `}
 `;

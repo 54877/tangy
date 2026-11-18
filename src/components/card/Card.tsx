@@ -28,19 +28,13 @@ export interface CardProps {
   readonly title: string;
   readonly duration: string;
   readonly tag: string[];
-  readonly macType?: boolean;
-  readonly width?: string;
-  readonly lgWidth?: string;
-  readonly xslgWidth?: string;
+  readonly alignRows?: boolean;
   readonly ImgWidth?: string;
 }
 
 export function Card({
   id,
-  macType,
-  lgWidth,
-  xslgWidth,
-  width,
+  alignRows = false,
   ImgWidth,
   tag,
   imageUrl,
@@ -56,11 +50,8 @@ export function Card({
   const [open, setOpen] = useState(false);
   return (
     <FlexTypeCard
-      style={{ width: "100%" }}
-      $width={width}
-      $lgWidth={lgWidth}
-      $xslgWidth={xslgWidth}
-      $direction={{ xs: "column", md: macType ? "column" : "row" }}
+      $alignRows={alignRows}
+      $direction={{ xs: "column", md: alignRows ? "column" : "row" }}
       $gap={"spc"}
       $align={"stretch"}
     >
@@ -73,7 +64,13 @@ export function Card({
         <Img src={imageUrl} alt="img" />
         <FavoriteButton courseId={id} />
       </ImageContainer>
-      <FlexCard $direction={"column"} $align={"flex-start"} $gap={"spc"}>
+
+      <FlexCard
+        $alignRows={alignRows}
+        $direction={"column"}
+        $align={"stretch"}
+        $gap={"spc"}
+      >
         <Tooltip title={title}>
           <TitleHeading
             onClick={() => {
@@ -90,7 +87,7 @@ export function Card({
         <FlexType $justify={"flex-start"} $gap={"xs"}>
           <SpanType $size={"sm"}>by {teacher}</SpanType>
         </FlexType>
-        {tag.length > 0 && (
+        {(alignRows || tag.length > 0) && (
           <FlexType style={{ flexWrap: "wrap" }} $justify={"flex-start"}>
             {tag.map((item, index) => (
               <SpanType
@@ -125,13 +122,7 @@ export function Card({
             <SpanType $size={"sm"}>{formatDuration(duration)}</SpanType>
           </FlexType>
         </FlexType>
-
-        <FlexEnd
-          style={{ marginTop: "auto" }}
-          $justify={"flex-start"}
-          $align={"flex-end"}
-          $gap={"spc"}
-        >
+        <FlexEnd $justify={"flex-start"} $align={"flex-end"} $gap={"spc"}>
           <Heading $size={"sm"} $color={"primary"} $shade={600}>
             NT${price}
           </Heading>
