@@ -4,7 +4,7 @@ import setupInterceptors from "../interceptor.api";
 export const createApi = (endpoint: string) => {
   return axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}/tangy/${endpoint}`,
-    withCredentials: true,
+    withCredentials: false,
   });
 };
 

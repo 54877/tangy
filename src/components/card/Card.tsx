@@ -15,6 +15,7 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { useState } from "react";
 import { breakpoints } from "../../styles/tokens/breakpoints";
 import { FavoriteButton } from "../FavoriteButton/FavoriteButton";
+import { formatDuration } from "../../utils/Duration";
 
 export interface CardProps {
   readonly id: string;
@@ -121,7 +122,7 @@ export function Card({
           </FlexType>
           <FlexType $align={"center"} $gap={"none"}>
             <Icon as={AccessTimeOutlinedIcon} />
-            <SpanType $size={"sm"}>{duration}</SpanType>
+            <SpanType $size={"sm"}>{formatDuration(duration)}</SpanType>
           </FlexType>
         </FlexType>
 

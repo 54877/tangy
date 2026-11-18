@@ -148,7 +148,7 @@ export const BackStageCourse = () => {
     columns.push({
       name: "審核次數",
       selector: (row) => Number(row.reviewCount) || 0,
-      width: "15%",
+      width: "10%",
     });
   }
 

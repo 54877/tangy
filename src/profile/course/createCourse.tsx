@@ -21,7 +21,7 @@ import { useOutletContext } from "react-router-dom";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
 import { createCourse, createCourseVideo } from "../../api/profile.api";
-import { handleApiError } from "../../utils/apiError";
+import { DialogApiError } from "../../utils/apiError";
 import type { FormError } from "../../types/errorType";
 import { LoadingUi } from "../../components/loading/loading";
 import { useLoadingState } from "../../utils/loading/loading.state";
@@ -32,6 +32,7 @@ import type {
   CourseCategoryType,
   TagsListType,
 } from "../../types/backStageType";
+import { useDialog } from "../../context/dialog/useDialog";
 
 type CourseFormOptionsContext = {
   courseTags: TagsListType[];
@@ -67,6 +68,7 @@ export function CreateCourse() {
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
   const isLoading = useLoadingState(3);
+  const { openDialog } = useDialog();
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -106,7 +108,7 @@ export function CreateCourse() {
       };
       await createCourseApi(info);
     } catch (err) {
-      handleApiError(err, setErr);
+      DialogApiError(err, openDialog, 1);
     } finally {
       await loading(3).stop();
     }
@@ -119,8 +121,8 @@ export function CreateCourse() {
       invalidateMyCourseList();
       setInformation(initialCourse);
     } catch (err) {
-      handleApiError(err, setErr);
       await loading(3).stop();
+      DialogApiError(err, openDialog, 1);
     }
   };
 

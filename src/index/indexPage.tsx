@@ -38,15 +38,58 @@ import { CardSm } from "../components/CardSm/CardSm";
 import { CourseSection } from "../components/CourseSection/CourseSection";
 import { CardSection } from "../components/CardSection/CardSection";
 import { Button } from "../components/Button/Button";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ButtonType } from "../components/Button/Button.styled";
 import { useNavigate } from "react-router-dom";
+import { getHomepageCourse } from "../api/homePage.api";
+import type { CourseType } from "../types/courseType";
+import { useLoading } from "../context/loading/useLoading";
+import { useLoadingState } from "../utils/loading/loading.state";
+import { LoadingUi } from "../components/loading/loading";
+import { DialogApiError } from "../utils/apiError";
+import { useDialog } from "../context/dialog/useDialog";
+import { formatDuration } from "../utils/Duration";
 
 export function Index() {
   const isMobile = useMediaQuery(`${media.sm}`);
   const isLgMobile = useMediaQuery(`${media.xsLg}`);
   const swiperRef = useRef<SwiperType | null>(null);
   const navigate = useNavigate();
+  const { loading } = useLoading();
+  const isHomepageCourseLoading = useLoadingState(5);
+  const [homepageCourses, setHomepageCourses] = useState<CourseType[]>([]);
+  const { openDialog } = useDialog();
+
+  useEffect(() => {
+    let active = true;
+    const loadHomepageCourses = async () => {
+      loading(5).start();
+      try {
+        const res = await getHomepageCourse();
+        const data = res.data.dataSet;
+        if (active) setHomepageCourses(data ?? []);
+      } catch (err) {
+        DialogApiError(err, openDialog, 1);
+      } finally {
+        void loading(5).stop();
+      }
+    };
+
+    void loadHomepageCourses();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  const homepageCourseGroups = Array.from(
+    homepageCourses.reduce((groups, course) => {
+      const group = groups.get(course.category) ?? [];
+      group.push(course);
+      groups.set(course.category, group);
+      return groups;
+    }, new Map<string, CourseType[]>()),
+  );
   //假資料
   const cardData = [
     {
@@ -142,33 +185,34 @@ export function Index() {
           </FlexTypeBanner>
         </BannerBox>
       </ImgContainer>
-      {/*TODO  data 字數需限制 */}
       {/* 學習地圖 */}
       <IndexBox>
         <CourseSection img={map} title={"碳吉學院學習地圖"} />
-        {/* 新手推薦 */}
-        <CourseMap
-          imgSrc={tangyNew}
-          title="新手推薦"
-          secTitle="打好基礎，啟航財富之旅"
-          ImgWidth={"50%"}
-          cardData={[]}
-        />
-        <CourseMap
-          imgSrc={tangyMap_2}
-          title="投資推薦"
-          reverse={true}
-          secTitle="建立家庭儲蓄，提升投資能力"
-          ImgWidth={"50%"}
-          cardData={[]}
-        />
-        <CourseMap
-          imgSrc={tangyMap_3}
-          title="退休推薦"
-          secTitle="財富自由，掌握未來！"
-          ImgWidth={"50%"}
-          cardData={[]}
-        />
+        {isHomepageCourseLoading ? (
+          <LoadingUi style={{ padding: "24px" }} type="spinner" />
+        ) : (
+          homepageCourseGroups.map(([category, courses], index) => (
+            <CourseMap
+              key={category}
+              imgSrc={[tangyNew, tangyMap_2, tangyMap_3][index % 3]}
+              title={`${category}推薦`}
+              reverse={index % 2 === 1}
+              ImgWidth={"50%"}
+              cardData={courses.map((course) => ({
+                id: course.id,
+                imageUrl: course.imageUrl,
+                originalPrice: String(course.originalPrice),
+                price: String(course.price),
+                rating: String(course.rating),
+                studentCount: String(course.studentCount),
+                teacher: course.teacher,
+                title: course.title,
+                duration: `${formatDuration(course.duration)}`,
+                tag: course.tags ?? [],
+              }))}
+            />
+          ))
+        )}
       </IndexBox>
       {/* 碳吉好學院 */}
       <Container>

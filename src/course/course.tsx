@@ -12,10 +12,11 @@ import { FlexType } from "../styles/components/flex";
 import { Box, useMediaQuery } from "@mui/material";
 import { media } from "../styles/helper/media";
 import { useLoading } from "../context/loading/useLoading";
-import { getCourse, type CourseType } from "../api/course.api";
+import { getCourse } from "../api/course.api";
 import { useLoadingState } from "../utils/loading/loading.state";
 import { LoadingUi } from "../components/loading/loading";
 import { useUser } from "../context/user/useUser";
+import type { CourseType } from "../types/courseType";
 
 export const Course = () => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -25,7 +26,10 @@ export const Course = () => {
   const isTablet = useMediaQuery(`${media.md}`);
   const [cardData, setCardData] = useState<CourseType[]>([]);
   const { categoryList } = useUser();
-  const item = ["所有領域", ...categoryList.map(({ CategoryName }) => CategoryName)];
+  const item = [
+    "所有領域",
+    ...categoryList.map(({ CategoryName }) => CategoryName),
+  ];
   const sortArray = ["依時間", "依人數", "依評分", "依價格"];
 
   //所有線上課程api
@@ -33,10 +37,7 @@ export const Course = () => {
     loading(1).start();
     try {
       const res = await getCourse();
-      const data = res.data.dataSet.map((course) => ({
-        ...course,
-        tags: course.tags?.length ? course.tags : ["14"],
-      }));
+      const data = res.data.dataSet;
       setCardData(data);
     } catch (err) {
       console.error(err);
@@ -207,7 +208,7 @@ export const Course = () => {
             cardData.map((item, index) => (
               <Card
                 key={`${item.title}-${index}`}
-                tag={item.tags}
+                tag={item.tags ?? []}
                 {...item}
                 macType={true}
                 lgWidth={"32.12%"}
