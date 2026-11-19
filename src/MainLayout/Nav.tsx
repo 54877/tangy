@@ -25,7 +25,7 @@ import {
 import { Button, ButtonOutlined } from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { Drawer } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { useAuth } from "../context/auth/useAuth";
 import { UserImg } from "../components/UserImg/userImg";
 import {
@@ -46,6 +46,9 @@ import { useUser } from "../context/user/useUser";
 import { useLoading } from "../context/loading/useLoading";
 import { LayoutDashboard } from "lucide-react";
 import { useFavorite } from "../context/favorite/useFavorite";
+import { useInformation } from "../utils/information";
+import type { SearchCourseRequest } from "../types/courseType";
+import { EMPTY_SEARCH } from "../constants/course";
 
 type NavProps = {
   isMobile: boolean;
@@ -63,6 +66,29 @@ export const Nav = ({ isMobile }: NavProps) => {
   const userIsLoading = useLoadingState(0);
   const logoutLoading = useLoadingState(5);
   const { loading } = useLoading();
+  const { information, handleOnChange } =
+    useInformation<SearchCourseRequest>(EMPTY_SEARCH);
+
+  const toggleCategory = (key: string) => {
+    const next = information.categoryKey.includes(key)
+      ? information.categoryKey.filter((item) => item !== key)
+      : [...information.categoryKey, key];
+    handleOnChange(next, "categoryKey");
+  };
+
+  const submitSearch = async (event?: SubmitEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    menu.closeClick();
+    closeClick();
+    navigate("/course", {
+      state: {
+        search: {
+          context: information.context.trim(),
+          categoryKey: information.categoryKey,
+        },
+      },
+    });
+  };
 
   useEffect(() => {
     void getMe();
@@ -152,9 +178,15 @@ export const Nav = ({ isMobile }: NavProps) => {
 
           <FlexTypeHeader $gap={{ xs: "none", sm: "lg" }}>
             {/* 搜尋 */}
-            <SearchFlex>
-              <HeaderSearch type="text" />
-              <Search />
+            <SearchFlex as="form" onSubmit={submitSearch}>
+              <HeaderSearch
+                type="text"
+                value={information.context}
+                onChange={(event) =>
+                  handleOnChange(event.target.value, "context")
+                }
+              />
+              <Search onClick={() => void submitSearch()} />
             </SearchFlex>
             <FlexType $gap={{ xs: "none", sm: "sm" }}>
               {/* cart */}
@@ -265,7 +297,11 @@ export const Nav = ({ isMobile }: NavProps) => {
         ) : (
           <ListMenu>
             {/* course List */}
-            <CourseList categoryList={categoryList} />
+            <CourseList
+              categoryList={categoryList}
+              selectedCategoryKeys={information.categoryKey}
+              onCategoryChange={toggleCategory}
+            />
             {!isAuthenticated && (
               <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
             )}
@@ -290,7 +326,11 @@ export const Nav = ({ isMobile }: NavProps) => {
             )}
             {/* 課程分類menu */}
             {menu.activeKey === "course" && (
-              <CourseMenu categoryList={categoryList} />
+              <CourseMenu
+                categoryList={categoryList}
+                selectedCategoryKeys={information.categoryKey}
+                onCategoryChange={toggleCategory}
+              />
             )}
             {/* 購物車menu */}
             {menu.activeKey === "chart" && (

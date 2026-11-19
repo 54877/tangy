@@ -76,10 +76,10 @@ export const UserMenu = ({ logout, loading, close }: UiType) => {
   );
 };
 
-export const CourseMenu = ({ categoryList }: { categoryList: CourseCategoryType[] }) => {
+export const CourseMenu = ({ categoryList, selectedCategoryKeys, onCategoryChange }: { categoryList: CourseCategoryType[]; selectedCategoryKeys: string[]; onCategoryChange: (categoryKey: string) => void }) => {
   return (
     <UserListMenu style={{ border: "0", padding: "16px 24px" }}>
-      <CourseList categoryList={categoryList} />
+      <CourseList categoryList={categoryList} selectedCategoryKeys={selectedCategoryKeys} onCategoryChange={onCategoryChange} />
     </UserListMenu>
   );
 };

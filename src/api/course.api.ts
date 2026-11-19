@@ -1,8 +1,9 @@
+import type { SearchCourseRequest } from "../types/courseType";
 import { createApi } from "./utils/createApi";
 
-export const _getCourse = createApi("getCourse");
+export const _searchCourse = createApi("searchCourse");
 
-//所有線上課程
-export const getCourse = async () => {
-  return await _getCourse.get("/");
+//搜尋線上課程
+export const searchCourse = async (information: SearchCourseRequest) => {
+  return await _searchCourse.post("/", information);
 };

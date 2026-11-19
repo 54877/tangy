@@ -11,3 +11,8 @@ export interface CourseType {
   tags: string[];
   category: string;
 }
+
+export type SearchCourseRequest = {
+  context: string;
+  categoryKey: string[];
+};
