@@ -3,6 +3,7 @@ import type { UseUserProps } from "../../types/userType";
 import type { OptionItem } from "../../types/selectType";
 import type { DeviceProps } from "../../types/profileType";
 import type { CourseCategoryType, TagsListType } from "../../types/backStageType";
+import type { SearchCourseRequest } from "../../types/courseType";
 
 //dialog類型
 export type DialogType =
@@ -14,7 +15,8 @@ export type DialogType =
   | "TextInputDialog"
   | "ImageCropDialog"
   | "CourseDetailDialog"
-  | "CourseDialog";
+  | "CourseDialog"
+  | "SearchCourseDialog";
 
 //共用props類型
 export interface BaseDialogData {
@@ -45,6 +47,8 @@ export interface BaseDialogData {
   courseDialogTitle?: string;
   confirmButtonText?: string;
   isReadOnly?: boolean;
+  searchInformation?: SearchCourseRequest;
+  onSearchSubmit?: (information: SearchCourseRequest) => void;
 }
 
 //層數props類型

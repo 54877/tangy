@@ -5,7 +5,7 @@ import { FlexType } from "../styles/components/flex";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { List } from "@mui/material";
-import { Button, ButtonOutlined } from "../components/Button/Button";
+import { Button } from "../components/Button/Button";
 import { LinkPrimary } from "../components/Link/Link";
 
 export const ContainerLayout = styled.div(() => ({
@@ -59,6 +59,7 @@ export const HeaderSearch = styled.input`
     color: ${({ theme }) => theme.colors.gray[500]};
   }
 `;
+
 export const Search = styled(SearchIcon)`
   && {
     width: 48px;
@@ -153,27 +154,6 @@ export const Border = styled.div<{ $borderState: boolean }>`
   width: 100%;
   border: ${({ $borderState }) =>
     $borderState ? "solid 2px #E5E5E5" : "solid 2px #0AA2C0"};
-`;
-
-export const BorderReverse = styled.div<{ $borderState: boolean }>`
-  width: 100%;
-  border: ${({ $borderState }) =>
-    $borderState ? "solid 2px #0AA2C0" : "solid 2px #E5E5E5"};
-`;
-
-export const NavButton = styled(ButtonOutlined)`
-  width: 100%;
-  padding: 20px 0 8px 0;
-  border: 0;
-  background-color: white;
-  &:focus {
-    border: 0;
-  }
-`;
-
-export const NavFlex = styled(FlexType)`
-  max-width: 50%;
-  width: 100%;
 `;
 
 export const UserListMenu = styled(List)`

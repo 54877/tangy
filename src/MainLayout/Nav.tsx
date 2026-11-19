@@ -7,16 +7,12 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import {
   HeaderFixed,
+  HeaderSearch,
   ContainerHeader,
   FlexTypeHeader,
   SearchFlex,
-  HeaderSearch,
   ButtonIcon,
   ListMenu,
-  Border,
-  NavButton,
-  NavFlex,
-  BorderReverse,
   UserListMenu,
   UserContainer,
   Search,
@@ -35,7 +31,6 @@ import {
 import { UserList } from "./userList";
 import { MenuNav } from "../components/Menu/Menu";
 import { useMenu } from "../components/Menu/menuHook";
-import { CourseList } from "./courseList";
 import { ChartMenu, CourseMenu, UserMenu } from "./menu";
 import { logout } from "../api/auth.api";
 import { useUserInit } from "../constants/user";
@@ -49,6 +44,7 @@ import { useFavorite } from "../context/favorite/useFavorite";
 import { useInformation } from "../utils/information";
 import type { SearchCourseRequest } from "../types/courseType";
 import { EMPTY_SEARCH } from "../constants/course";
+import { useDialog } from "../context/dialog/useDialog";
 
 type NavProps = {
   isMobile: boolean;
@@ -56,7 +52,6 @@ type NavProps = {
 
 export const Nav = ({ isMobile }: NavProps) => {
   const [open, setOpen] = useState(false);
-  const [borderState, setBorderState] = useState(false);
   const { isAuthenticated, clearAuthToken } = useAuth();
   const { clearFavorites } = useFavorite();
   const navigate = useNavigate();
@@ -66,6 +61,7 @@ export const Nav = ({ isMobile }: NavProps) => {
   const userIsLoading = useLoadingState(0);
   const logoutLoading = useLoadingState(5);
   const { loading } = useLoading();
+  const { openDialog } = useDialog();
   const { information, handleOnChange } =
     useInformation<SearchCourseRequest>(EMPTY_SEARCH);
 
@@ -76,18 +72,37 @@ export const Nav = ({ isMobile }: NavProps) => {
     handleOnChange(next, "categoryKey");
   };
 
-  const submitSearch = async (event?: SubmitEvent<HTMLFormElement>) => {
+  const submitSearch = (event?: SubmitEvent<HTMLFormElement>) => {
     event?.preventDefault();
+    navigateToSearch(information);
+  };
+
+  const navigateToSearch = (search: SearchCourseRequest) => {
+    handleOnChange(search.context, "context", {
+      categoryKey: search.categoryKey,
+    });
     menu.closeClick();
     closeClick();
     navigate("/course", {
       state: {
         search: {
-          context: information.context.trim(),
-          categoryKey: information.categoryKey,
+          context: search.context.trim(),
+          categoryKey: search.categoryKey,
         },
       },
     });
+  };
+
+  const openMobileSearch = () => {
+    openDialog(
+      {
+        type: "SearchCourseDialog",
+        searchInformation: information,
+        courseCategories: categoryList,
+        onSearchSubmit: navigateToSearch,
+      },
+      1,
+    );
   };
 
   useEffect(() => {
@@ -102,7 +117,6 @@ export const Nav = ({ isMobile }: NavProps) => {
   //關閉menu
   const closeClick = () => {
     setOpen(false);
-    setBorderState(false);
   };
 
   //登出
@@ -128,7 +142,12 @@ export const Nav = ({ isMobile }: NavProps) => {
     return open ? (
       <ButtonIcon onClick={closeClick} icon={<CloseIcon />} />
     ) : (
-      <ButtonIcon onClick={() => setOpen(true)} icon={<MenuIcon />} />
+      <ButtonIcon
+        onClick={() => {
+          setOpen(true);
+        }}
+        icon={<MenuIcon />}
+      />
     );
   };
 
@@ -186,7 +205,9 @@ export const Nav = ({ isMobile }: NavProps) => {
                   handleOnChange(event.target.value, "context")
                 }
               />
-              <Search onClick={() => void submitSearch()} />
+              <Search
+                onClick={() => (isMobile ? undefined : openMobileSearch())}
+              />
             </SearchFlex>
             <FlexType $gap={{ xs: "none", sm: "sm" }}>
               {/* cart */}
@@ -214,38 +235,7 @@ export const Nav = ({ isMobile }: NavProps) => {
           },
         }}
       >
-        {isAuthenticated && (
-          <FlexType style={{ paddingBottom: "12px" }} $gap={"none"}>
-            <NavFlex $direction={"column"} $gap={"none"}>
-              <NavButton
-                onClick={() => {
-                  setBorderState(false);
-                }}
-                text={
-                  <SpanType style={{ padding: "6.5px 8px" }} $type={"label"}>
-                    課程分類
-                  </SpanType>
-                }
-              />
-              <Border $borderState={borderState} />
-            </NavFlex>
-
-            <NavFlex $direction={"column"} $gap={"none"}>
-              <NavButton
-                onClick={() => {
-                  setBorderState(true);
-                }}
-                text={
-                  <SpanType style={{ padding: "6.5px 8px" }} $type={"label"}>
-                    <FlexType $direction={"row"}>關於我</FlexType>
-                  </SpanType>
-                }
-              />
-              <BorderReverse $borderState={borderState} />
-            </NavFlex>
-          </FlexType>
-        )}
-        {borderState ? (
+        {isAuthenticated ? (
           <UserContainer $direction={"column"}>
             <ListButtonDefault
               as={"div"}
@@ -297,11 +287,6 @@ export const Nav = ({ isMobile }: NavProps) => {
         ) : (
           <ListMenu>
             {/* course List */}
-            <CourseList
-              categoryList={categoryList}
-              selectedCategoryKeys={information.categoryKey}
-              onCategoryChange={toggleCategory}
-            />
             {!isAuthenticated && (
               <Button onClick={loginRouterOnclick} text={"登入/註冊"} />
             )}
