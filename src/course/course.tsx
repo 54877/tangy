@@ -5,7 +5,7 @@ import { Card } from "../components/card/Card";
 import { CourseGrid } from "./course.styled";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { SpanType } from "../styles/components/span";
 import { FlexType } from "../styles/components/flex";
 import { useMediaQuery } from "@mui/material";
@@ -19,19 +19,15 @@ import { useLocation } from "react-router-dom";
 import courseNotFoundImage from "../assets/searchError.png";
 import { EMPTY_SEARCH } from "../constants/course";
 
-const toNumber = (value: string) => {
-  const number = Number(value.replace(/,/g, ""));
-  return Number.isFinite(number) ? number : 0;
-};
-
 export const Course = () => {
   const [sortIndex, setSortIndex] = useState(0);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const { loading } = useLoading();
   const isTablet = useMediaQuery(`${media.md}`);
-  const [cardData, setCardData] = useState<CourseType[]>([]);
+  const [cardData, setCardData] = useState<CourseType[] | null>(null);
   const location = useLocation();
   const search = location.state?.search ?? EMPTY_SEARCH;
+  const isLoading = useLoadingState(1) || cardData === null;
   const sortArray = ["依人數", "依評分", "依價格"];
 
   //所有線上課程api
@@ -39,6 +35,7 @@ export const Course = () => {
     let active = true;
 
     const loadCourses = async () => {
+      setCardData(null);
       loading(1).start();
       try {
         console.log(search);
@@ -48,6 +45,7 @@ export const Course = () => {
         }
       } catch (err) {
         console.error(err);
+        if (active) setCardData([]);
       } finally {
         void loading(1).stop();
       }
@@ -61,27 +59,78 @@ export const Course = () => {
   }, [search]);
 
   const sortedCardData = useMemo(() => {
+    if (cardData === null) {
+      return [];
+    }
+
     const courses = [...cardData];
 
     if (sortIndex === 0) {
       return courses.sort((a, b) => {
-        const result = toNumber(a.studentCount) - toNumber(b.studentCount);
+        const result = +a.studentCount - +b.studentCount;
         return sortDirection === "asc" ? result : -result;
       });
     }
 
     if (sortIndex === 1) {
       return courses.sort((a, b) => {
-        const result = toNumber(a.rating) - toNumber(b.rating);
+        const result = +a.rating - +b.rating;
         return sortDirection === "asc" ? result : -result;
       });
     }
 
     return courses.sort((a, b) => {
-      const result = toNumber(a.price) - toNumber(b.price);
+      const result = +a.price - +b.price;
       return sortDirection === "asc" ? result : -result;
     });
   }, [cardData, sortDirection, sortIndex]);
+
+  let courseContent: ReactNode = sortedCardData.map((item, index) => (
+    <Card
+      key={`${item.title}-${index}`}
+      tag={item.tags ?? []}
+      {...item}
+      alignRows
+    />
+  ));
+
+  if (sortedCardData.length === 0) {
+    courseContent = (
+      <FlexType
+        $direction="column"
+        $gap="sm"
+        style={{
+          gridColumn: "1 / -1",
+          padding: "24px 16px 64px",
+          textAlign: "center",
+        }}
+      >
+        <img
+          src={courseNotFoundImage}
+          alt="找不到符合條件的課程"
+          style={{
+            display: "block",
+            width: "min(100%, 520px)",
+            height: "auto",
+          }}
+        />
+        <SpanType $size={{ xsLg: "lg", lg: "lg" }}>
+          找不到符合條件的課程
+        </SpanType>
+      </FlexType>
+    );
+  }
+
+  if (isLoading) {
+    courseContent = (
+      <FlexType
+        style={{ gridColumn: "1 / -1", padding: "64px 0" }}
+        $justify="center"
+      >
+        <LoadingUi type="spinner" />
+      </FlexType>
+    );
+  }
 
   return (
     <IndexBox>
@@ -146,46 +195,7 @@ export const Course = () => {
 
       {/* course內容 */}
       <CourseGrid style={{ marginBottom: isTablet ? "96px" : "48px" }}>
-        {useLoadingState(1) ? (
-          <FlexType
-            style={{ gridColumn: "1 / -1", padding: "64px 0" }}
-            $justify="center"
-          >
-            <LoadingUi type="spinner" />
-          </FlexType>
-        ) : sortedCardData.length === 0 ? (
-          <FlexType
-            $direction="column"
-            $gap="sm"
-            style={{
-              gridColumn: "1 / -1",
-              padding: "24px 16px 64px",
-              textAlign: "center",
-            }}
-          >
-            <img
-              src={courseNotFoundImage}
-              alt="找不到符合條件的課程"
-              style={{
-                display: "block",
-                width: "min(100%, 520px)",
-                height: "auto",
-              }}
-            />
-            <SpanType $size={{ xsLg: "lg", lg: "lg" }}>
-              找不到符合條件的課程
-            </SpanType>
-          </FlexType>
-        ) : (
-          sortedCardData.map((item, index) => (
-            <Card
-              key={`${item.title}-${index}`}
-              tag={item.tags ?? []}
-              {...item}
-              alignRows
-            />
-          ))
-        )}
+        {courseContent}
       </CourseGrid>
     </IndexBox>
   );

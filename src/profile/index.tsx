@@ -1,5 +1,5 @@
 import collect from "./collect";
-import CreateCourse from "./course";
+import CreateCourse from "./createCourse";
 import personal from "./individual";
 import learn from "./learn";
 import order from "./order";

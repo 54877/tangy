@@ -28,7 +28,7 @@ import {
   Fields,
   Section,
   SectionHead,
-} from "../course/createCourse.styled";
+} from "../createCourse/createCourse.styled";
 
 const emptyCourse: MyCourseDetailType = {
   id: "",
