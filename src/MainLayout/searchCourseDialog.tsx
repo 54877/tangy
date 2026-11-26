@@ -1,5 +1,4 @@
 import { useState, type SubmitEvent } from "react";
-import SearchIcon from "@mui/icons-material/Search";
 import { TextField } from "@mui/material";
 import { Button } from "../components/Button/Button";
 import { DialogBase } from "../components/dialog/dialogBase";
@@ -9,6 +8,7 @@ import { useActiveDialog } from "../utils/dialogLayer";
 import { useInformation } from "../utils/information";
 import type { SearchCourseRequest } from "../types/courseType";
 import { CourseList } from "./courseList";
+import { toggleCategoryKey } from "../utils/toggleCategoryKey";
 
 export function SearchCourseDialog() {
   const { closeDialog } = useDialog();
@@ -22,13 +22,7 @@ export function SearchCourseDialog() {
   const close = () => closeDialog(activeLayer);
 
   const toggleCategory = (key: string) => {
-    setCategoryKeys((current) =>
-      current.includes(key)
-        ? current.filter((item) => item !== key)
-        : current.length < 5
-          ? [...current, key]
-          : current,
-    );
+    setCategoryKeys((current) => toggleCategoryKey(current, key));
   };
 
   const submit = (event: SubmitEvent<HTMLFormElement>) => {
@@ -50,6 +44,7 @@ export function SearchCourseDialog() {
         <form onSubmit={submit}>
           <FlexType $direction="column" $align="stretch" $gap="md">
             <TextField
+              style={{ marginTop: "8px" }}
               autoFocus
               fullWidth
               label="搜尋課程"
@@ -72,7 +67,7 @@ export function SearchCourseDialog() {
                 paddingTop: 12,
               }}
             >
-              <Button text="搜尋" icon_left={<SearchIcon />} />
+              <Button text="搜尋" />
             </FlexType>
           </FlexType>
         </form>

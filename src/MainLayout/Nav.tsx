@@ -45,6 +45,7 @@ import { useInformation } from "../utils/information";
 import type { SearchCourseRequest } from "../types/courseType";
 import { EMPTY_SEARCH } from "../constants/course";
 import { useDialog } from "../context/dialog/useDialog";
+import { toggleCategoryKey } from "../utils/toggleCategoryKey";
 
 type NavProps = {
   isMobile: boolean;
@@ -66,10 +67,10 @@ export const Nav = ({ isMobile }: NavProps) => {
     useInformation<SearchCourseRequest>(EMPTY_SEARCH);
 
   const toggleCategory = (key: string) => {
-    const next = information.categoryKey.includes(key)
-      ? information.categoryKey.filter((item) => item !== key)
-      : [...information.categoryKey, key];
-    handleOnChange(next, "categoryKey");
+    handleOnChange(
+      toggleCategoryKey(information.categoryKey, key),
+      "categoryKey",
+    );
   };
 
   const submitSearch = (event?: SubmitEvent<HTMLFormElement>) => {
@@ -83,7 +84,7 @@ export const Nav = ({ isMobile }: NavProps) => {
     });
     menu.closeClick();
     closeClick();
-    navigate("/course", {
+    void navigate("/course", {
       state: {
         search: {
           context: search.context.trim(),
