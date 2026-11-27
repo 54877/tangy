@@ -14,7 +14,7 @@ const _2FA = createTokenApi("2FA");
 const _2FAClose = createTokenApi("2FAClose");
 const _DeviceCloseById = createTokenApi("DeviceCloseById");
 const _DeviceCloseByUserId = createTokenApi("DeviceCloseByUserId");
-const _createCourseVideo = createTokenApi("createCourseVideo");
+const _getUploadToken = createTokenApi("getUploadToken");
 const _createCourse = createTokenApi("createCourse");
 const _updateUserImage = createTokenApi("updateUserImage");
 const _getCourseFormOptions = createTokenApi("getCourseFormOptions");
@@ -95,15 +95,16 @@ export const DeviceCloseByUserId = async (userId: string) => {
   });
 };
 
-export const createCourseVideo = async (information: CoursePayload) => {
-  const formData = new FormData();
-
-  if (information.video) {
-    formData.append("video", information.video);
-  }
-
-  const res = await _createCourseVideo.post("/", formData);
-  return res;
+export const getUploadToken = async (
+  fileName: string,
+  size: number,
+  contentType: string,
+) => {
+  return await _getUploadToken.post("/", {
+    fileName,
+    size,
+    contentType,
+  });
 };
 
 export const createCourse = async (information: CoursePayload) => {

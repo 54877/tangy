@@ -16,11 +16,7 @@ import { Flex } from "../../components/Input/Input.styled";
 import { LoadingUi } from "../../components/loading/loading";
 import { useLoading } from "../../context/loading/useLoading";
 import { useLoadingState } from "../../utils/loading/loading.state";
-import {
-  createCourseVideo,
-  getMyCourseById,
-  reReviewCourse,
-} from "../../api/profile.api";
+import { getMyCourseById, reReviewCourse } from "../../api/profile.api";
 import { DialogApiError } from "../../utils/apiError";
 import { validateForm } from "../../validation/validateForm";
 import {
@@ -124,12 +120,15 @@ export const CourseDialog = () => {
     try {
       let submission = { ...information, videoTicket: "" };
       if (information.video instanceof File) {
-        const res = await createCourseVideo({
-          ...information,
-          video: information.video,
-          videoTicket: "",
-        });
-        submission = { ...submission, ...res.data.dataSet };
+        // const res = await createCourseVideo({
+        //   ...information,
+        //   video: information.video,
+        //   videoTicket: "",
+        // });
+        submission = {
+          ...submission,
+          //  ...res.data.dataSet
+        };
       }
       await reReviewCourse({ ...submission, id: courseId });
       await onCourseResubmitted?.();

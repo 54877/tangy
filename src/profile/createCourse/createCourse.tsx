@@ -7,6 +7,7 @@ import {
   Intro,
   Section,
   SectionHead,
+  UploadProgress,
 } from "./createCourse.styled";
 import { useInformation } from "../../utils/information";
 import { Heading, SpanType } from "../../styles/components/span";
@@ -20,7 +21,7 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Flex } from "../../components/Input/Input.styled";
 import { useLoading } from "../../context/loading/useLoading";
-import { createCourse, createCourseVideo } from "../../api/profile.api";
+import { createCourse, getUploadToken } from "../../api/profile.api";
 import { DialogApiError } from "../../utils/apiError";
 import type { FormError } from "../../types/errorType";
 import { LoadingUi } from "../../components/loading/loading";
@@ -33,6 +34,10 @@ import type {
   TagsListType,
 } from "../../types/backStageType";
 import { useDialog } from "../../context/dialog/useDialog";
+import {
+  uploadStandardVideo,
+  uploadTusVideo,
+} from "../../utils/uploadTusVideo";
 
 type CourseFormOptionsContext = {
   courseTags: TagsListType[];
@@ -67,6 +72,7 @@ export function CreateCourse() {
     useInformation<CoursePayload>(initialCourse);
   const { loading } = useLoading();
   const [err, setErr] = useState<FormError<CoursePayload>>({});
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const isLoading = useLoadingState(3);
   const { openDialog } = useDialog();
 
@@ -81,35 +87,53 @@ export function CreateCourse() {
     formValidate<CoursePayload>({
       information,
       fields: [
-        "title",
-        "teacher",
-        "content",
-        "price",
-        "originalPrice",
-        "categoryKey",
-        "tagsKey",
-        "image",
+        // "title",
+        // "teacher",
+        // "content",
+        // "price",
+        // "originalPrice",
+        // "categoryKey",
+        // "tagsKey",
+        // "image",
         "video",
       ],
       setErr,
-      fn: () => createCourseVideoApi(payload),
+      fn: () => getUploadTokenApi(payload),
     });
   };
 
   //影片API
-  const createCourseVideoApi = async (payload: CoursePayload) => {
+  const getUploadTokenApi = async (payload: CoursePayload) => {
+    const { video } = payload;
+    if (!video) return;
+    setUploadProgress(0);
     loading(3).start();
+
     try {
-      const res = await createCourseVideo(payload);
+      const res = await getUploadToken(video.name, video.size, video.type);
       const data = res.data.dataSet;
-      const info = {
-        ...payload,
-        ...data,
-      };
-      await createCourseApi(info);
+      const method = data.method;
+      if (method !== "tus" && method !== "standard") {
+        throw new Error(`不支援的影片上傳方式：${data.method}`);
+      }
+      if (method == "tus") {
+        throw new Error(`TUS 上船有異常暫不使用}`);
+        //await uploadTusVideo(video, data, setUploadProgress);
+      }
+
+      if (method == "standard") {
+        await uploadStandardVideo(video, data);
+      }
+      // const info = {
+      //   ...payload,
+      //   videoKey: data.path,
+      //   videoTicket: data.uploadId,
+      // };
+      //await createCourseApi(info);
     } catch (err) {
       DialogApiError(err, openDialog, 1);
     } finally {
+      setUploadProgress(null);
       await loading(3).stop();
     }
   };
@@ -281,6 +305,16 @@ export function CreateCourse() {
                 allowedExtensions={["mp4", "webm"]}
                 preview="video"
               />
+              {uploadProgress !== null && (
+                <UploadProgress>
+                  <span>影片上傳中：{uploadProgress}%</span>
+                  <progress
+                    aria-label="影片上傳進度"
+                    value={uploadProgress}
+                    max={100}
+                  />
+                </UploadProgress>
+              )}
             </Flex>
           </Flex>
         </Section>

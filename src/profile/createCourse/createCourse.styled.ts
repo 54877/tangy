@@ -69,3 +69,17 @@ export const Actions = styled.div`
     flex-direction: row;
   }
 `;
+
+export const UploadProgress = styled.div`
+  margin-top: 12px;
+  color: ${({ theme }) => theme.colors.gray[600]};
+  font-size: 14px;
+
+  progress {
+    display: block;
+    width: 100%;
+    height: 8px;
+    margin-top: 6px;
+    accent-color: ${({ theme }) => theme.colors.primary[600]};
+  }
+`;
