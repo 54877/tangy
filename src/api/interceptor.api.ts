@@ -4,7 +4,7 @@ import {
   type InternalAxiosRequestConfig,
 } from "axios";
 import { TOKEN_KEY } from "./utils/token";
-import { refreshApi } from "./utils/createApi";
+import { refreshAccessToken } from "./utils/createApi";
 import { jwtDecode } from "jwt-decode";
 
 let isRedirecting = false;
@@ -23,23 +23,6 @@ type TokenPayload = {
 };
 
 const setupInterceptors = (instance: AxiosInstance) => {
-  let refreshPromise: Promise<string> | null = null;
-
-  const refreshAccessToken = () => {
-    refreshPromise ??= refreshApi
-      .post("/refresh")
-      .then(({ data }) => {
-        const accessToken = data.dataSet.accessToken;
-        sessionStorage.setItem(TOKEN_KEY, accessToken);
-        return accessToken;
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
-
-    return refreshPromise;
-  };
-
   const shouldRefresh = (token: string) => {
     const { exp } = jwtDecode<TokenPayload>(token);
     return exp - Math.floor(Date.now() / 1000) < 300;

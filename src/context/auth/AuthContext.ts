@@ -3,6 +3,7 @@ import { createContext } from "react";
 interface AuthContextProps {
   token: string;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   setAuthToken: (token: string) => void;
   clearAuthToken: () => void;
 }

@@ -1,6 +1,9 @@
 import * as tus from "tus-js-client";
 import { supabase } from "../api/supabse.api";
 
+const MAX_UPLOAD_RETRIES = 3;
+const UPLOAD_RETRY_DELAYS = [0, 1000, 3000];
+
 export type UploadTokenResponse = {
   uploadId: string;
   method: string;
@@ -23,6 +26,8 @@ export const uploadTusVideo = (
     const upload = new tus.Upload(file, {
       endpoint: info.endpoint,
       chunkSize: info.chunkSize,
+      // Initial attempt plus at most three retries, with increasing delays.
+      retryDelays: UPLOAD_RETRY_DELAYS,
       headers: {
         [info.signatureHeader ?? "x-signature"]: info.token,
       },
@@ -68,13 +73,27 @@ export const uploadStandardVideo = async (
   file: File,
   info: UploadTokenResponse,
 ) => {
-  const { data, error } = await supabase.storage
-    .from(info.bucket)
-    .uploadToSignedUrl(info.path, info.token, file, {
-      contentType: file.type,
-      cacheControl: "3600",
-    });
+  type UploadResult = Awaited<
+    ReturnType<
+      ReturnType<typeof supabase.storage.from>["uploadToSignedUrl"]
+    >
+  >["data"];
 
-  if (error) throw error;
-  return data;
+  const upload = async (attempt: number): Promise<UploadResult> => {
+    const { data, error } = await supabase.storage
+      .from(info.bucket)
+      .uploadToSignedUrl(info.path, info.token, file, {
+        contentType: file.type,
+        cacheControl: "3600",
+      });
+
+    if (!error) return data;
+    if (attempt >= MAX_UPLOAD_RETRIES) throw error;
+
+    const delay = UPLOAD_RETRY_DELAYS[attempt];
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    return upload(attempt + 1);
+  };
+
+  return upload(0);
 };
