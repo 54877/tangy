@@ -1,0 +1,15 @@
+import{Gn as e,Hn as t,Jn as n,Ln as r,Q as i,Qn as a,Un as o,Wn as s,Wt as c,at as l,er as u,hn as d,mt as f,ot as p,st as m,z as h,zn as g}from"./index-C8m-qZNr.js";import{t as _}from"./course-DpbUWCvt.js";var v=r(),y=d((0,v.jsx)(`path`,{d:`m20 12-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8z`}),`ArrowDownward`),b=d((0,v.jsx)(`path`,{d:`m4 12 1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z`}),`ArrowUpward`),x=e.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  column-gap: ${({theme:e})=>e.spaces.lg};
+  row-gap: ${({theme:e})=>e.spaces.spc};
+
+  @media (min-width: ${s.xsLg}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: ${s.lg}) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+`,S=u(a(),1),C=f(`searchCourse`),w=async e=>await C.post(`/`,e),T=`/tangy/assets/searchError-Bb0Ts74t.png`,E=()=>{let[e,r]=(0,S.useState)(0),[a,s]=(0,S.useState)(`desc`),{loading:u}=m(),d=c(`${o.md}`),[f,C]=(0,S.useState)(null),E=n().state?.search??_,D=l(1)||f===null,O=[`依人數`,`依評分`,`依價格`];(0,S.useEffect)(()=>{let e=!0;return(async()=>{C(null),u(1).start();try{if(console.log(E),E){let t=await w(E);e&&C(t.data.dataSet??[])}}catch(t){console.error(t),e&&C([])}finally{u(1).stop()}})(),()=>{e=!1}},[E]);let k=(0,S.useMemo)(()=>{if(f===null)return[];let t=[...f];return e===0?t.sort((e,t)=>{let n=e.studentCount-+t.studentCount;return a===`asc`?n:-n}):e===1?t.sort((e,t)=>{let n=e.rating-+t.rating;return a===`asc`?n:-n}):t.sort((e,t)=>{let n=e.price-+t.price;return a===`asc`?n:-n})},[f,a,e]),A=k.map((e,t)=>(0,v.jsx)(h,{tag:e.tags??[],...e,alignRows:!0},`${e.title}-${t}`));return k.length===0&&(A=(0,v.jsxs)(t,{$direction:`column`,$gap:`sm`,style:{gridColumn:`1 / -1`,padding:`24px 16px 64px`,textAlign:`center`},children:[(0,v.jsx)(`img`,{src:T,alt:`找不到符合條件的課程`,style:{display:`block`,width:`min(100%, 520px)`,height:`auto`}}),(0,v.jsx)(g,{$size:{xsLg:`lg`,lg:`lg`},children:`找不到符合條件的課程`})]})),D&&(A=(0,v.jsx)(t,{style:{gridColumn:`1 / -1`,padding:`64px 0`},$justify:`center`,children:(0,v.jsx)(p,{type:`spinner`})})),(0,v.jsxs)(i,{children:[k.length>0&&(0,v.jsx)(t,{style:{margin:`24px 0`},$justify:`flex-start`,children:O.map((t,n)=>(0,v.jsxs)(g,{onClick:()=>{r(n),s(n===2?`asc`:`desc`)},style:{display:`inline-flex`,alignItems:`center`,gap:`4px`,color:e===n?`white`:`#232529`,backgroundColor:e===n?`#0F778F`:`#E9ECEF`,padding:`8px 12px`,borderRadius:`100px`},$size:{xsLg:`sm`,lg:`lg`},children:[t,e===n&&(0,v.jsx)(`button`,{type:`button`,"aria-label":a===`asc`?`切換為降冪`:`切換為升冪`,onClick:e=>{e.stopPropagation(),s(e=>e===`asc`?`desc`:`asc`)},style:{display:`inline-flex`,alignItems:`center`,padding:0,border:0,background:`transparent`,color:`inherit`,cursor:`pointer`},children:a===`asc`?(0,v.jsx)(b,{fontSize:`small`}):(0,v.jsx)(y,{fontSize:`small`})})]},t))}),(0,v.jsx)(x,{style:{marginBottom:d?`96px`:`48px`},children:A})]})};export{E as Course};

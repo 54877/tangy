@@ -1,1 +1,0 @@
-import{zn as e}from"./index-DaRkPBbP.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`收藏`});export{n as Collect};

@@ -1,0 +1,1 @@
+import{Ln as e}from"./index-C8m-qZNr.js";var t=e(),n=()=>(0,t.jsx)(`h1`,{children:`訂單`});export{n as Order};
